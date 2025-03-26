@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transaction fee - Cardano Blueprint</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Cardano Blueprint</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/ledger/transaction-fee.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<style>
+.mdbook-alerts {
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-left: 0.25em solid var(--mdbook-alerts-color);
+}
+
+.mdbook-alerts > *:first-child {
+  margin-top: 0;
+}
+
+.mdbook-alerts > *:last-child {
+  margin-bottom: 0;
+}
+
+.mdbook-alerts-title {
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  line-height: 1;
+  color: var(--mdbook-alerts-color);
+  text-transform: capitalize;
+}
+
+.mdbook-alerts-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.2em;
+  background-color: currentColor;
+  -webkit-mask: no-repeat center / 100%;
+  mask: no-repeat center / 100%;
+  -webkit-mask-image: var(--mdbook-alerts-icon);
+  mask-image: var(--mdbook-alerts-icon);
+}
+
+.mdbook-alerts-note {
+  --mdbook-alerts-color: rgb(9, 105, 218);
+  /* https://icon-sets.iconify.design/material-symbols/info-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12q0-3.35-2.325-5.675T12 4Q8.65 4 6.325 6.325T4 12q0 3.35 2.325 5.675T12 20m0-8"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-tip {
+  --mdbook-alerts-color: rgb(26, 127, 55);
+  /* https://icon-sets.iconify.design/material-symbols/lightbulb-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 22q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-3-3q-.425 0-.712-.288T8 18q0-.425.288-.712T9 17h6q.425 0 .713.288T16 18q0 .425-.288.713T15 19zm-.75-3q-1.725-1.025-2.738-2.75T4.5 9.5q0-3.125 2.188-5.312T12 2q3.125 0 5.313 2.188T19.5 9.5q0 2.025-1.012 3.75T15.75 16zm.6-2h6.3q1.125-.8 1.738-1.975T17.5 9.5q0-2.3-1.6-3.9T12 4Q9.7 4 8.1 5.6T6.5 9.5q0 1.35.613 2.525T8.85 14M12 14"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-important {
+  --mdbook-alerts-color: rgb(130, 80, 223);
+  /* https://icon-sets.iconify.design/material-symbols/chat-info-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 7q.425 0 .713-.288T13 6q0-.425-.288-.712T12 5q-.425 0-.712.288T11 6q0 .425.288.713T12 7m0 8q.425 0 .713-.288T13 14v-4q0-.425-.288-.712T12 9q-.425 0-.712.288T11 10v4q0 .425.288.713T12 15m-6 3l-2.3 2.3q-.475.475-1.088.213T2 19.575V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-.85-2H20V4H4v13.125zM4 16V4z"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-warning {
+  --mdbook-alerts-color: rgb(154, 103, 0);
+  /* https://icon-sets.iconify.design/material-symbols/warning-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M2.725 21q-.275 0-.5-.137t-.35-.363q-.125-.225-.137-.488t.137-.512l9.25-16q.15-.25.388-.375T12 3q.25 0 .488.125t.387.375l9.25 16q.15.25.138.513t-.138.487q-.125.225-.35.363t-.5.137zm1.725-2h15.1L12 6zM12 18q.425 0 .713-.288T13 17q0-.425-.288-.712T12 16q-.425 0-.712.288T11 17q0 .425.288.713T12 18m0-3q.425 0 .713-.288T13 14v-3q0-.425-.288-.712T12 10q-.425 0-.712.288T11 11v3q0 .425.288.713T12 15m0-2.5"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-caution {
+  --mdbook-alerts-color: rgb(207, 34, 46);
+  /* https://icon-sets.iconify.design/material-symbols/brightness-alert-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 17q.425 0 .713-.288T13 16q0-.425-.288-.712T12 15q-.425 0-.712.288T11 16q0 .425.288.713T12 17m0-4q.425 0 .713-.288T13 12V8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8v4q0 .425.288.713T12 13m-3.35 7H6q-.825 0-1.412-.587T4 18v-2.65L2.075 13.4q-.275-.3-.425-.662T1.5 12q0-.375.15-.737t.425-.663L4 8.65V6q0-.825.588-1.412T6 4h2.65l1.95-1.925q.3-.275.663-.425T12 1.5q.375 0 .738.15t.662.425L15.35 4H18q.825 0 1.413.588T20 6v2.65l1.925 1.95q.275.3.425.663t.15.737q0 .375-.15.738t-.425.662L20 15.35V18q0 .825-.587 1.413T18 20h-2.65l-1.95 1.925q-.3.275-.662.425T12 22.5q-.375 0-.737-.15t-.663-.425zm.85-2l2.5 2.5l2.5-2.5H18v-3.5l2.5-2.5L18 9.5V6h-3.5L12 3.5L9.5 6H6v3.5L3.5 12L6 14.5V18zm2.5-6"%2F%3E%3C%2Fsvg%3E');
+}
+
+</style>
+<h1 id="transaction-fee"><a class="header" href="#transaction-fee">Transaction fee</a></h1>
+<div class="mdbook-alerts mdbook-alerts-warning">
+<p class="mdbook-alerts-title">
+  <span class="mdbook-alerts-icon"></span>
+  warning
+</p>
+<p>Ideally this would not exist in a vacuum and instead benefit from a general explanation on Cardano transactions.</p>
+</div>
+<div class="mdbook-alerts mdbook-alerts-note">
+<p class="mdbook-alerts-title">
+  <span class="mdbook-alerts-icon"></span>
+  note
+</p>
+<p>This file is hand-written and currently not checked for correctness. The domain is very small and hence this would make for a great testing ground for techniques to ensure consistent, but also approachable documentation.</p>
+</div>
+<p>This is a write-up of how transaction fees are calculated. In fact, the minimum transaction fee for transaction to be deemed valid by the Cardano ledger.</p>
+<p>This document describes the situation as of</p>
+<ul>
+<li>Protocol version: <code>10</code></li>
+<li>Era: <code>Conway</code></li>
+</ul>
+<p>See also:</p>
+<ul>
+<li>Formal ledger specification: <a href="https://github.com/intersectmbo/cardano-ledger/releases/latest/download/alonzo-ledger.pdf">Alonzo, Figure 4, minfee</a> and <a href="https://intersectmbo.github.io/formal-ledger-specifications/conway-ledger.pdf#section.4">Conway, chapter 4</a></li>
+<li>Haskell implementation: <a href="https://github.com/input-output-hk/cardano-ledger/blob/f0a0864eab00cd269befcdcd1931250dbb329f80/eras/conway/impl/src/Cardano/Ledger/Conway/UTxO.hs#L138">getConwayMinFeeTxUtxo</a> and related functions</li>
+</ul>
+<h2 id="inputs"><a class="header" href="#inputs">Inputs</a></h2>
+<ul>
+<li>Transaction bytes, CBOR-encoded</li>
+<li>Resolved inputs (= unspent outputs), CBOR-encoded</li>
+<li>Protocol Parameters
+<ul>
+<li><code>minFeeConstant</code></li>
+<li><code>minFeeCoefficient</code></li>
+<li><code>minFeeReferenceScripts</code></li>
+<li><code>prices.memory</code></li>
+<li><code>prices.steps</code></li>
+</ul>
+</li>
+</ul>
+<div class="mdbook-alerts mdbook-alerts-warning">
+<p class="mdbook-alerts-title">
+  <span class="mdbook-alerts-icon"></span>
+  warning
+</p>
+<p>TODO: Include transaction CDDL to reference individual parts (e.g. transaction_output)
+TODO: Explain protocol parameters somewhere</p>
+</div>
+<h2 id="algorithm"><a class="header" href="#algorithm">Algorithm</a></h2>
+<p>At a high level, the fee is composed of</p>
+<ul>
+<li>a minimum constant,</li>
+<li>plus a cost per transaction byte,</li>
+<li>plus a cost per reference script byte,</li>
+<li>plus an execution cost per budgeted script redeemer.</li>
+</ul>
+<p>Calculate the base fee by adding the <code>minFeeConstant</code> to (<code>minFeeCoefficient</code> * serialized transaction length in bytes). These numbers are all integers, so you shouldn’t end up with a fractional amount of lovelace.</p>
+<div class="mdbook-alerts mdbook-alerts-warning">
+<p class="mdbook-alerts-title">
+  <span class="mdbook-alerts-icon"></span>
+  warning
+</p>
+<p>TODO: Explain resolving input and reference inputs</p>
+</div>
+<p>Next, calculate the untagged size of each <code>scriptRef</code> on each of the transaction inputs and reference inputs. Specifically, each <code>scriptRef</code> field is serialized as a cbor tag, an integer plutus version, and then the raw script bytes. We’re interested in the size of the raw script bytes only.</p>
+<p>Next, calculate the reference script fee. First, sum up the length in bytes of each of script reference into <code>scriptRefLengths</code>. The <code>minFeeReferenceScripts</code> parameter consists of a <code>base</code>, a <code>multiplier</code>, and a <code>range</code>. (Note that in conway, the multiplier and the range are hard coded, rather than protocol parameters, but the intention is to change this at the next hardfork.)</p>
+<p>To calculate the fee, starting from a <code>baseFee</code> of <code>minFeeReferenceScripts.base</code> and remaining bytes of <code>sum(scriptRefLengths)</code>, until remaining bytes is zero, add <code>baseFee * min(remainingBytes, minFeeReferenceScripts.range)</code>, scale <code>baseFee</code> by <code>minFeeReferenceScripts.multiplier</code>, and decrease <code>remainingBytes</code> by <code>min(remainingBytes, minFeeReferenceScripts.range)</code>. This calculation can result in rational values (as the multiplier can be rational), and so you should take the ceiling as a <em>last step</em>.</p>
+<p>Finally, to calculate the evaluation fee, for each redeemer, multiply the redeemer execution units budget (memory and steps) by the corresponding protocol parameters (<code>prices.memory</code> and <code>prices.steps</code>), and add them up. These are fractional parameters, so you may end with a fractional amount of lovelace, and you should take the ceiling.</p>
+<p>The final minimum fee is the base fee, plus the reference script fee, plus the evaluation fee.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>Lets do a decently complex worked example, from mainnet transaction with id (body hash)</p>
+<p><code>f06e17af7b0085b44bcc13f76008202c69865795841c692875810bc92948d609</code></p>
+<p>The transaction bytes are:</p>
+<pre><code class="language-hex">84ac00838258209ea0d817dc67ce8046f6c2abc27267905c74374530c4684bb3c252ed6b97cc8702825820e3195e7888a83f3d1ef218e50675bfa10d9817a4a756b8ba26305f604c0f96e500825820285c77a9e62c0f87fedfcc91a630251ce2b7fcb9dd8d2fd8591c0d0aba46d4bc000183a300583911e0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312bbc10fe312acd69e2e12cbc2cca05aa0e432e3dee65d5a9498344e4aa01821b00000082deef6e00a2581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114a1434941471b0000016f8a787b24581ce0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312ba15820000de1406f79e3e55eef82b9d03cf62cc3d4a6d0d03b00bf7b1b43330f82977901028201d8185862d8799f581c6f79e3e55eef82b9d03cf62cc3d4a6d0d03b00bf7b1b43330f8297799f9f4040ff9f581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d11443494147ffff1b000000c823a3f15c18641864d87a80001a73c3be00ff8258390123a9f67af7e7e6d1aa0b495f68787649bb6f097d6648c2fa59c185e400168e1b0b38fe76f31427ee638adba1b7ad61ab8274ff4ecaa4109e821a001e8480a1581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114a1434941471afad8cc9182581d618ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1a6079b955021a00092e4d031a08e498d705a1581df199e5aacf401fed0eb0e2993d72d423947f42342e8f848353d03efe6100081a08e491070b5820b159feadc14235013a7ac8e993b410e5cdbd69c5829cd06b463603f15a39e6660d818258209ea0d817dc67ce8046f6c2abc27267905c74374530c4684bb3c252ed6b97cc87020e81581c8ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1082581d618ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1a60369c62111a004c4b401283825820fa46a1d162c59cece3308c5a9d4db9ff2ea17f9c0146ff821c9b445588b017c900825820f5f1bdfad3eb4d67d2fc36f36f47fc2938cf6f001689184ab320735a28642cf2008258200258ec397cbd4a86951126bd2c423d62f71ec844430964cd0e14df2f951906a400a3008182582043be65bfb94286317d1274ff4c1d4890ddc524d04d1182c4c714e97e1985954858401a5d1672aed8d170f343c2d517d8475f3569df6e1db0741091a2fcc3aae92a520b9496e91a005544b8d1ae938525666ba732f8a88945fb8ba859f91b2636ee0706815901455901420100003323232323232322322253330053253330063370e900218039baa300130083754004264a66600e66e1d2000300837540022646600200264a66601266e1d2002300a3754002297adef6c6013756601c60166ea8004c8cc004004dd5980218059baa300e300b375400644a66601a0022980103d87a80001323232533300d3371e0166eb8c03800c4cdd2a4000660226e980052f5c026600a00a0046eacc038008c044008c03c004894ccc030004528099299980519b873371c6eb8c02cc03c00920024806852889980180180098078008b1929998050008a6103d87a800013374a9000198059806000a5eb80dd618059806180618041baa300b3008375400429408c02cc03000452613656375c002ae6955ceaab9e5573eae815d0aba24c011e581ce0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312b00010583840000d87a9fd8799f000d9f9f02d87a8000ffffffff821a001024a21a13fcfa0f840002d8798082196ec71a007e3127840300d8798082199f5f1a00bc09d0f5f6
+</code></pre>
+<p>This is <code>1358</code> bytes and you can inspect it using <a href="https://cbor.nemo157.com/#type=hex&value=84ac00838258209ea0d817dc67ce8046f6c2abc27267905c74374530c4684bb3c252ed6b97cc8702825820e3195e7888a83f3d1ef218e50675bfa10d9817a4a756b8ba26305f604c0f96e500825820285c77a9e62c0f87fedfcc91a630251ce2b7fcb9dd8d2fd8591c0d0aba46d4bc000183a300583911e0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312bbc10fe312acd69e2e12cbc2cca05aa0e432e3dee65d5a9498344e4aa01821b00000082deef6e00a2581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114a1434941471b0000016f8a787b24581ce0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312ba15820000de1406f79e3e55eef82b9d03cf62cc3d4a6d0d03b00bf7b1b43330f82977901028201d8185862d8799f581c6f79e3e55eef82b9d03cf62cc3d4a6d0d03b00bf7b1b43330f8297799f9f4040ff9f581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d11443494147ffff1b000000c823a3f15c18641864d87a80001a73c3be00ff8258390123a9f67af7e7e6d1aa0b495f68787649bb6f097d6648c2fa59c185e400168e1b0b38fe76f31427ee638adba1b7ad61ab8274ff4ecaa4109e821a001e8480a1581c5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114a1434941471afad8cc9182581d618ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1a6079b955021a00092e4d031a08e498d705a1581df199e5aacf401fed0eb0e2993d72d423947f42342e8f848353d03efe6100081a08e491070b5820b159feadc14235013a7ac8e993b410e5cdbd69c5829cd06b463603f15a39e6660d818258209ea0d817dc67ce8046f6c2abc27267905c74374530c4684bb3c252ed6b97cc87020e81581c8ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1082581d618ca0e08cdbc30fa0dd21833d7370d666493ecc28b136df179f97fb5d1a60369c62111a004c4b401283825820fa46a1d162c59cece3308c5a9d4db9ff2ea17f9c0146ff821c9b445588b017c900825820f5f1bdfad3eb4d67d2fc36f36f47fc2938cf6f001689184ab320735a28642cf2008258200258ec397cbd4a86951126bd2c423d62f71ec844430964cd0e14df2f951906a400a3008182582043be65bfb94286317d1274ff4c1d4890ddc524d04d1182c4c714e97e1985954858401a5d1672aed8d170f343c2d517d8475f3569df6e1db0741091a2fcc3aae92a520b9496e91a005544b8d1ae938525666ba732f8a88945fb8ba859f91b2636ee0706815901455901420100003323232323232322322253330053253330063370e900218039baa300130083754004264a66600e66e1d2000300837540022646600200264a66601266e1d2002300a3754002297adef6c6013756601c60166ea8004c8cc004004dd5980218059baa300e300b375400644a66601a0022980103d87a80001323232533300d3371e0166eb8c03800c4cdd2a4000660226e980052f5c026600a00a0046eacc038008c044008c03c004894ccc030004528099299980519b873371c6eb8c02cc03c00920024806852889980180180098078008b1929998050008a6103d87a800013374a9000198059806000a5eb80dd618059806180618041baa300b3008375400429408c02cc03000452613656375c002ae6955ceaab9e5573eae815d0aba24c011e581ce0302560ced2fdcbfcb2602697df970cd0d6a38f94b32703f51c312b00010583840000d87a9fd8799f000d9f9f02d87a8000ffffffff821a001024a21a13fcfa0f840002d8798082196ec71a007e3127840300d8798082199f5f1a00bc09d0f5f6%0A">https://cbor.nemo157.com/</a></p>
+<p>Among the inputs and reference inputs, there are 2 inputs which, when resolved, contain reference scripts:</p>
+<ul>
+<li>reference input <code>f5f1bdfad3eb4d67d2fc36f36f47fc2938cf6f001689184ab320735a28642cf2#0</code> with <code>2469</code> bytes</li>
+<li>reference input <code>fa46a1d162c59cece3308c5a9d4db9ff2ea17f9c0146ff821c9b445588b017c9#0</code> with <code>15728</code> bytes</li>
+</ul>
+<p>And there are three redeemers:</p>
+<ul>
+<li>Spend#0 with a budget of <code>1057954</code> memory units, and <code>335346191</code> steps</li>
+<li>Spend#2 with a budget of <code>28359</code> memory units, and <code>8270119</code> steps</li>
+<li>Withdraw#0 with a budget of <code>40799</code> memory units, and <code>12323280</code> steps</li>
+</ul>
+<p>The protocol parameters at the time were:</p>
+<ul>
+<li><code>minFeeConstant</code>: <code>155381</code> lovelace</li>
+<li><code>minFeeCoefficient</code>: <code>44</code> lovelace per byte</li>
+<li><code>minFeeReferenceScripts</code>:
+<ul>
+<li><code>base</code>: <code>15</code> lovelace</li>
+<li><code>multiplier</code>: <code>1.2</code></li>
+<li><code>size increment</code>: <code>25600</code> bytes</li>
+</ul>
+</li>
+<li><code>prices.memory</code>: <code>0.0577</code> lovelace per memory unit</li>
+<li><code>prices.steps</code>: <code>0.0000721</code> lovelace per step</li>
+</ul>
+<p>Thus:</p>
+<ul>
+<li>The base fee is <code>155381 + 44 * 1358 = 215133</code> lovelace.</li>
+<li>The total reference scripts length is <code>2469 + 15728 = 18197</code> and fall under the 25,600 byte increment, so it costs <code>15</code> lovelace per byte: <code>15 * min(18197, 25600) = 15 * 18197 = 272955</code> lovelace</li>
+<li>And the execution costs are <code>ceil(1057954 * 0.0577 + 335346191 * 0.0000721 + 28359 * 0.0577 + 8270119 * 0.0000721 + 40799 * 0.0577 + 12323280 * 0.0000721) = ceil(90697.606839) = 90698</code> lovelace.</li>
+</ul>
+<p>Thus, the total minimum fee is <code>578786</code> lovelace.</p>
+<p>Note that historically calculating this has been pretty opaque, and so many people have resorted to slightly padding the minimum fee, and I believe this is why the on-chain minimum fee (which is declared in the transaction body) is <code>601677</code> lovelace.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../ledger/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../ledger/block-validation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../ledger/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../ledger/block-validation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../.mdbook/mermaid.min.js"></script>
+        <script src="../.mdbook/mermaid-init.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

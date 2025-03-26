@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Builtin Types and Functions - Cardano Blueprint</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Cardano Blueprint</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/plutus/builtin.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<style>
+.mdbook-alerts {
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-left: 0.25em solid var(--mdbook-alerts-color);
+}
+
+.mdbook-alerts > *:first-child {
+  margin-top: 0;
+}
+
+.mdbook-alerts > *:last-child {
+  margin-bottom: 0;
+}
+
+.mdbook-alerts-title {
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  line-height: 1;
+  color: var(--mdbook-alerts-color);
+  text-transform: capitalize;
+}
+
+.mdbook-alerts-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.2em;
+  background-color: currentColor;
+  -webkit-mask: no-repeat center / 100%;
+  mask: no-repeat center / 100%;
+  -webkit-mask-image: var(--mdbook-alerts-icon);
+  mask-image: var(--mdbook-alerts-icon);
+}
+
+.mdbook-alerts-note {
+  --mdbook-alerts-color: rgb(9, 105, 218);
+  /* https://icon-sets.iconify.design/material-symbols/info-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12q0-3.35-2.325-5.675T12 4Q8.65 4 6.325 6.325T4 12q0 3.35 2.325 5.675T12 20m0-8"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-tip {
+  --mdbook-alerts-color: rgb(26, 127, 55);
+  /* https://icon-sets.iconify.design/material-symbols/lightbulb-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 22q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-3-3q-.425 0-.712-.288T8 18q0-.425.288-.712T9 17h6q.425 0 .713.288T16 18q0 .425-.288.713T15 19zm-.75-3q-1.725-1.025-2.738-2.75T4.5 9.5q0-3.125 2.188-5.312T12 2q3.125 0 5.313 2.188T19.5 9.5q0 2.025-1.012 3.75T15.75 16zm.6-2h6.3q1.125-.8 1.738-1.975T17.5 9.5q0-2.3-1.6-3.9T12 4Q9.7 4 8.1 5.6T6.5 9.5q0 1.35.613 2.525T8.85 14M12 14"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-important {
+  --mdbook-alerts-color: rgb(130, 80, 223);
+  /* https://icon-sets.iconify.design/material-symbols/chat-info-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 7q.425 0 .713-.288T13 6q0-.425-.288-.712T12 5q-.425 0-.712.288T11 6q0 .425.288.713T12 7m0 8q.425 0 .713-.288T13 14v-4q0-.425-.288-.712T12 9q-.425 0-.712.288T11 10v4q0 .425.288.713T12 15m-6 3l-2.3 2.3q-.475.475-1.088.213T2 19.575V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-.85-2H20V4H4v13.125zM4 16V4z"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-warning {
+  --mdbook-alerts-color: rgb(154, 103, 0);
+  /* https://icon-sets.iconify.design/material-symbols/warning-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M2.725 21q-.275 0-.5-.137t-.35-.363q-.125-.225-.137-.488t.137-.512l9.25-16q.15-.25.388-.375T12 3q.25 0 .488.125t.387.375l9.25 16q.15.25.138.513t-.138.487q-.125.225-.35.363t-.5.137zm1.725-2h15.1L12 6zM12 18q.425 0 .713-.288T13 17q0-.425-.288-.712T12 16q-.425 0-.712.288T11 17q0 .425.288.713T12 18m0-3q.425 0 .713-.288T13 14v-3q0-.425-.288-.712T12 10q-.425 0-.712.288T11 11v3q0 .425.288.713T12 15m0-2.5"%2F%3E%3C%2Fsvg%3E');
+}
+
+.mdbook-alerts-caution {
+  --mdbook-alerts-color: rgb(207, 34, 46);
+  /* https://icon-sets.iconify.design/material-symbols/brightness-alert-outline-rounded/ */
+  --mdbook-alerts-icon: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M12 17q.425 0 .713-.288T13 16q0-.425-.288-.712T12 15q-.425 0-.712.288T11 16q0 .425.288.713T12 17m0-4q.425 0 .713-.288T13 12V8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8v4q0 .425.288.713T12 13m-3.35 7H6q-.825 0-1.412-.587T4 18v-2.65L2.075 13.4q-.275-.3-.425-.662T1.5 12q0-.375.15-.737t.425-.663L4 8.65V6q0-.825.588-1.412T6 4h2.65l1.95-1.925q.3-.275.663-.425T12 1.5q.375 0 .738.15t.662.425L15.35 4H18q.825 0 1.413.588T20 6v2.65l1.925 1.95q.275.3.425.663t.15.737q0 .375-.15.738t-.425.662L20 15.35V18q0 .825-.587 1.413T18 20h-2.65l-1.95 1.925q-.3.275-.662.425T12 22.5q-.375 0-.737-.15t-.663-.425zm.85-2l2.5 2.5l2.5-2.5H18v-3.5l2.5-2.5L18 9.5V6h-3.5L12 3.5L9.5 6H6v3.5L3.5 12L6 14.5V18zm2.5-6"%2F%3E%3C%2Fsvg%3E');
+}
+
+</style>
+<h1 id="built-in-types-and-functions"><a class="header" href="#built-in-types-and-functions">Built-in Types and Functions</a></h1>
+<h2 id="built-in-types"><a class="header" href="#built-in-types">Built-in Types</a></h2>
+<p>The listing below defines the built-in types in UPLC.</p>
+<pre><code class="language-text">a ∈ Atomic type ::= integer
+                  | bytestring
+                  | string
+                  | bool
+                  | unit
+                  | data
+                  | 𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟷_𝚎𝚕𝚎𝚖𝚎𝚗𝚝
+                  | 𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟸_𝚎𝚕𝚎𝚖𝚎𝚗𝚝
+                  | 𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝚖𝚕𝚛𝚎𝚜𝚞𝚕𝚝
+
+T ∈ Built-in type ::= a
+                    | list(T)
+                    | pair(T, T)
+</code></pre>
+<p>The following table shows the values and concrete syntaxes of the types and type operators:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Type 𝑇</th><th style="text-align: left">Value</th><th style="text-align: left">Concrete Syntax 𝐂(𝑇)</th></tr></thead><tbody>
+<tr><td style="text-align: left">integer</td><td style="text-align: left"><code>ℤ</code></td><td style="text-align: left"><code>-?[0-9]+</code></td></tr>
+<tr><td style="text-align: left">bytestring</td><td style="text-align: left">the set of sequences of bytes or 8-bit characters</td><td style="text-align: left"><code>#([0-9A-Fa-f][0-9A-Fa-f])*</code></td></tr>
+<tr><td style="text-align: left">string</td><td style="text-align: left">the set of sequences of Unicode characters</td><td style="text-align: left">see below</td></tr>
+<tr><td style="text-align: left">bool</td><td style="text-align: left"><code>{true, false}</code></td><td style="text-align: left"><code>True | False</code></td></tr>
+<tr><td style="text-align: left">unit</td><td style="text-align: left"><code>{()}</code></td><td style="text-align: left"><code>()</code></td></tr>
+<tr><td style="text-align: left">data</td><td style="text-align: left">see below</td><td style="text-align: left">see below</td></tr>
+<tr><td style="text-align: left">𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟷_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</td><td style="text-align: left"><code>𝐺₁</code></td><td style="text-align: left"><code>0x[0-9A-Fa-f]{96}</code> (see below)</td></tr>
+<tr><td style="text-align: left">𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟸_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</td><td style="text-align: left"><code>𝐺₂</code></td><td style="text-align: left"><code>0x[0-9A-Fa-f]{192}</code> (see below)</td></tr>
+<tr><td style="text-align: left">𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝚖𝚕𝚛𝚎𝚜𝚞𝚕𝚝</td><td style="text-align: left"><code>𝐻</code></td><td style="text-align: left">see below</td></tr>
+</tbody></table>
+</div>
+<p>For the definitions of <code>𝐺₁</code>, <code>𝐺₂</code> and <code>𝐻</code>, refer to the <a href="https://plutus.cardano.intersectmbo.org/resources/plutus-core-spec.pdf">Plutus Core Spec</a>.</p>
+<p>In the following, we use <code>𝑐(𝑇) ∈ 𝐂(𝑇)</code> to denote a valid representation of a constant of type 𝑇.</p>
+<h3 id="concrete-syntax-for-strings"><a class="header" href="#concrete-syntax-for-strings">Concrete Syntax for Strings</a></h3>
+<p>Strings are represented as sequences of Unicode characters enclosed in
+double quotes, and may include standard escape sequences.
+Surrogate characters in the range <code>U+D800</code> - <code>U+DFFF</code> are replaced with the Unicode replacement character <code>U+FFFD</code>.</p>
+<h3 id="concrete-syntax-for-lists-and-pairs"><a class="header" href="#concrete-syntax-for-lists-and-pairs">Concrete Syntax for Lists and Pairs</a></h3>
+<p>A list of type <code>list(𝑡)</code> is written as a syntactic list <code>[𝑐₁, … ,𝑐ₙ]</code>, where each <code>𝑐ᵢ ∈ 𝐂(𝑡)</code>.</p>
+<p>A pair of type <code>pair(𝑡₁, 𝑡₂)</code> is written as a syntactic pair <code>(𝑐₁, 𝑐₂)</code> where <code>𝑐₁ ∈ 𝐂(𝑡₁)</code> and <code>𝑐₂ ∈ 𝐂(𝑡₂)</code>.</p>
+<p>Some valid constant expressions are:</p>
+<ul>
+<li><code>(con (list integer) [11, 22, 33])</code></li>
+<li><code>(con (pair bool string) (True, "Plutus"))</code></li>
+<li><code>(con (list (pair bool (list bytestring))) [(True, []), (False, [#,#1F]), (True, [#123456, #AB, #ef2804])])</code></li>
+</ul>
+<h3 id="the-data-type"><a class="header" href="#the-data-type">The <code>data</code> Type</a></h3>
+<p>We provide a built-in type, <code>data</code>, which permits the encoding of simple data structures
+for use as arguments to Plutus Core scripts.
+The Haskell definition of <code>data</code> can be found in <a href="https://plutus.cardano.intersectmbo.org/haddock/latest/plutus-core/PlutusCore-Data.html#t:Data">PlutusCore.Data</a>.</p>
+<h3 id="concrete-syntax-for-data"><a class="header" href="#concrete-syntax-for-data">Concrete Syntax for <code>data</code></a></h3>
+<p>The concrete syntax for 𝚍𝚊𝚝𝚊 is given by</p>
+<pre><code class="language-text">𝑐(𝚍𝚊𝚝𝚊) ∶∶= (Constr 𝑐(𝚒𝚗𝚝𝚎𝚐𝚎𝚛) 𝑐(𝚕𝚒𝚜𝚝(𝚍𝚊𝚝𝚊)))
+          | (Map 𝑐(𝚕𝚒𝚜𝚝(𝚙𝚊𝚒𝚛(𝚍𝚊𝚝𝚊,𝚍𝚊𝚝𝚊))))
+          | (List 𝑐(𝚕𝚒𝚜𝚝(𝚍𝚊𝚝𝚊)))
+          | (I 𝑐(𝚒𝚗𝚝𝚎𝚐𝚎𝚛))
+          | (B 𝑐(𝚋𝚢𝚝𝚎𝚜𝚝𝚛𝚒𝚗𝚐)).
+</code></pre>
+<p>Some valid data constants are:</p>
+<ul>
+<li><code>(con data (Constr 1 [(I 2), (B #), (Map [])]))</code></li>
+<li><code>(con data (Map [((I 0), (B #00)), ((I 1), (B #0F))]))</code></li>
+<li><code>(con data (List [(I 0), (I 1), (B #7FFF), (List []])))</code></li>
+<li><code>(con data (I -22))</code></li>
+<li><code>(con data (B #001A))</code></li>
+</ul>
+<h3 id="concrete-syntax-for-bls12-381-types"><a class="header" href="#concrete-syntax-for-bls12-381-types">Concrete syntax for BLS12-381 Types</a></h3>
+<p>The concrete syntaxes for <code>𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟷_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</code> and <code>𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟸_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</code> are provided only for use in textual Plutus Core programs, for example for experimentation and testing.
+We do not support constants of any of the BLS12-381 types in serialised programs.</p>
+<p>If you need to put <code>𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟷_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</code> and <code>𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝙶𝟸_𝚎𝚕𝚎𝚖𝚎𝚗𝚝</code> in your script, you can instead use the appropriate uncompression function on a bytestring constant.</p>
+<p>No concrete syntax is provided for values of type <code>𝚋𝚕𝚜𝟷𝟸_𝟹𝟾𝟷_𝚖𝚕𝚛𝚎𝚜𝚞𝚕𝚝</code>.
+It is not possible to parse such values, and they will appear as <code>(con bls12_381_mlresult &lt;opaque&gt;)</code> if output by a program.</p>
+<h2 id="built-in-functions"><a class="header" href="#built-in-functions">Built-in Functions</a></h2>
+<p>Plutus includes a set of built-in functions.
+Like in Haskell, these can be polymorphic, accepting both type and term arguments.
+However, Plutus distinguishes between two kinds of type arguments:</p>
+<ul>
+<li>A built-in-polymorphic type argument (denoted as <code>𝑎#</code>, <code>𝑏#</code> etc. in the spec) is limited to built-in types.</li>
+<li>A fully-polymorphic type argument (denoted as <code>∗</code> in the spec) represents arbitrary terms.</li>
+</ul>
+<p><code>∗</code> can not be used as an argument to a type operator.
+For instance, <code>list(∗)</code> is not allowed, whereas <code>list(𝑎#)</code> and <code>pair(𝑎#, integer)</code> are valid.</p>
+<p>A term argument of type <code>∗</code> can be any UPLC term.
+Multiple arguments of type <code>∗</code> are independent and need not be related.
+All other term arguments must be UPLC constants of the appropriate types.
+For example, an argument of type <code>pair(𝑎#, 𝑎#)</code> must be a pair constant, where both components are constants of the same built-in type.</p>
+<p>A built-in function returns an application consisting of a head and zero or more arguments.
+Most built-in functions returns a single value, which corresponds to an application with zero argument.
+Each of the head and the arguments may be either a UPLC constant, or of type <code>∗</code>.
+If it is of type <code>∗</code>, it must be one of the arguments passed to the built-in function, unmodified.</p>
+<p>Take built-in function <code>ifThenElse</code> as an example.
+It has signature <code>[∀∗, 𝚋𝚘𝚘𝚕, ∗, ∗] → ∗</code>.
+Thus it takes three term arguments: a <code>bool</code> constant, followed by two arbitrary terms.
+Since its return type is <code>∗</code>, the result must be either the second argument or the third argument.</p>
+<p>As another example, built-in function <code>mkCons</code> has signature <code>[∀𝑎#, 𝑎#, 𝚕𝚒𝚜𝚝(𝑎#)] → 𝚕𝚒𝚜𝚝(𝑎#)</code>, indicating that it takes a constant of some type, and a list constant whose elements are of the same type.
+The result is a list constant of the same element type.</p>
+<p>Type arguments are not passed explicitly when calling a built-in function.
+In UPLC, type instantiation is achieved via the <code>force</code> construct.</p>
+<p>Because introducing built-in functions requires a hard fork, each built-in function is introduced in a specific major protocol version.
+For example, <code>integerToByteString</code> was introduced in major protocol version 9 (following the Chang hard fork).
+Moreover, not all built-in functions are available in every Plutus ledger language version (Plutus V1, V2, V3).
+Scripts using an unavailable built-in function will be rejected by the Cardano node.
+More details will be provided in Script Deserialization and Execution.</p>
+<p>For the full list of UPLC built-in functions, their signatures, semantics, and supported Plutus ledger language versions and protocol versions, refer to the <a href="https://plutus.cardano.intersectmbo.org/resources/plutus-core-spec.pdf">Plutus Core Spec</a>, Section 4.3 (Built-in types and functions).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../plutus/syntax.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../plutus/cek.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../plutus/syntax.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../plutus/cek.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../.mdbook/mermaid.min.js"></script>
+        <script src="../.mdbook/mermaid-init.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

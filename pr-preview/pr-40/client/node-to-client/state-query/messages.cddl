@@ -1,0 +1,36 @@
+;
+; LocalStateQuery mini-protocol.
+;
+
+localStateQueryMessage
+  = msgAcquire
+  / msgAcquired
+  / msgFailure
+  / msgQuery
+  / msgResult
+  / msgRelease
+  / msgReAcquire
+  / lsqMsgDone
+
+acquireFailurePointTooOld     = 0
+acquireFailurePointNotOnChain = 1
+
+failure      = acquireFailurePointTooOld
+             / acquireFailurePointNotOnChain
+
+msgAcquire   = [0, point]
+             / [8]
+             / [10]
+msgAcquired  = [1]
+msgFailure   = [2, failure]
+; ANCHOR: api
+msgQuery     = [3, $query]
+msgResult    = [4, $result]
+; ANCHOR_END: api
+msgRelease   = [5]
+msgReAcquire = [6, point]
+             / [9]
+             / [11]
+lsqMsgDone   = [7]
+
+point = any
