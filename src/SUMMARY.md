@@ -20,6 +20,8 @@
   - [`cardano-node`'s ChainDB](storage/cardano-node-chaindb/README.md)
 - [Mempool](mempool/README.md)
 - [Ledger](ledger/README.md)
+  - [Ledger Rules](ledger/ledger-rules/README.md)
+    - [Witness Validation](ledger/ledger-rules/witness-validation.md)
   - [Transaction fee](ledger/transaction-fee.md)
   - [Block Validation](ledger/block-validation.md)
 - [Plutus](plutus/README.md)
