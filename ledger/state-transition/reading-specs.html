@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The State Transition Function - Cardano Blueprint</title>
+        <title>How to read the Ledger specs - Cardano Blueprint</title>
 
 
         <!-- Custom HTML head -->
@@ -12,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../favicon.svg">
-        <link rel="shortcut icon" href="../favicon.png">
-        <link rel="stylesheet" href="../css/variables.css">
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/chrome.css">
-        <link rel="stylesheet" href="../css/print.css" media="print">
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../fonts/fonts.css">
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "../";
+            const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex.js";
+            window.path_to_searchindex_js = "../../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc.js"></script>
+        <script src="../../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -106,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -141,13 +141,13 @@
                     <h1 class="menu-title">Cardano Blueprint</h1>
 
                     <div class="right-buttons">
-                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/ledger/state-transition.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/ledger/state-transition/reading-specs.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -249,65 +249,20 @@
 }
 
 </style>
-<h1 id="the-ledger-state-transition"><a class="header" href="#the-ledger-state-transition">The ledger state transition</a></h1>
-<p>The ledger can be fundamentally seen as a state transition function. Given a
-ledger state and a signal (typically a block) we return a new ledger state.</p>
-<p>In the formal modeling of the ledger, we allow a slightly richer definition in
-order to bring more clarity. As such, we think of the ledger transition function
-as having three parts:</p>
-<ul>
-<li>
-<p>The <em>Environment</em>. This consists of “read-only” data which can affect the
-transition. This might consist of things such as as the protocol parameters
-or the current slot or block number.</p>
-</li>
-<li>
-<p>The <em>State</em>. This is the current state of the ledger. It includes obvious
-things such as the UTxO set.</p>
-</li>
-<li>
-<p>The <em>Signal</em>. The signal is what drives evolution of the ledger. There are
-three top-level signals which the ledger has to consider:</p>
-<ul>
-<li>
-<p>A <em>block body</em>. When a new block is added to the chain, the state is
-updated. Since the ledger is concerned only with the
-<a href="./concepts/blocks.html">block body</a>, that is the part which drives the state
-transition.</p>
-</li>
-<li>
-<p>A <em>transaction</em>. This is needed to validate transactions when they enter
-the mempool, before including them into a block.</p>
-</li>
-<li>
-<p>A <em>tick</em>. This represents time moving on. Sometimes the state of the
-ledger updates just due to time moving - for example, at an epoch boundary.</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>The question of validity is determined inductively from an initial state. A
-transaction is valid with respect to some state if one can correctly apply the
-transition function to yield a new state, which is then itself considered valid.</p>
-<p>We discuss the question of validity for transactions and blocks in
-<a href="./state-transition/validity.html">Validity</a>. Ticks must always be valid - if we
-are in a situation where we cannot advance time in a valid fashion, then we
-are in a very bad situation indeed!</p>
-<p>The ledger state transition function must execute identically on each node in
-the network. Consequently, the full function is defined in the ledger specs -
-formal or semi-formal expressions of the computation to be performed. More
-detail on how to read the specs is detailed in
-<a href="./state-transition/reading-specs.html">How to read the ledger specs</a></p>
+<h1 id="how-to-read-the-ledger-specs"><a class="header" href="#how-to-read-the-ledger-specs">How to read the ledger specs</a></h1>
+<blockquote>
+<p>TODO This section is a stub</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../ledger/concepts/determinism.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../ledger/state-transition/validity.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../ledger/state-transition/validity.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../ledger/transaction-fee.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -317,11 +272,11 @@ detail on how to read the specs is detailed in
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../ledger/concepts/determinism.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../ledger/state-transition/validity.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../ledger/state-transition/validity.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../ledger/transaction-fee.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -336,17 +291,17 @@ detail on how to read the specs is detailed in
         </script>
 
 
-        <script src="../elasticlunr.min.js"></script>
-        <script src="../mark.min.js"></script>
-        <script src="../searcher.js"></script>
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
 
-        <script src="../clipboard.min.js"></script>
-        <script src="../highlight.js"></script>
-        <script src="../book.js"></script>
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../.mdbook/mermaid.min.js"></script>
-        <script src="../.mdbook/mermaid-init.js"></script>
+        <script src="../../.mdbook/mermaid.min.js"></script>
+        <script src="../../.mdbook/mermaid-init.js"></script>
 
 
 

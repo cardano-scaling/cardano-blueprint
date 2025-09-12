@@ -249,6 +249,10 @@
 }
 
 </style>
+<h1 id="block-validity"><a class="header" href="#block-validity">Block Validity</a></h1>
+<blockquote>
+<p>This section is currently a stub</p>
+</blockquote>
 <h1 id="transaction-validity"><a class="header" href="#transaction-validity">Transaction Validity</a></h1>
 <p>What does it mean for a transaction to be valid? The ledger specs define it
 quite simply: a transaction is valid if it may be applied to a valid ledger
@@ -295,7 +299,7 @@ collateral being taken - they can validate that their script passes before
 submitting the transaction and then be assured that it will either pass when
 the transaction is included, or that the transaction will fail during phase 1
 (for example, if an input has been spent).<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup></p>
-<h2 id="static-vs-dynamic-checks"><a class="header" href="#static-vs-dynamic-checks">Static vs Dynamic Checks</a></h2>
+<h1 id="static-vs-dynamic-checks"><a class="header" href="#static-vs-dynamic-checks">Static vs Dynamic Checks</a></h1>
 <p>Since transaction validity is defined with regard to a ledger state, a change
 to the ledger state may result in previously valid transactions now becoming
 invalid. For example, the time may have moved past the transaction’s validity
@@ -318,11 +322,7 @@ the ledger state is updated. Obvious examples of dynamic checks include
 verifying that inputs exist, checking that the transaction still sits within its
 validity window, and validating block transaction size against the protocol
 parameters.</p>
-<h1 id="block-validity"><a class="header" href="#block-validity">Block Validity</a></h1>
-<blockquote>
-<p>This section is currently a stub</p>
-</blockquote>
-<h1 id="relevance-for-the-node-developer"><a class="header" href="#relevance-for-the-node-developer">Relevance for the node developer</a></h1>
+<h2 id="relevance-for-the-node-developer"><a class="header" href="#relevance-for-the-node-developer">Relevance for the node developer</a></h2>
 <p>The above is mostly relevant for node developers in that it is useful to be able
 to run the ledger transitions with fine-grained control over which checks are
 computed.</p>
@@ -362,7 +362,7 @@ script. <a href="#fr-1-1">↩</a></p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../ledger/transaction-fee.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../ledger/state-transition/reading-specs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -376,7 +376,7 @@ script. <a href="#fr-1-1">↩</a></p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../ledger/transaction-fee.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../ledger/state-transition/reading-specs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
