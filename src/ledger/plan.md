@@ -16,18 +16,21 @@ details needed by all potential implementations.
 
 - Concepts
   - [x] Blocks
-    - [x] The header/body split
   - Transactions
   - Eras
   - The structure of an epoch
-  - Determinism
+  - [x] Determinism
 - The ledger state transition
-  - [x] How to read the specs
+  - [ ] How to read the specs
     - Old-style semi-formal specs
     - New-style Agda specifications
   - [x] Validity
     - [x] Multi-phase validity
     - [x] Static vs dynamic checks
+  - Non-integral math
+  - Transaction fee calculation
+  - Snapshots
+  - [ ] Reward calculation
 - Ledger interfaces
   - To the consensus layer
     - Applying a block
@@ -41,11 +44,6 @@ details needed by all potential implementations.
     - Revalidating a transaction
   - To the CLI
     - Forecasting the leader schedule
-- Understanding parts of the transition
-  - Non-integral math
-  - Transaction fee calculation
-  - Snapshots
-  - Reward calculation
 - Ledger serialisation
   - Transaction and block formats
   - The ledger state
@@ -55,3 +53,4 @@ details needed by all potential implementations.
   - Computational concerns
     - Avoiding spikes
   - Rollbacks and storage
+  - [x] The header/body split
