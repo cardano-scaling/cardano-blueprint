@@ -1,0 +1,2 @@
+cargo::rustc-check-cfg=cfg(atomic64, atomic32)
+cargo::rustc-cfg=atomic64
