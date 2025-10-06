@@ -1,0 +1,17 @@
+[package]
+name = "cardano_golden_test_vectors"
+version = "0.1.0"
+edition = "2024"
+authors = ["Pi Lanningham <pi@sundae.fi>"]
+description = "A small crate for parsing Cardano test vectors"
+license = "Apache-2.0"
+
+[dependencies]
+anyhow = "1.0"
+serde = "1.0"
+minicbor = { version = "0.26.0", features = ["std", "half", "derive"] }
+pallas = "0.32.1"
+pallas-primitives = "0.32.1"
+pallas-codec = "0.32.1"
+flate2 = "1.1.4"
+tar = "0.4.44"
