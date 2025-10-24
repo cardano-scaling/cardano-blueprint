@@ -1,5 +1,52 @@
 Logbook about `cardano-blueprint` that contains thinking, discussions, pains, joys, events, and experiences that happen on a daily basis. It is supposed to be a kind of [Stream of consciousness](https://en.wikipedia.org/wiki/Stream_of_consciousness) that can later be searched, linked to or reviewed. It may also be used as a very informal decision log.
 
+## 2025-05-09
+
+By @ch1bo on writing local state query serialization tests in `ouroboros-consensus`
+
+- If we want to use `cddlc`, we need to package it using `nix` to make it available to CI.
+- Cuddle based tests in `cardano-ledger` are way faster than the ones running the ruby-based `cddl` tool.
+- The LocalStateQuery API description and example cbor I envisioned to have in the cardano-blueprint would be *full messages* as sent over the wire.
+- After moving the test suite into `ouroboros-consensus-cardano` tests I seem to have everything in scope, network decoders and `CardanoBlock` which selects all the right things.
+- Making sure the right type class instances are in scope was a bit tricky (needed imports like `import Ouroboros.Consensus.Shelley.Ledger.SupportsProtocol ()`)
+- Finally I have a working roundtrip test for queries and when doing it for results (and some `typed-protocols` annoyance) I came across this weird thing:
+  - After correctly decoding the `GetSystemStart` result from:
+
+        820483c2581e65fea62360470c59141d0ba6cc897f99e050184606937264a1f8c5026abc3b3a5d754770442481c3581e50670ee65e805e3cc5aadf6619e791db8b1c2237dd918ba3b6818e7c258a
+
+  - Re-encoding it as `MsgResult` produces:
+
+        820483c2581e65fea62360470c59141d0ba6cc897f99e050184606937264a1f8c5026abc01c3581e50670ee65e805e3cc5aadf6619e791db8b1c2237dd918ba3b6818e7c258a
+
+  - In diagnostic notation:
+
+        [
+            4,
+            [
+                2(h'65fea62360470c59141d0ba6cc897f99e050184606937264a1f8c5026abc'),
+                -4205646576720553090_3,
+                3(h'50670ee65e805e3cc5aadf6619e791db8b1c2237dd918ba3b6818e7c258a'),
+            ],
+        ]
+
+    becomes
+
+        [
+            4,
+            [
+                2(h'65fea62360470c59141d0ba6cc897f99e050184606937264a1f8c5026abc'),
+                1,
+                3(h'50670ee65e805e3cc5aadf6619e791db8b1c2237dd918ba3b6818e7c258a'),
+            ],
+        ]
+
+  - Overflow on the second field of `UTCTime`!?
+
+  - Turns out the `FromCBOR UTCTime` is using [`fromOrdinalDate`](https://hackage.haskell.org/package/time-1.14/docs/Data-Time-Calendar-OrdinalDate.html#v:fromOrdinalDate) which clips `dayOfYear` (the second field, an `Int`) to valid range `[1, 366]`
+- So in fact `dayOfYear` in `cddl` should not be an `int` (with which the example was generated)!
+- Made a CI job to check cbor against cddl in `cardano-blueprint`, switched `dayOfYear` to `uint` and regenerate example. Now it fails because the generated `532554154` is clamped to `366`.
+- Are roundtrips even required? As long as we can decode what comes from the CDDL and what we encode is conformant that might be good enough?
+
 ## 2025-03-25
 
 By @ch1bo

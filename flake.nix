@@ -42,7 +42,10 @@
 
         devShells.default = pkgs.mkShell {
           inputsFrom = [ packages.mdbook ];
-          buildInputs = formattingPkgs;
+          buildInputs = formattingPkgs ++ [
+            pkgs.cddl
+            pkgs.xxd
+          ];
         };
       }
     );

@@ -79,6 +79,9 @@ _Since: v9_
 
 Query the chain's start time as a `UTCTime`.
 
+> [!CAUTION]
+> Is this the Byron or Shelly start time? 
+
 ```cddl
 {{#include messages.cddl:api}}
 ```
@@ -98,6 +101,10 @@ Example response:
 ```cbor
 {{#include examples/getSystemStart/result.cbor}}
 ```
+
+> [!WARNING]
+> TODO: Create more realistic examples and use a tool to probabilistically verify more data.
+> TODO: Also use CBOR diagnostic notation for examples
 
 > [!CAUTION]
 > FIXME: While I experimented in using the network / consensus cddl parts above, `time` would be defined in the CDDL prelude (a number, assuming seconds since epoch), but is actually incorrect and the result is serialized using `ToCBOR UTCTime` following this cddl:

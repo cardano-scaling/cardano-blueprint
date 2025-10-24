@@ -1,0 +1,29 @@
+name: Check cbor examples
+
+on:
+  pull_request:
+  push:
+    branches:
+    - main
+  schedule:
+    # Everyday at 4:00 AM
+    - cron: "0 4 * * *"
+
+jobs:
+  check-cbor-examples:
+    name: Check cbor examples
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install nix
+      uses: cachix/install-nix-action@V27
+      with:
+        extra_nix_config: |
+          accept-flake-config = true
+          log-lines = 1000
+
+    - name: Enter nix shell
+      uses: nicknovitski/nix-develop@v1
+
+    - run: ./.github/workflows/check-examples.sh
