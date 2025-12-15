@@ -68,6 +68,6 @@ By @ch1bo
 
 By @yHSJ
 
-I've written up some basic information about the [ScriptContext](./src/plutus/script-context.md) and provided some initial test vectors. Some important questions:
+I've written up some basic information about the [ScriptContext](plutus/script-context.md) and provided some initial test vectors. Some important questions:
 - Where should this live? `Plutus`? `Ledger`? Elsewhere?
 - Do we want to provide a more robust specification of each version's `ScriptContext` and serialization to `PlutusData`? This would be massively helpful for future node implementors, but is also risky since the Haskell team intentionally has not specified this (they say it's an "implementation detail". Thus, the Haskell implementation is the source of truth and should be treated as such.
