@@ -22,7 +22,7 @@ end
 
 ```
 
-See also the [Block CDDL](https://github.com/IntersectMBO/cardano-ledger/blob/master/eras/conway/impl/cddl-files/conway.cddl#L8)
+See also the [Block CDDL](https://github.com/IntersectMBO/cardano-ledger/blob/master/eras/conway/impl/cddl/data/conway.cddl#L8)
 for the Conway era (the latest era at the time of writing).
 
 ## The header/body split
