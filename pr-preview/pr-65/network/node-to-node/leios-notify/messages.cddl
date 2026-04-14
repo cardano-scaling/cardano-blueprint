@@ -16,4 +16,4 @@ size = base.word32
 point = [base.slotNo, eb_hash]
 eb_hash = base.hash
 
-;#import base as base
+;# import base as base

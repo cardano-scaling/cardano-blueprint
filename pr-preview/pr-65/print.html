@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7e636138.js";
+            window.path_to_searchindex_js = "searchindex-72884e64.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-f932e73a.js"></script>
@@ -1312,7 +1312,7 @@ size = base.word32
 point = [base.slotNo, eb_hash]
 eb_hash = base.hash
 
-;#import base as base
+;# import base as base
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
@@ -1512,14 +1512,6 @@ leios_bls_signature = bytes .size 48
 <p>A <code>vote</code> carries the slot-based election identifier, a persistent voter ID,
 a BLS eligibility signature proving the voter was elected, the hash of the EB
 being endorsed, and a BLS vote signature over that EB.</p>
-<blockquote class="blockquote-tag blockquote-tag-note">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>MsgClientDone</code> (<code>[1]</code>) and <code>MsgRequestNextVote</code> (<code>[1, 0]</code>) share tag <code>1</code>
-and are disambiguated by array length. The <code>persistent_voter_id</code> semantics
-and the vote aggregation scheme are still being designed. See
-<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a> for
-rationale and ongoing discussion.</p>
-</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="consensus"><a class="header" href="#consensus">Consensus</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
