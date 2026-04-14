@@ -3769,11 +3769,13 @@ information on what is available.</p>
 enforced in CI. With <code>nix develop</code> active:</p>
 <pre><code class="language-shell">treefmt
 </code></pre>
-<!-- markdown-link-check-disable-next-line -->
+<!-- markdown-link-check-disable -->
 <p>See <code>formattingPkgs</code> in <a href="flake.nix"><code>flake.nix</code></a> for the full list of tools.</p>
+<!-- markdown-link-check-enable -->
 <h2 id="running-tests"><a class="header" href="#running-tests">Running tests</a></h2>
-<!-- markdown-link-check-disable-next-line -->
+<!-- markdown-link-check-disable -->
 <p>The repository includes a test suite under <a href="test/README.html"><code>test/</code></a> that validates the CDDL specifications for consistency. With <code>nix develop</code> active, run:</p>
+<!-- markdown-link-check-enable -->
 <pre><code class="language-shell">bats test/validate-cddl.bats
 </code></pre>
 <p>These tests also run automatically in CI on every pull request and push to <code>main</code>.</p>
