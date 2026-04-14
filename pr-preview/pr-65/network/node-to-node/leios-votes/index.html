@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-59710ca1.js";
+            window.path_to_searchindex_js = "../../../searchindex-7e636138.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-f932e73a.js"></script>
@@ -244,20 +244,14 @@ delivers one vote at a time.</p>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
-;
-; LeiosVotes mini-protocol
-;
-; NOTE: This is a draft specification. Tags marked TODO are provisional.
-;
-
 leiosVotesMessage
      = msgClientDone
      / msgRequestNextVote
      / msgLeiosVote
 
-msgClientDone = [1] ; NOTE: tag 1 shared with MsgRequestNextVote (discriminated by length)
 msgRequestNextVote = [1, 0]
 msgLeiosVote = [2, vote]
+msgClientDone = [3]
 
 vote =
   [ election_id           : base.slotNo

@@ -1,17 +1,11 @@
-;
-; LeiosVotes mini-protocol
-;
-; NOTE: This is a draft specification. Tags marked TODO are provisional.
-;
-
 leiosVotesMessage
      = msgClientDone
      / msgRequestNextVote
      / msgLeiosVote
 
-msgClientDone = [1] ; NOTE: tag 1 shared with MsgRequestNextVote (discriminated by length)
 msgRequestNextVote = [1, 0]
 msgLeiosVote = [2, vote]
+msgClientDone = [3]
 
 vote =
   [ election_id           : base.slotNo
