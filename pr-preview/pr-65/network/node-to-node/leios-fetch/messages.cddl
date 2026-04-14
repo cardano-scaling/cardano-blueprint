@@ -1,0 +1,27 @@
+;
+; LeiosFetch mini-protocol
+;
+; NOTE: This is a draft specification. Tags marked TODO are provisional.
+;
+
+leiosBlockFetchMessage
+     = msgClientDone
+     / msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+
+msgClientDone = [9] ; TODO: tag 9 is provisional
+msgLeiosBlockRequest = [0, point]
+msgLeiosBlock = [1, endorser_block]
+msgLeiosBlockTxsRequest = [2, point, bitmaps]
+msgLeiosBlockTxs = [3, point, bitmaps, txList]
+
+point = [slot, eb_hash]
+endorser_block = any ; TODO
+bitmaps = any ; TODO
+txList = [ *tx ] ; REVIEW: length-definite encoding TBD
+
+slot = uint .size 8
+eb_hash = bytes .size 32
+tx = any ; TODO: use conway.tx

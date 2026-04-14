@@ -1,0 +1,26 @@
+;
+; LeiosVotes mini-protocol
+;
+; NOTE: This is a draft specification. Tags marked TODO are provisional.
+;
+
+leiosVotesMessage
+     = msgClientDone
+     / msgRequestNextVote
+     / msgLeiosVote
+
+msgClientDone = [1] ; NOTE: tag 1 shared with MsgRequestNextVote (discriminated by length)
+msgRequestNextVote = [1, 0]
+msgLeiosVote = [2, vote]
+
+vote =
+  [ election_id           : base.slotNo
+  , persistent_voter_id   : base.word16
+  , eligibility_signature : leios_bls_signature
+  , endorser_block_hash   : base.hash
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
+
+;# import base as base

@@ -1,0 +1,24 @@
+;
+; LeiosNotify mini-protocol
+;
+; NOTE: This is a draft specification. Tags marked TODO are provisional.
+;
+
+leiosNotifyMessage
+     = msgClientDone
+     / msgLeiosNotificationRequestNext
+     / msgLeiosBlockAnnouncement
+     / msgLeiosBlockOffer
+     / msgLeiosBlockTxsOffer
+
+msgClientDone = [5] ; TODO: tag 5 is provisional
+msgLeiosNotificationRequestNext = [1, 0]
+msgLeiosBlockAnnouncement = [1, announcement] ; NOTE: tag 1 shared with RequestNext (discriminated by 2nd field)
+msgLeiosBlockOffer = [2, point, size]
+msgLeiosBlockTxsOffer = [3, point]
+
+announcement = any ; TODO
+size = uint .size 4
+point = [slot, eb_hash]
+eb_hash = bytes .size 32
+slot = uint .size 8
