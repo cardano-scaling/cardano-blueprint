@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-97a749bc.js";
+            window.path_to_searchindex_js = "searchindex-fb9648ee.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-75936e3d.js"></script>
@@ -3743,8 +3743,9 @@ How about code blocks?</p>
 <h3 id="review-contributions"><a class="header" href="#review-contributions">Review contributions</a></h3>
 <p>The Cardano Blueprint aims to be a community effort and we would love to have you become a regular visitor and maybe even reviewer of new contributions! 🤝</p>
 <h2 id="building-the-book"><a class="header" href="#building-the-book">Building the book</a></h2>
-<p>The blueprints are written using markdown and can be viewed <a href="src/introduction/README.html">directly in
-Github</a> or built into <a href="https://cardano-scaling.github.io/cardano-blueprint">the HTML
+<p>The blueprints are written using markdown and can be viewed <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main/src/introduction">directly in
+Github</a>
+or built into <a href="https://cardano-scaling.github.io/cardano-blueprint">the HTML
 site</a> using <a href="https://rust-lang.github.io/mdBook/index.html">mdbook</a>.</p>
 <h3 id="with-nix"><a class="header" href="#with-nix">With nix</a></h3>
 <pre><code class="language-shell">nix build -o out
@@ -3768,8 +3769,10 @@ information on what is available.</p>
 enforced in CI. With <code>nix develop</code> active:</p>
 <pre><code class="language-shell">treefmt
 </code></pre>
+<!-- markdown-link-check-disable-next-line -->
 <p>See <code>formattingPkgs</code> in <a href="flake.nix"><code>flake.nix</code></a> for the full list of tools.</p>
 <h2 id="running-tests"><a class="header" href="#running-tests">Running tests</a></h2>
+<!-- markdown-link-check-disable-next-line -->
 <p>The repository includes a test suite under <a href="test/README.html"><code>test/</code></a> that validates the CDDL specifications for consistency. With <code>nix develop</code> active, run:</p>
 <pre><code class="language-shell">bats test/validate-cddl.bats
 </code></pre>
