@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-72884e64.js";
+            window.path_to_searchindex_js = "../../../searchindex-e1cd8a5f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-f932e73a.js"></script>
@@ -245,20 +245,19 @@ delivers one vote at a time.</p>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
 leiosVotesMessage
-     = msgClientDone
-     / msgRequestNextVote
+     = msgRequestNextVote
      / msgLeiosVote
+     / msgClientDone
 
 msgRequestNextVote = [1, 0]
 msgLeiosVote = [2, vote]
 msgClientDone = [3]
 
 vote =
-  [ election_id           : base.slotNo
-  , persistent_voter_id   : base.word16
-  , eligibility_signature : leios_bls_signature
-  , endorser_block_hash   : base.hash
-  , vote_signature        : leios_bls_signature
+  [ election_id         : base.slotNo
+  , endorser_block_hash : base.hash
+  , voter_id            : base.word16
+  , vote_signature      : leios_bls_signature
   ]
 
 leios_bls_signature = bytes .size 48

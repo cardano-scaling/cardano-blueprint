@@ -1,9 +1,9 @@
 leiosBlockFetchMessage
-     = msgClientDone
-     / msgLeiosBlockRequest
+     = msgLeiosBlockRequest
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
+     / msgClientDone
 
 msgLeiosBlockRequest = [0, point]
 msgLeiosBlock = [1, endorser_block]

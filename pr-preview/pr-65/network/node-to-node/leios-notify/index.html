@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-72884e64.js";
+            window.path_to_searchindex_js = "../../../searchindex-e1cd8a5f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-f932e73a.js"></script>
@@ -256,11 +256,11 @@ push announcements to downstream peers with minimal latency.</p>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
 leiosNotifyMessage
-     = msgClientDone
-     / msgLeiosNotificationRequestNext
+     = msgLeiosNotificationRequestNext
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
+     / msgClientDone
 
 msgLeiosNotificationRequestNext = [0, 0]
 msgLeiosBlockAnnouncement = [1, announcement]

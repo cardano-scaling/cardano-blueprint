@@ -1,9 +1,9 @@
 leiosNotifyMessage
-     = msgClientDone
-     / msgLeiosNotificationRequestNext
+     = msgLeiosNotificationRequestNext
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
+     / msgClientDone
 
 msgLeiosNotificationRequestNext = [0, 0]
 msgLeiosBlockAnnouncement = [1, announcement]
