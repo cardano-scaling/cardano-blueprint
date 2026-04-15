@@ -1,0 +1,19 @@
+leiosVotesMessage
+     = msgRequestNextVote
+     / msgLeiosVote
+     / msgClientDone
+
+msgRequestNextVote = [1, 0]
+msgLeiosVote = [2, vote]
+msgClientDone = [3]
+
+vote =
+  [ election_id         : base.slotNo
+  , endorser_block_hash : base.hash
+  , voter_id            : base.word16
+  , vote_signature      : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
+
+;# import base as base
