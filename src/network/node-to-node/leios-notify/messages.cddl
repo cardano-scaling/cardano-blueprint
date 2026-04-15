@@ -6,17 +6,14 @@ leiosNotifyMessage
      / msgLeiosVotesOffer
      / msgClientDone
 
-msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement_header]
-msgLeiosBlockOffer              = [2, point]
-msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
-msgClientDone                   = [5]
+msgLeiosNotificationRequestNext = [0, 0]
+msgLeiosBlockAnnouncement = [1, announcement]
+msgLeiosBlockOffer = [2, leios.point, size]
+msgLeiosBlockTxsOffer = [3, leios.point]
+msgClientDone = [4]
 
-announcement_header = any ; TODO
-point = (slot, eb_hash)
-slot = base.slotNo
-eb_hash = base.hash
-voter_id = base.word16  ; REVIEW: size?
+announcement = any ; TODO
+size = base.word32
 
 ;# import base as base
+;# import leios as leios

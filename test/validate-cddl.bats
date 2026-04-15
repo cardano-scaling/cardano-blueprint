@@ -21,6 +21,7 @@ LEDGER_RAW="https://raw.githubusercontent.com/IntersectMBO/cardano-ledger/master
 # Add new files here when new modules are introduced.
 LOCAL_MODULES=(
   src/codecs/base.cddl
+  src/network/node-to-node/leios.cddl
   src/network/node-to-node/blockfetch/block.cddl
   src/network/node-to-node/chainsync/header.cddl
   src/network/node-to-node/txsubmission2/tx.cddl

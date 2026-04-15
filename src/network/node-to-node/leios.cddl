@@ -1,0 +1,4 @@
+eb_hash = base.hash
+point = [base.slotNo, eb_hash]
+
+;# import base as base
