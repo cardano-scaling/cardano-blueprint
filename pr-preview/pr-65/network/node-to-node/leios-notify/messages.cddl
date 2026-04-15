@@ -7,13 +7,12 @@ leiosNotifyMessage
 
 msgLeiosNotificationRequestNext = [0, 0]
 msgLeiosBlockAnnouncement = [1, announcement]
-msgLeiosBlockOffer = [2, point, size]
-msgLeiosBlockTxsOffer = [3, point]
+msgLeiosBlockOffer = [2, leios.point, size]
+msgLeiosBlockTxsOffer = [3, leios.point]
 msgClientDone = [4]
 
 announcement = any ; TODO
 size = base.word32
-point = [base.slotNo, eb_hash]
-eb_hash = base.hash
 
 ;# import base as base
+;# import leios as leios

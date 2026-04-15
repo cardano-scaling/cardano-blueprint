@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e1cd8a5f.js";
+            window.path_to_searchindex_js = "searchindex-1b3b8593.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-f932e73a.js"></script>
@@ -1303,16 +1303,15 @@ leiosNotifyMessage
 
 msgLeiosNotificationRequestNext = [0, 0]
 msgLeiosBlockAnnouncement = [1, announcement]
-msgLeiosBlockOffer = [2, point, size]
-msgLeiosBlockTxsOffer = [3, point]
+msgLeiosBlockOffer = [2, leios.point, size]
+msgLeiosBlockTxsOffer = [3, leios.point]
 msgClientDone = [4]
 
 announcement = any ; TODO
 size = base.word32
-point = [base.slotNo, eb_hash]
-eb_hash = base.hash
 
 ;# import base as base
+;# import leios as leios
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
@@ -1397,19 +1396,18 @@ leiosBlockFetchMessage
      / msgLeiosBlockTxs
      / msgClientDone
 
-msgLeiosBlockRequest = [0, point]
+msgLeiosBlockRequest = [0, leios.point]
 msgLeiosBlock = [1, endorser_block]
-msgLeiosBlockTxsRequest = [2, point, bitmaps]
-msgLeiosBlockTxs = [3, point, bitmaps, txList]
+msgLeiosBlockTxsRequest = [2, leios.point, bitmaps]
+msgLeiosBlockTxs = [3, leios.point, bitmaps, txList]
 msgClientDone = [4]
 
-point = [base.slotNo, eb_hash]
-eb_hash = base.hash
 endorser_block = any ; TODO
 bitmaps = any ; TODO
 txList = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
 ;# import base as base 
+;# import leios as leios 
 ;# import tx as tx
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -1498,15 +1496,18 @@ msgLeiosVote = [2, vote]
 msgClientDone = [3]
 
 vote =
-  [ election_id         : base.slotNo
-  , endorser_block_hash : base.hash
-  , voter_id            : base.word16
-  , vote_signature      : leios_bls_signature
+  [ election_id
+  , leios.eb_hash
+  , voter_id
+  , vote_signature : leios_bls_signature
   ]
 
+election_id = base.slotNo
+voter_id = base.word16
 leios_bls_signature = bytes .size 48
 
 ;# import base as base
+;# import leios as leios
 </code></pre>
 <p>A <code>vote</code> carries the slot-based election identifier, a persistent voter ID,
 a BLS eligibility signature proving the voter was elected, the hash of the EB

@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-e1cd8a5f.js";
+            window.path_to_searchindex_js = "../../../searchindex-1b3b8593.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-f932e73a.js"></script>
@@ -254,15 +254,18 @@ msgLeiosVote = [2, vote]
 msgClientDone = [3]
 
 vote =
-  [ election_id         : base.slotNo
-  , endorser_block_hash : base.hash
-  , voter_id            : base.word16
-  , vote_signature      : leios_bls_signature
+  [ election_id
+  , leios.eb_hash
+  , voter_id
+  , vote_signature : leios_bls_signature
   ]
 
+election_id = base.slotNo
+voter_id = base.word16
 leios_bls_signature = bytes .size 48
 
 ;# import base as base
+;# import leios as leios
 </code></pre>
 <p>A <code>vote</code> carries the slot-based election identifier, a persistent voter ID,
 a BLS eligibility signature proving the voter was elected, the hash of the EB

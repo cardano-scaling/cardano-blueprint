@@ -5,17 +5,16 @@ leiosBlockFetchMessage
      / msgLeiosBlockTxs
      / msgClientDone
 
-msgLeiosBlockRequest = [0, point]
+msgLeiosBlockRequest = [0, leios.point]
 msgLeiosBlock = [1, endorser_block]
-msgLeiosBlockTxsRequest = [2, point, bitmaps]
-msgLeiosBlockTxs = [3, point, bitmaps, txList]
+msgLeiosBlockTxsRequest = [2, leios.point, bitmaps]
+msgLeiosBlockTxs = [3, leios.point, bitmaps, txList]
 msgClientDone = [4]
 
-point = [base.slotNo, eb_hash]
-eb_hash = base.hash
 endorser_block = any ; TODO
 bitmaps = any ; TODO
 txList = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
 ;# import base as base 
+;# import leios as leios 
 ;# import tx as tx
