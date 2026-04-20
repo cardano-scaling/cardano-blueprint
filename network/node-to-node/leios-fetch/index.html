@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>ChainSync - Cardano Blueprint</title>
+        <title>LeiosFetch (proposed) - Cardano Blueprint</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main" title="Git repository" aria-label="Git repository">
                             <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
-                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/network/node-to-node/chainsync/README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/network/node-to-node/leios-fetch/README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
@@ -182,54 +182,47 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="chainsync"><a class="header" href="#chainsync">ChainSync</a></h1>
-<p><strong>Mini-protocol number: 2</strong></p>
-<p><code>ChainSync</code> is the miniprotocol used to transmit chains of headers. It is a
-pull-based miniprotocol: data is transmitted only upon explicit request from the
-client.</p>
-<p>The purpose of <code>ChainSync</code> is to enable the client to acquire and validate the
-headers of the server’s selected chain, and if it is better than the client’s
-current selection, direct <code>BlockFetch</code> to download the corresponding blocks.</p>
-<blockquote class="blockquote-tag blockquote-tag-tip">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
-<p>There usually is one <code>ChainSync</code> client per-peer connected to the node, such
-that the <em>chain state</em> of each peer is tracked independently.</p>
-</blockquote>
-<p>The connection is abruptly terminated if the peer misbehaves. In particular,
-actions considered as misbehaviour are (not exclusively):</p>
-<ul>
-<li>The peer violates the state machine of the protocol,</li>
-<li>The server sends an invalid header,</li>
-<li>The server announces a fork that is more than <code>k</code> blocks deep from the
-client’s current selection.</li>
-</ul>
+<h1 id="leiosfetch"><a class="header" href="#leiosfetch">LeiosFetch</a></h1>
+<p><strong>Mini-protocol number: 19</strong></p>
 <blockquote class="blockquote-tag blockquote-tag-warning">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>TODO: Make this list exhaustive</p>
+<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
+specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
+an extension to the Ouroboros consensus protocol aimed at significantly
+increasing transaction throughput. Details are subject to change.</p>
 </blockquote>
+<p><code>LeiosFetch</code> is the mini-protocol responsible for fetching Endorser Blocks (EBs)
+and their transaction payloads from peers. It is a pull-based protocol: the
+client explicitly requests either a full EB or a subset of its transactions
+(identified by a bitmap), and the server streams the response.</p>
+<p>EBs are discovered via <a href="../leios-notify/README.html">LeiosNotify</a>; once a node
+decides it wants a block or its transactions, it uses <code>LeiosFetch</code> to retrieve
+the data.</p>
 <h2 id="state-machine"><a class="header" href="#state-machine">State machine</a></h2>
-<p>The state machine for ChainSync is as follows:</p>
 <pre class="mermaid">graph LR
-    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
-    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
-    linkStyle default stroke:gray
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+   linkStyle default stroke:gray
 
-    StDone(((StDone)))
+   StDone(((StDone)))
 
-    i(( )) --&gt; StIdle
-    StIdle --MsgDone--&gt; StDone
-    StIdle --MsgFindIntersect--&gt; StIntersect
-    StIdle --MsgRequestNext--&gt; StCanAwait
-    StIntersect --MsgIntersectNotFound--&gt; StIdle
-    StIntersect --MsgIntersectFound--&gt; StIdle
-    StCanAwait --MsgRollForward--&gt; StIdle
-    StCanAwait --MsgRollBackward--&gt; StIdle
-    StCanAwait --MsgAwaitReply--&gt; StMustReply
-    StMustReply --MsgRollForward--&gt; StIdle
-    StMustReply --MsgRollBackward--&gt; StIdle
+   i(( )) --&gt; StIdle
+   StIdle --MsgDone--&gt; StDone
+   StIdle --MsgLeiosBlockRequest--&gt; StBlock
+   StBlock --MsgLeiosBlock--&gt; StIdle
 
-    class StIdle client
-    class StCanAwait,StIntersect,StMustReply server
+   StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
+   StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
+
+   StIdle --MsgLeiosVotesRequest--&gt; StVotes
+   StVotes --MsgLeiosVotes--&gt;StIdle
+
+   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
+   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
+   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
+
+   class StIdle client
+   class StBlock,StBlockTxs,StVotes,StBlockRange server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -240,9 +233,10 @@ client’s current selection.</li>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
-<tr><td style="text-align: left">StIntersect</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StMustReply</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StVotes</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -253,140 +247,93 @@ client’s current selection.</li>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgRequestNext</td><td></td><td style="text-align: left">StCanAwait</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgFindIntersect</td><td><code>[point]</code></td><td style="text-align: left">StIntersect</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left">MsgAwaitReply</td><td></td><td style="text-align: left">StMustReply</td></tr>
-<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left">MsgRollForward</td><td><code>header</code>, <code>tip</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left">MsgRollBackward</td><td><code>point_old</code>, <code>tip</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StMustReply</td><td style="text-align: left">MsgRollForward</td><td><code>header</code>, <code>tip</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StMustReply</td><td style="text-align: left">MsgRollBackward</td><td><code>point_old</code>, <code>tip</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StIntersect</td><td style="text-align: left">MsgIntersectFound</td><td><code>point_intersect</code>, <code>tip</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StIntersect</td><td style="text-align: left">MsgIntersectNotFound</td><td><code>tip</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
-<h2 id="chainsync-pipelining-or-pipelined-diffusion"><a class="header" href="#chainsync-pipelining-or-pipelined-diffusion">ChainSync pipelining or pipelined diffusion</a></h2>
-<p>Not to be confused with <em>protocol pipelining</em>. The original design of ChainSync
-was extended with pipelining capabilities: a server can transmit a <em>tentative</em>
-header on top of the selected chain, and the invalidity of such header (or the
-associated body) will not cause the connection to terminate. If the client wants
-(by considering such header as the best known chain) it can request the body of
-the block via <code>BlockFetch</code> as usually done for any block.</p>
-<p>This optimization is used to shorten the time it takes to diffuse chains on the
-network, as otherwise nodes would only announce blocks <em>after</em> they validated
-it, causing each hop through the network to be bottle-necked by validation
-times.</p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>TODO: expand pipelining explanation, possibly with diagrams</p>
-</blockquote>
-<p>There are some important considerations to take into account regarding pipelined
-diffusion:</p>
-<ul>
-<li>Nodes can pipeline only <strong>one</strong> header which must be on top of its current
-selection,</li>
-<li>If the server then validates the pipelined block and finds out it was invalid,
-it is encouraged to announce it promptly to its clients.</li>
-</ul>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>TODO: Are these hard requirements?</p>
-</blockquote>
-<p>More information can be found <a href="https://iohk.io/en/blog/posts/2022/02/01/introducing-pipelining-cardanos-consensus-layer-scaling-solution/">here</a>.</p>
-<h2 id="access-pattern-of-chainsync"><a class="header" href="#access-pattern-of-chainsync">Access pattern of ChainSync</a></h2>
-<p><code>ChainSync</code> involves potentially serving the whole chain, both the immutable
-part and the volatile part (the current node’s selection). As the current
-selection is bound to be rolled back, the <code>ChainSync</code> protocol has capabilities
-for announcing such rollbacks to clients and following rollbacks of servers.</p>
-<ul>
-<li>For the immutable part of the chain: <code>ChainSync</code> accesses blocks in a
-sequential manner, a simple iterator over such chain would suffice.</li>
-<li>For the volatile part of the chain: <code>ChainSync</code> accesses the current
-selection in a sequential manner but such selection is bound to
-change if a new chain is selected. The abstraction used to implement
-the access to the selection must be able to follow such rollbacks.</li>
-<li>Blocks that become immutable usually are written to the disk as they are not
-used for following the current chain once the node is caught up, following the
-description in <a href="../../../consensus/chainsel.html#the-k-security-parameter">the <code>k</code> security parameter</a> section. The
-implementation of <code>ChainSync</code> should be able to identify this situation, as
-blocks might be gone from the volatile part of the chain as the selection
-advances. This does not need to be made explicit for clients but it has to be
-taken into account on the implementation of the server.</li>
-</ul>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
-chainSyncMessage
-    = msgRequestNext
-    / msgAwaitReply
-    / msgRollForward
-    / msgRollBackward
-    / msgFindIntersect
-    / msgIntersectFound
-    / msgIntersectNotFound
-    / chainSyncMsgDone
+leiosBlockFetchMessage
+     = msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+     / msgLeiosVotesRequest
+     / msgLeiosVoteDelivery
+     / msgLeiosBlockRangeRequest
+     / msgLeiosNextBlockAndTxsInRange
+     / msgLeiosLastBlockAndTxsInRange
+     / msgClientDone
 
-msgRequestNext         = [0]
-msgAwaitReply          = [1]
-msgRollForward         = [2, header.header, tip]
-msgRollBackward        = [3, point, tip]
-msgFindIntersect       = [4, [* point]]
-msgIntersectFound      = [5, point, tip]
-msgIntersectNotFound   = [6, tip]
-chainSyncMsgDone       = [7]
+msgLeiosBlockRequest           = [0, point]
+msgLeiosBlock                  = [1, endorser_block]
+msgLeiosBlockTxsRequest        = [2, point, bitmaps]
+msgLeiosBlockTxs               = [3, tx_list]
+msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
+msgLeiosVoteDelivery           = [5, [1* vote ]]
+msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
+msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
+msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
+msgClientDone                  = [9]
 
-tip = [ point, base.blockNo ]
+point = (slot, eb_hash)
+start_slot = slot
+end_slot = slot
+start_hash = base.hash
+end_hash = base.hash
+slot = base.slotNo
+voter_id = base.word16  ; REVIEW: size?
+eb_hash = base.hash
+endorser_block = any ; TODO
+bitmaps = any ; TODO
+tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
-point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+vote =
+  [ election_id           : base.slotNo
+  , persistent_voter_id   : base.word16
+  , eligibility_signature : leios_bls_signature
+  , endorser_block_hash   : base.hash
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
 
 ;# import base as base
-;# import header as header
+;# import tx as tx
 </code></pre>
-<p>The header is a tag-encoded value that contains CBOR-in-CBOR headers
-for the particular era:</p>
-<pre><code class="language-cddl">;; header.cddl
-header
- = base.ns7&lt;byronHeader,
-            serialisedShelleyHeader&lt;shelley.header&gt;,
-            serialisedShelleyHeader&lt;allegra.header&gt;,
-            serialisedShelleyHeader&lt;mary.header&gt;,
-            serialisedShelleyHeader&lt;alonzo.header&gt;,
-            serialisedShelleyHeader&lt;babbage.header&gt;,
-            serialisedShelleyHeader&lt;conway.header&gt;&gt;
-
-byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
-            / [byronBoundaryIdx, #6.24(bytes .cbor byron.ebbhead)]
-
-byronBoundaryIdx = [0, base.word32]
-byronRegularIdx = [1, base.word32]
-
-serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
-
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
-;# include byron as byron
-;# include shelley as shelley
-;# include allegra as allegra
-;# include mary as mary
-;# include alonzo as alonzo
-;# include babbage as babbage
-;# include conway as conway
-;# import base as base
-</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The CBOR tags in this specification are provisional (<code>MsgClientDone</code> at <code>[9]</code>
+in particular). The <code>endorser_block</code>, <code>bitmaps</code>, and <code>tx</code> types remain
+underspecified (<code>any</code>) pending further protocol design, including the
+length-definite encoding for <code>txList</code>. Additionally, the protocol is known
+to be incomplete: catch-up oriented batch request messages are likely to be
+added, and the bitmap-based transaction request structure
+(<code>MsgLeiosBlockTxsRequest</code>) may change significantly as the roaring bitmap
+encoding is still under discussion. See
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
+for the latest design decisions.</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../../network/node-to-node/handshake/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../../network/node-to-node/leios-notify/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../../network/node-to-node/blockfetch/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../consensus/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -396,11 +343,11 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../../network/node-to-node/handshake/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../../network/node-to-node/leios-notify/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../../network/node-to-node/blockfetch/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../consensus/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../.mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "../../../searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-75936e3d.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,20 +190,21 @@ negotiate protocol versions and parameters between the initiator
 node-to-node (NTN) and one for node-to-client (NTC), which differ only
 in their protocol parameters.</p>
 <h2 id="state-machine"><a class="header" href="#state-machine">State machine</a></h2>
-<pre class="mermaid">stateDiagram
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+    linkStyle default stroke:gray
+    
+    StDone(((StDone)))
 
-    [*] --&gt; StPropose
-    StPropose --&gt; StConfirm: MsgProposeVersions
-    StConfirm --&gt; [*]: MsgAcceptVersion
-    StConfirm --&gt; [*]: MsgReplyVersion
-    StConfirm --&gt; [*]: MsgRefuse
+    i(( )) --&gt; StPropose
+    StPropose --MsgProposeVersions--&gt; StConfirm
+    StConfirm --MsgAcceptVersion--&gt; StDone
+    StConfirm --MsgReplyVersion--&gt; StDone
+    StConfirm --MsgRefuse--&gt; StDone
 
-    direction LR
-
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StPropose initiator
-    class StConfirm responder
+    class StPropose client
+    class StConfirm server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -212,8 +214,8 @@ in their protocol parameters.</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StPropose</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StConfirm</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StPropose</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StConfirm</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>

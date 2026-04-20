@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../.mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "../../../searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-75936e3d.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -212,21 +213,23 @@ terminated. Actions that are considered misbehaving are (not exclusively):</p>
 </blockquote>
 <h2 id="state-machine"><a class="header" href="#state-machine">State machine</a></h2>
 <p>The state machine for BlockFetch is as follows:</p>
-<pre class="mermaid">stateDiagram
-   direction LR
-   [*] --&gt; StIdle
-   StIdle --&gt; [*]: MsgClientDone
-   StIdle --&gt; StBusy: MsgRequestRange
-   StBusy --&gt; StIdle: MsgNoBlocks
-   StBusy --&gt; StStreaming: MsgStartBatch
-   StStreaming --&gt; StStreaming: MsgBlock
-   StStreaming --&gt; StIdle: MsgBatchDone
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+   linkStyle default stroke:gray
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle initiator
-    class StBusy responder
-    class StStreaming responder
+   StDone(((StDone)))
+
+   i(( )) --&gt; StIdle
+   StIdle --MsgClientDone--&gt; StDone
+   StIdle --MsgRequestRange--&gt; StBusy
+   StBusy --MsgNoBlocks--&gt; StIdle
+   StBusy --MsgStartBatch--&gt; StStreaming
+   StStreaming --MsgBlock--&gt; StStreaming
+   StStreaming --MsgBatchDone--&gt; StIdle
+
+   class StIdle client
+   class StBusy,StStreaming server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -236,9 +239,9 @@ terminated. Actions that are considered misbehaving are (not exclusively):</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StStreaming</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StStreaming</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>

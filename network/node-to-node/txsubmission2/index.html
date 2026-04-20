@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../.mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "../../../searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-75936e3d.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -215,25 +216,24 @@ server,</li>
 </blockquote>
 <h2 id="state-machine"><a class="header" href="#state-machine">State machine</a></h2>
 <p>The state machine for TxSubmission2 is as follows:</p>
-<pre class="mermaid">stateDiagram
-   direction LR
-   [*] --&gt; StInit
-   StInit --&gt; StIdle: MsgInit
-   StIdle --&gt; StTxs: MsgRequestTxs
-   StTxs --&gt; StIdle: MsgReplyTxs
-   StIdle --&gt; StTxIdsNonBlocking: MsgRequestTxIdsNonBlocking
-   StTxIdsNonBlocking --&gt; StIdle: MsgReplyTxIds
-   StIdle --&gt; StTxIdsBlocking: MsgRequestTxIdsBlocking
-   StTxIdsBlocking --&gt; StIdle: MsgReplyTxIds
-   StTxIdsBlocking --&gt; [*]: MsgDone
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle responder
-    class StInit initiator
-    class StTxs initiator
-    class StTxIdsBlocking initiator
-    class StTxIdsNonBlocking initiator
+   StDone(((StDone)))
+
+   i(( )) --&gt; StInit
+   StInit --MsgInit--&gt; StIdle
+   StIdle --MsgRequestTxs--&gt; StTxs
+   StTxs --MsgReplyTxs--&gt; StIdle
+   StIdle --MsgRequestTxIdsNonBlocking--&gt; StTxIdsNonBlocking
+   StTxIdsNonBlocking --MsgReplyTxIds--&gt; StIdle
+   StIdle --MsgRequestTxIdsBlocking--&gt; StTxIdsBlocking
+   StTxIdsBlocking --MsgReplyTxIds--&gt; StIdle
+   StTxIdsBlocking --MsgDone--&gt; StDone
+
+   class StInit,StTxs,StTxIdsBlocking,StTxIdsNonBlocking client
+   class StIdle server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -243,11 +243,11 @@ server,</li>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StInit</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StTxs</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StTxIdsBlocking</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StTxIdsNonBlocking</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
+<tr><td style="text-align: left">StInit</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StTxs</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StTxIdsBlocking</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StTxIdsNonBlocking</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 </tbody>
 </table>
 </div>

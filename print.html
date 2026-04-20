@@ -29,6 +29,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href=".mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-75936e3d.js"></script>
+        <script src="toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -468,24 +469,26 @@ keep agency and send a follow-up message later.</p>
 <p>We can draw this state machine in the standard way using circles and arrows, but
 with the addition of an indicator of which side has agency. This one is for the
 minimal example mini-protocol, <a href="#mini-protocols">Ping Pong</a>:</p>
-<pre class="mermaid">stateDiagram
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+    classDef init fill:black,stroke:black;
 
-    [*] --&gt; StIdle
-    StIdle --&gt; StBusy: MsgPing
-    StBusy --&gt; StIdle: MsgPong
-    StIdle --&gt; [*]: MsgDone
+   linkStyle default stroke:gray
 
-    direction LR
+   StDone(((StDone)))
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle initiator
-    class StBusy responder
+    i(( )) --&gt; StIdle
+    StIdle --MsgPing--&gt; StBusy
+    StBusy --MsgPong--&gt; StIdle
+    StIdle --MsgDone--&gt; StDone
+
+    class StIdle client
+    class StBusy server
 </pre>
 
 <p>It has been the convention to mark states where the initiator has agency
-in green and the responder in blue, as here, but we also underline it for
-responder agency in case colours aren’t clear.</p>
+in green and the responder in blue, as here.</p>
 <p>As a double check, we can show the agency for each state as a table as well:</p>
 <div class="table-wrapper">
 <table>
@@ -493,8 +496,8 @@ responder agency in case colours aren’t clear.</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -530,20 +533,21 @@ negotiate protocol versions and parameters between the initiator
 node-to-node (NTN) and one for node-to-client (NTC), which differ only
 in their protocol parameters.</p>
 <h2 id="state-machine"><a class="header" href="#state-machine">State machine</a></h2>
-<pre class="mermaid">stateDiagram
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+    linkStyle default stroke:gray
+    
+    StDone(((StDone)))
 
-    [*] --&gt; StPropose
-    StPropose --&gt; StConfirm: MsgProposeVersions
-    StConfirm --&gt; [*]: MsgAcceptVersion
-    StConfirm --&gt; [*]: MsgReplyVersion
-    StConfirm --&gt; [*]: MsgRefuse
+    i(( )) --&gt; StPropose
+    StPropose --MsgProposeVersions--&gt; StConfirm
+    StConfirm --MsgAcceptVersion--&gt; StDone
+    StConfirm --MsgReplyVersion--&gt; StDone
+    StConfirm --MsgRefuse--&gt; StDone
 
-    direction LR
-
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StPropose initiator
-    class StConfirm responder
+    class StPropose client
+    class StConfirm server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -553,8 +557,8 @@ in their protocol parameters.</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StPropose</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StConfirm</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StPropose</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StConfirm</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -701,26 +705,27 @@ client’s current selection.</li>
 </blockquote>
 <h2 id="state-machine-1"><a class="header" href="#state-machine-1">State machine</a></h2>
 <p>The state machine for ChainSync is as follows:</p>
-<pre class="mermaid">stateDiagram
-    direction LR
-    [*] --&gt; StIdle
-    StIdle --&gt; [*]: MsgDone
-    StIdle --&gt; StIntersect: MsgFindIntersect
-    StIdle --&gt; StCanAwait: MsgRequestNext
-    StIntersect --&gt; StIdle: MsgIntersectNotFound
-    StIntersect --&gt; StIdle: MsgIntersectFound
-    StCanAwait --&gt; StIdle: MsgRollForward
-    StCanAwait --&gt; StIdle: MsgRollBackward
-    StCanAwait --&gt; StMustReply: MsgAwaitReply
-    StMustReply --&gt; StIdle: MsgRollForward
-    StMustReply --&gt; StIdle: MsgRollBackward
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+    linkStyle default stroke:gray
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle initiator
-    class StCanAwait responder
-    class StIntersect responder
-    class StMustReply responder
+    StDone(((StDone)))
+
+    i(( )) --&gt; StIdle
+    StIdle --MsgDone--&gt; StDone
+    StIdle --MsgFindIntersect--&gt; StIntersect
+    StIdle --MsgRequestNext--&gt; StCanAwait
+    StIntersect --MsgIntersectNotFound--&gt; StIdle
+    StIntersect --MsgIntersectFound--&gt; StIdle
+    StCanAwait --MsgRollForward--&gt; StIdle
+    StCanAwait --MsgRollBackward--&gt; StIdle
+    StCanAwait --MsgAwaitReply--&gt; StMustReply
+    StMustReply --MsgRollForward--&gt; StIdle
+    StMustReply --MsgRollBackward--&gt; StIdle
+
+    class StIdle client
+    class StCanAwait,StIntersect,StMustReply server
 </pre>
 
 <h3 id="state-agencies-1"><a class="header" href="#state-agencies-1">State agencies</a></h3>
@@ -730,10 +735,10 @@ client’s current selection.</li>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StIntersect</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StMustReply</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StIntersect</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StCanAwait</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StMustReply</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -900,21 +905,23 @@ terminated. Actions that are considered misbehaving are (not exclusively):</p>
 </blockquote>
 <h2 id="state-machine-2"><a class="header" href="#state-machine-2">State machine</a></h2>
 <p>The state machine for BlockFetch is as follows:</p>
-<pre class="mermaid">stateDiagram
-   direction LR
-   [*] --&gt; StIdle
-   StIdle --&gt; [*]: MsgClientDone
-   StIdle --&gt; StBusy: MsgRequestRange
-   StBusy --&gt; StIdle: MsgNoBlocks
-   StBusy --&gt; StStreaming: MsgStartBatch
-   StStreaming --&gt; StStreaming: MsgBlock
-   StStreaming --&gt; StIdle: MsgBatchDone
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+   linkStyle default stroke:gray
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle initiator
-    class StBusy responder
-    class StStreaming responder
+   StDone(((StDone)))
+
+   i(( )) --&gt; StIdle
+   StIdle --MsgClientDone--&gt; StDone
+   StIdle --MsgRequestRange--&gt; StBusy
+   StBusy --MsgNoBlocks--&gt; StIdle
+   StBusy --MsgStartBatch--&gt; StStreaming
+   StStreaming --MsgBlock--&gt; StStreaming
+   StStreaming --MsgBatchDone--&gt; StIdle
+
+   class StIdle client
+   class StBusy,StStreaming server
 </pre>
 
 <h3 id="state-agencies-2"><a class="header" href="#state-agencies-2">State agencies</a></h3>
@@ -924,9 +931,9 @@ terminated. Actions that are considered misbehaving are (not exclusively):</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StStreaming</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StStreaming</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1034,25 +1041,24 @@ server,</li>
 </blockquote>
 <h2 id="state-machine-3"><a class="header" href="#state-machine-3">State machine</a></h2>
 <p>The state machine for TxSubmission2 is as follows:</p>
-<pre class="mermaid">stateDiagram
-   direction LR
-   [*] --&gt; StInit
-   StInit --&gt; StIdle: MsgInit
-   StIdle --&gt; StTxs: MsgRequestTxs
-   StTxs --&gt; StIdle: MsgReplyTxs
-   StIdle --&gt; StTxIdsNonBlocking: MsgRequestTxIdsNonBlocking
-   StTxIdsNonBlocking --&gt; StIdle: MsgReplyTxIds
-   StIdle --&gt; StTxIdsBlocking: MsgRequestTxIdsBlocking
-   StTxIdsBlocking --&gt; StIdle: MsgReplyTxIds
-   StTxIdsBlocking --&gt; [*]: MsgDone
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle responder
-    class StInit initiator
-    class StTxs initiator
-    class StTxIdsBlocking initiator
-    class StTxIdsNonBlocking initiator
+   StDone(((StDone)))
+
+   i(( )) --&gt; StInit
+   StInit --MsgInit--&gt; StIdle
+   StIdle --MsgRequestTxs--&gt; StTxs
+   StTxs --MsgReplyTxs--&gt; StIdle
+   StIdle --MsgRequestTxIdsNonBlocking--&gt; StTxIdsNonBlocking
+   StTxIdsNonBlocking --MsgReplyTxIds--&gt; StIdle
+   StIdle --MsgRequestTxIdsBlocking--&gt; StTxIdsBlocking
+   StTxIdsBlocking --MsgReplyTxIds--&gt; StIdle
+   StTxIdsBlocking --MsgDone--&gt; StDone
+
+   class StInit,StTxs,StTxIdsBlocking,StTxIdsNonBlocking client
+   class StIdle server
 </pre>
 
 <h3 id="state-agencies-3"><a class="header" href="#state-agencies-3">State agencies</a></h3>
@@ -1062,11 +1068,11 @@ server,</li>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StInit</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
-<tr><td style="text-align: left">StTxs</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StTxIdsBlocking</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StTxIdsNonBlocking</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
+<tr><td style="text-align: left">StInit</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StTxs</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StTxIdsBlocking</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StTxIdsNonBlocking</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1186,12 +1192,20 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 <h1 id="keepalive"><a class="header" href="#keepalive">KeepAlive</a></h1>
 <p>TODO: fill this section</p>
 <p>The state machine for the KeepAlive protocol is as follows:</p>
-<pre class="mermaid">stateDiagram
-  direction LR
-  [*] --&gt; StClient
-  StClient --&gt; StServer: MsgKeepAlive
-  StServer --&gt; StClient: MsgKeepAliveResponse
-  StClient --&gt; StDone: MsgDone
+<pre class="mermaid">graph LR
+  classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+  classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+  linkStyle default stroke:gray
+
+  StDone(((StDone)))
+
+  i(( )) --&gt; StClient
+  StClient --MsgKeepAlive--&gt; StServer
+  StServer --MsgKeepAliveResponse--&gt; StClient
+  StClient --MsgDone--&gt; StDone
+
+  class StClient client
+  class StServer server
 </pre>
 
 <p>The CDDL for the messages in <code>KeepAlive</code> is as follows:</p>
@@ -1206,6 +1220,254 @@ msgDone = [ 2 ]
 
 ;# import base as base
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="leiosnotify"><a class="header" href="#leiosnotify">LeiosNotify</a></h1>
+<p><strong>Mini-protocol number: 18</strong></p>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
+specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
+an extension to the Ouroboros consensus protocol aimed at significantly
+increasing transaction throughput. Details are subject to change.</p>
+</blockquote>
+<p><code>LeiosNotify</code> is the mini-protocol responsible for announcing Endorser Blocks
+(EBs) and offering EB bodies and their associated transaction closures to peers.
+It is a pull-based protocol: the client drives progress by requesting the next
+notification, and the server replies with whatever is available.</p>
+<p>Leios introduces Endorser Blocks as a mechanism to endorse and achieve consensus
+on transaction inclusion independently and overlayed on the Praos block chain.
+<code>LeiosNotify</code> is the dissemination layer that lets peers discover new EBs before
+fetching them via <a href="network/node-to-node/leios-fetch/README.html">LeiosFetch</a>. The protocol is
+intended to run in a pipelined fashion where the client issues multiple
+<code>MsgRequestNext</code> even before receiving a notification, so that the server can
+push announcements to downstream peers with minimal latency.</p>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>TODO: Add more detail about admitted pipeline depth and other punishable requirements</p>
+</blockquote>
+<h2 id="state-machine-4"><a class="header" href="#state-machine-4">State machine</a></h2>
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+   linkStyle default stroke:gray
+
+   StDone(((StDone)))
+
+   i(( )) --&gt; StIdle
+   StIdle --MsgClientDone--&gt; StDone
+   StIdle --MsgLeiosNotificationRequestNext--&gt; StBusy
+   StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
+   StBusy --MsgLeiosBlockOffer--&gt; StIdle
+   StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
+   StBusy --MsgLeiosVotesOffer--&gt; StIdle
+
+   class StIdle client
+   class StBusy server
+</pre>
+
+<h3 id="state-agencies-4"><a class="header" href="#state-agencies-4">State agencies</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="state-transitions-4"><a class="header" href="#state-transitions-4">State transitions</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotesOffer</td><td><code>[1* (slot, voterId)]</code></td><td style="text-align: left">StIdle</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="codecs-3"><a class="header" href="#codecs-3">Codecs</a></h2>
+<p>The messages depicted in the state machine follow this CDDL specification:</p>
+<pre><code class="language-cddl">;; messages.cddl
+leiosNotifyMessage
+     = msgLeiosNotificationRequestNext
+     / msgLeiosBlockAnnouncement
+     / msgLeiosBlockOffer
+     / msgLeiosBlockTxsOffer
+     / msgLeiosVotesOffer
+     / msgClientDone
+
+msgLeiosNotificationRequestNext = [0]
+msgLeiosBlockAnnouncement       = [1, announcement_header]
+msgLeiosBlockOffer              = [2, point]
+msgLeiosBlockTxsOffer           = [3, point]
+msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
+msgClientDone                   = [5]
+
+announcement_header = any ; TODO
+point = (slot, eb_hash)
+slot = base.slotNo
+eb_hash = base.hash
+voter_id = base.word16  ; REVIEW: size?
+
+;# import base as base
+</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The CBOR tags in this specification are provisional. Several types remain underspecified (<code>any</code>) pending
+further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
+for rationale and ongoing discussion.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="leiosfetch"><a class="header" href="#leiosfetch">LeiosFetch</a></h1>
+<p><strong>Mini-protocol number: 19</strong></p>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
+specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
+an extension to the Ouroboros consensus protocol aimed at significantly
+increasing transaction throughput. Details are subject to change.</p>
+</blockquote>
+<p><code>LeiosFetch</code> is the mini-protocol responsible for fetching Endorser Blocks (EBs)
+and their transaction payloads from peers. It is a pull-based protocol: the
+client explicitly requests either a full EB or a subset of its transactions
+(identified by a bitmap), and the server streams the response.</p>
+<p>EBs are discovered via <a href="network/node-to-node/leios-notify/README.html">LeiosNotify</a>; once a node
+decides it wants a block or its transactions, it uses <code>LeiosFetch</code> to retrieve
+the data.</p>
+<h2 id="state-machine-5"><a class="header" href="#state-machine-5">State machine</a></h2>
+<pre class="mermaid">graph LR
+   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+   linkStyle default stroke:gray
+
+   StDone(((StDone)))
+
+   i(( )) --&gt; StIdle
+   StIdle --MsgDone--&gt; StDone
+   StIdle --MsgLeiosBlockRequest--&gt; StBlock
+   StBlock --MsgLeiosBlock--&gt; StIdle
+
+   StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
+   StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
+
+   StIdle --MsgLeiosVotesRequest--&gt; StVotes
+   StVotes --MsgLeiosVotes--&gt;StIdle
+
+   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
+   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
+   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
+
+   class StIdle client
+   class StBlock,StBlockTxs,StVotes,StBlockRange server
+</pre>
+
+<h3 id="state-agencies-5"><a class="header" href="#state-agencies-5">State agencies</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StVotes</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="state-transitions-5"><a class="header" href="#state-transitions-5">State transitions</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="codecs-4"><a class="header" href="#codecs-4">Codecs</a></h2>
+<p>The messages depicted in the state machine follow this CDDL specification:</p>
+<pre><code class="language-cddl">;; messages.cddl
+leiosBlockFetchMessage
+     = msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+     / msgLeiosVotesRequest
+     / msgLeiosVoteDelivery
+     / msgLeiosBlockRangeRequest
+     / msgLeiosNextBlockAndTxsInRange
+     / msgLeiosLastBlockAndTxsInRange
+     / msgClientDone
+
+msgLeiosBlockRequest           = [0, point]
+msgLeiosBlock                  = [1, endorser_block]
+msgLeiosBlockTxsRequest        = [2, point, bitmaps]
+msgLeiosBlockTxs               = [3, tx_list]
+msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
+msgLeiosVoteDelivery           = [5, [1* vote ]]
+msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
+msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
+msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
+msgClientDone                  = [9]
+
+point = (slot, eb_hash)
+start_slot = slot
+end_slot = slot
+start_hash = base.hash
+end_hash = base.hash
+slot = base.slotNo
+voter_id = base.word16  ; REVIEW: size?
+eb_hash = base.hash
+endorser_block = any ; TODO
+bitmaps = any ; TODO
+tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
+
+vote =
+  [ election_id           : base.slotNo
+  , persistent_voter_id   : base.word16
+  , eligibility_signature : leios_bls_signature
+  , endorser_block_hash   : base.hash
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
+
+;# import base as base
+;# import tx as tx
+</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The CBOR tags in this specification are provisional (<code>MsgClientDone</code> at <code>[9]</code>
+in particular). The <code>endorser_block</code>, <code>bitmaps</code>, and <code>tx</code> types remain
+underspecified (<code>any</code>) pending further protocol design, including the
+length-definite encoding for <code>txList</code>. Additionally, the protocol is known
+to be incomplete: catch-up oriented batch request messages are likely to be
+added, and the bitmap-based transaction request structure
+(<code>MsgLeiosBlockTxsRequest</code>) may change significantly as the roaring bitmap
+encoding is still under discussion. See
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
+for the latest design decisions.</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="consensus"><a class="header" href="#consensus">Consensus</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -3397,17 +3659,24 @@ client/server APIs.</p>
 </blockquote>
 <details>
   <summary> Full mini-protocol state diagram</summary>
-<pre class="mermaid">stateDiagram
-    direction LR
-    [*] --&gt; StIdle
-    StIdle --&gt; [*]: MsgDone
-    StIdle --&gt; Acquiring: MsgAcquire
-    Acquiring --&gt; Acquired: MsgAcquired
-    Acquired --&gt; Querying: MsgQuery
-    Querying --&gt; Acquired: MsgResult
-    Acquired --&gt; Acquiring: MsgReAcquire
-    Acquiring --&gt; StIdle: MsgFailure
-    Acquired --&gt; StIdle: MsgRelease
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+
+    StDone(((StDone)))
+
+    i(( )) --&gt; StIdle
+    StIdle --MsgDone--&gt; StDone
+    StIdle --MsgAcquire--&gt; Acquiring
+    Acquiring --MsgAcquired--&gt; Acquired
+    Acquiring --MsgFailure--&gt; StIdle
+    Acquired --MsgQuery--&gt; Querying
+    Querying --MsgResult--&gt; Acquired
+    Acquired --MsgReAcquire--&gt; Acquiring
+    Acquired --MsgRelease--&gt; StIdle
+
+    class StIdle,Acquired client
+    class Acquiring,Querying server
 </pre>
 
 <p>See also definition in <a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-spec/network-spec.pdf#section.3.13">network spec</a>.</p>

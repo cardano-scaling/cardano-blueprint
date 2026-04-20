@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../.mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "../../../searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-75936e3d.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,17 +192,24 @@
 </blockquote>
 <details>
   <summary> Full mini-protocol state diagram</summary>
-<pre class="mermaid">stateDiagram
-    direction LR
-    [*] --&gt; StIdle
-    StIdle --&gt; [*]: MsgDone
-    StIdle --&gt; Acquiring: MsgAcquire
-    Acquiring --&gt; Acquired: MsgAcquired
-    Acquired --&gt; Querying: MsgQuery
-    Querying --&gt; Acquired: MsgResult
-    Acquired --&gt; Acquiring: MsgReAcquire
-    Acquiring --&gt; StIdle: MsgFailure
-    Acquired --&gt; StIdle: MsgRelease
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+
+    StDone(((StDone)))
+
+    i(( )) --&gt; StIdle
+    StIdle --MsgDone--&gt; StDone
+    StIdle --MsgAcquire--&gt; Acquiring
+    Acquiring --MsgAcquired--&gt; Acquired
+    Acquiring --MsgFailure--&gt; StIdle
+    Acquired --MsgQuery--&gt; Querying
+    Querying --MsgResult--&gt; Acquired
+    Acquired --MsgReAcquire--&gt; Acquiring
+    Acquired --MsgRelease--&gt; StIdle
+
+    class StIdle,Acquired client
+    class Acquiring,Querying server
 </pre>
 
 <p>See also definition in <a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-spec/network-spec.pdf#section.3.13">network spec</a>.</p>

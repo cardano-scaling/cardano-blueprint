@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../.mdbook/custom.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fb9648ee.js";
+            window.path_to_searchindex_js = "../searchindex-cb030f73.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-75936e3d.js"></script>
+        <script src="../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -206,24 +207,26 @@ keep agency and send a follow-up message later.</p>
 <p>We can draw this state machine in the standard way using circles and arrows, but
 with the addition of an indicator of which side has agency. This one is for the
 minimal example mini-protocol, <a href="">Ping Pong</a>:</p>
-<pre class="mermaid">stateDiagram
+<pre class="mermaid">graph LR
+    classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
+    classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
+    classDef init fill:black,stroke:black;
 
-    [*] --&gt; StIdle
-    StIdle --&gt; StBusy: MsgPing
-    StBusy --&gt; StIdle: MsgPong
-    StIdle --&gt; [*]: MsgDone
+   linkStyle default stroke:gray
 
-    direction LR
+   StDone(((StDone)))
 
-    classDef initiator color:#080
-    classDef responder color:#008, text-decoration: underline
-    class StIdle initiator
-    class StBusy responder
+    i(( )) --&gt; StIdle
+    StIdle --MsgPing--&gt; StBusy
+    StBusy --MsgPong--&gt; StIdle
+    StIdle --MsgDone--&gt; StDone
+
+    class StIdle client
+    class StBusy server
 </pre>
 
 <p>It has been the convention to mark states where the initiator has agency
-in green and the responder in blue, as here, but we also underline it for
-responder agency in case colours aren’t clear.</p>
+in green and the responder in blue, as here.</p>
 <p>As a double check, we can show the agency for each state as a table as well:</p>
 <div class="table-wrapper">
 <table>
@@ -231,8 +234,8 @@ responder agency in case colours aren’t clear.</p>
 <tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span style="color:#080">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span style="color:#008;text-decoration:underline">Responder</span></td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
