@@ -10,11 +10,11 @@ msgRequestRange = [0, point, point]
 msgClientDone   = [1]
 msgStartBatch   = [2]
 msgNoBlocks     = [3]
-msgBlock        = [4, block.block]
+msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
       / [ base.slotNo, base.hash ]
 
-;# import block as block
+;# include block as block
 ;# import base as base

@@ -15,6 +15,10 @@ byronRegularIdx = [1, base.word32]
 
 serialisedShelleyHeader<era> = #6.24(bytes .cbor era)
 
+; Era modules are included (not imported) so that era type references used as
+; generic arguments (e.g. in ns7<>) are baked in as concrete definitions.
+; cddlc does not rewrite such references through chained imports, so a parent
+; that imports this module would see undefined era names.
 ;# include byron as byron
 ;# include shelley as shelley
 ;# include allegra as allegra

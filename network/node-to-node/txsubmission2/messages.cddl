@@ -21,11 +21,11 @@ txCount         = base.word16
 ; The codec only accepts indefinite-length lists.
 txIdList        = [ *txId.txId ]
 txList          = [ *tx.tx ]
-txIdAndSize     = [base.txId, txSizeInBytes]
+txIdAndSize     = [txId.txId, txSizeInBytes]
 ; The codec only accepts definite-length lists.
 txIdsAndSizes   = [ *txIdAndSize ]
 txSizeInBytes   = base.word32
 
 ;# import tx as tx
-;# import txId as txId
+;# import txid as txId
 ;# import base as base
