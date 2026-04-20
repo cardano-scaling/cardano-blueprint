@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-1b3b8593.js";
+            window.path_to_searchindex_js = "../../../searchindex-62872003.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-f932e73a.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -216,10 +216,10 @@ push announcements to downstream peers with minimal latency.</p>
 
    i(( )) --&gt; StIdle
    StIdle --MsgClientDone--&gt; StDone
-   StIdle --MsgRequestNext--&gt; StBusy
-   StBusy --MsgBlockAnnouncement--&gt; StIdle
-   StBusy --MsgBlockOffer--&gt; StIdle
-   StBusy --MsgBlockTxsOffer--&gt; StIdle
+   StIdle --MsgLeiosNotificationRequestNext--&gt; StBusy
+   StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
+   StBusy --MsgLeiosBlockOffer--&gt; StIdle
+   StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
 
    class StIdle client
    class StBusy server
@@ -245,10 +245,10 @@ push announcements to downstream peers with minimal latency.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -262,7 +262,7 @@ leiosNotifyMessage
      / msgLeiosBlockTxsOffer
      / msgClientDone
 
-msgLeiosNotificationRequestNext = [0, 0]
+msgLeiosNotificationRequestNext = [0]
 msgLeiosBlockAnnouncement = [1, announcement]
 msgLeiosBlockOffer = [2, leios.point, size]
 msgLeiosBlockTxsOffer = [3, leios.point]
@@ -276,10 +276,7 @@ size = base.word32
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional. In particular,
-<code>MsgRequestNext</code> and <code>MsgBlockAnnouncement</code> share array tag <code>[1, ...]</code> and
-are disambiguated by the second field (<code>0</code> vs. an announcement value).
-<code>announcement</code> and several other types remain underspecified (<code>any</code>) pending
+<p>The CBOR tags in this specification are provisional. Several types remain underspecified (<code>any</code>) pending
 further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
 for rationale and ongoing discussion.</p>
 </blockquote>

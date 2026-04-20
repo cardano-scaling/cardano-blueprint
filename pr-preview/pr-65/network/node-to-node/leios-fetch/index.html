@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-1b3b8593.js";
+            window.path_to_searchindex_js = "../../../searchindex-62872003.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-f932e73a.js"></script>
+        <script src="../../../toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -207,14 +207,19 @@ the data.</p>
    StDone(((StDone)))
 
    i(( )) --&gt; StIdle
-   StIdle --MsgClientDone--&gt; StDone
-   StIdle --MsgLeiosBlockRequest--&gt; StBusyBlock
-   StIdle --MsgLeiosBlockTxsRequest--&gt; StBusyTxs
-   StBusyBlock --MsgLeiosBlock--&gt; StIdle
-   StBusyTxs --MsgLeiosBlockTxs--&gt; StIdle
+   StIdle --MsgDone--&gt; StDone
+   StIdle --MsgLeiosBlockRequest--&gt; StBlock
+   StBlock --MsgLeiosBlock--&gt; StIdle
+
+   StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
+   StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
+
+   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
+   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
+   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
 
    class StIdle client
-   class StBusyBlock,StBusyTxs server
+   class StBlock,StBlockTxs,StBlockRange server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -225,8 +230,9 @@ the data.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusyBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StBusyTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -238,10 +244,13 @@ the data.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBusyBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBusyTxs</td></tr>
-<tr><td style="text-align: left">StBusyBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusyTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>txList</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -253,17 +262,20 @@ leiosBlockFetchMessage
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
+     / msgLeiosBlockRangeRequest
+     / msgLeiosNextBlockAndTxsInRange
+     / msgLeiosLastBlockAndTxsInRange
      / msgClientDone
 
 msgLeiosBlockRequest = [0, leios.point]
 msgLeiosBlock = [1, endorser_block]
 msgLeiosBlockTxsRequest = [2, leios.point, bitmaps]
-msgLeiosBlockTxs = [3, leios.point, bitmaps, txList]
+msgLeiosBlockTxs = [3, leios.point, bitmaps, tx_list]
 msgClientDone = [4]
 
 endorser_block = any ; TODO
 bitmaps = any ; TODO
-txList = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
+tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
 ;# import base as base 
 ;# import leios as leios 
@@ -291,7 +303,7 @@ for the latest design decisions.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../../network/node-to-node/leios-votes/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../consensus/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -305,7 +317,7 @@ for the latest design decisions.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../../network/node-to-node/leios-votes/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../consensus/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

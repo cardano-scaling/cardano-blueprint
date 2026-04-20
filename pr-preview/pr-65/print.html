@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1b3b8593.js";
+            window.path_to_searchindex_js = "searchindex-62872003.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-f932e73a.js"></script>
+        <script src="toc-fb937a43.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1255,10 +1255,10 @@ push announcements to downstream peers with minimal latency.</p>
 
    i(( )) --&gt; StIdle
    StIdle --MsgClientDone--&gt; StDone
-   StIdle --MsgRequestNext--&gt; StBusy
-   StBusy --MsgBlockAnnouncement--&gt; StIdle
-   StBusy --MsgBlockOffer--&gt; StIdle
-   StBusy --MsgBlockTxsOffer--&gt; StIdle
+   StIdle --MsgLeiosNotificationRequestNext--&gt; StBusy
+   StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
+   StBusy --MsgLeiosBlockOffer--&gt; StIdle
+   StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
 
    class StIdle client
    class StBusy server
@@ -1284,10 +1284,10 @@ push announcements to downstream peers with minimal latency.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -1301,7 +1301,7 @@ leiosNotifyMessage
      / msgLeiosBlockTxsOffer
      / msgClientDone
 
-msgLeiosNotificationRequestNext = [0, 0]
+msgLeiosNotificationRequestNext = [0]
 msgLeiosBlockAnnouncement = [1, announcement]
 msgLeiosBlockOffer = [2, leios.point, size]
 msgLeiosBlockTxsOffer = [3, leios.point]
@@ -1315,10 +1315,7 @@ size = base.word32
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional. In particular,
-<code>MsgRequestNext</code> and <code>MsgBlockAnnouncement</code> share array tag <code>[1, ...]</code> and
-are disambiguated by the second field (<code>0</code> vs. an announcement value).
-<code>announcement</code> and several other types remain underspecified (<code>any</code>) pending
+<p>The CBOR tags in this specification are provisional. Several types remain underspecified (<code>any</code>) pending
 further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
 for rationale and ongoing discussion.</p>
 </blockquote>
@@ -1348,14 +1345,19 @@ the data.</p>
    StDone(((StDone)))
 
    i(( )) --&gt; StIdle
-   StIdle --MsgClientDone--&gt; StDone
-   StIdle --MsgLeiosBlockRequest--&gt; StBusyBlock
-   StIdle --MsgLeiosBlockTxsRequest--&gt; StBusyTxs
-   StBusyBlock --MsgLeiosBlock--&gt; StIdle
-   StBusyTxs --MsgLeiosBlockTxs--&gt; StIdle
+   StIdle --MsgDone--&gt; StDone
+   StIdle --MsgLeiosBlockRequest--&gt; StBlock
+   StBlock --MsgLeiosBlock--&gt; StIdle
+
+   StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
+   StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
+
+   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
+   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
+   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
 
    class StIdle client
-   class StBusyBlock,StBusyTxs server
+   class StBlock,StBlockTxs,StBlockRange server
 </pre>
 
 <h3 id="state-agencies-5"><a class="header" href="#state-agencies-5">State agencies</a></h3>
@@ -1366,8 +1368,9 @@ the data.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusyBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StBusyTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1379,10 +1382,13 @@ the data.</p>
 </thead>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBusyBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBusyTxs</td></tr>
-<tr><td style="text-align: left">StBusyBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusyTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>txList</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
+<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -1394,17 +1400,20 @@ leiosBlockFetchMessage
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
+     / msgLeiosBlockRangeRequest
+     / msgLeiosNextBlockAndTxsInRange
+     / msgLeiosLastBlockAndTxsInRange
      / msgClientDone
 
 msgLeiosBlockRequest = [0, leios.point]
 msgLeiosBlock = [1, endorser_block]
 msgLeiosBlockTxsRequest = [2, leios.point, bitmaps]
-msgLeiosBlockTxs = [3, leios.point, bitmaps, txList]
+msgLeiosBlockTxs = [3, leios.point, bitmaps, tx_list]
 msgClientDone = [4]
 
 endorser_block = any ; TODO
 bitmaps = any ; TODO
-txList = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
+tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
 ;# import base as base 
 ;# import leios as leios 
@@ -1423,95 +1432,6 @@ encoding is still under discussion. See
 <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
 for the latest design decisions.</p>
 </blockquote>
-<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="leiosvotes"><a class="header" href="#leiosvotes">LeiosVotes</a></h1>
-<p><strong>Mini-protocol number: 20</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
-<p><code>LeiosVotes</code> is the mini-protocol responsible for disseminating votes on
-Endorser Blocks (EBs). In Leios, stake pool operators that are elected as
-voters in a given slot range cast BLS signatures over EBs they consider valid.
-These votes are aggregated to produce a certificate that attests to an EB’s
-endorsement by a quorum of stake.</p>
-<p><code>LeiosVotes</code> follows the same pull-based pattern as <a href="network/node-to-node/leios-notify/README.html">LeiosNotify</a>:
-the client drives progress by requesting the next available vote, and the server
-delivers one vote at a time.</p>
-<h2 id="state-machine-6"><a class="header" href="#state-machine-6">State machine</a></h2>
-<pre class="mermaid">graph LR
-   classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
-   classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
-   linkStyle default stroke:gray
-
-   StDone(((StDone)))
-
-   i(( )) --&gt; StIdle
-   StIdle --MsgClientDone--&gt; StDone
-   StIdle --MsgRequestNextVote--&gt; StBusy
-   StBusy --MsgLeiosVote--&gt; StIdle
-
-   class StIdle client
-   class StBusy server
-</pre>
-
-<h3 id="state-agencies-6"><a class="header" href="#state-agencies-6">State agencies</a></h3>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th style="text-align: left">State</th><th style="text-align: left">Agency</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-</tbody>
-</table>
-</div>
-<h3 id="state-transitions-6"><a class="header" href="#state-transitions-6">State transitions</a></h3>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgRequestNextVote</td><td></td><td style="text-align: left">StBusy</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVote</td><td><code>vote</code></td><td style="text-align: left">StIdle</td></tr>
-</tbody>
-</table>
-</div>
-<h2 id="codecs-5"><a class="header" href="#codecs-5">Codecs</a></h2>
-<p>The messages depicted in the state machine follow this CDDL specification:</p>
-<pre><code class="language-cddl">;; messages.cddl
-leiosVotesMessage
-     = msgRequestNextVote
-     / msgLeiosVote
-     / msgClientDone
-
-msgRequestNextVote = [1, 0]
-msgLeiosVote = [2, vote]
-msgClientDone = [3]
-
-vote =
-  [ election_id
-  , leios.eb_hash
-  , voter_id
-  , vote_signature : leios_bls_signature
-  ]
-
-election_id = base.slotNo
-voter_id = base.word16
-leios_bls_signature = bytes .size 48
-
-;# import base as base
-;# import leios as leios
-</code></pre>
-<p>A <code>vote</code> carries the slot-based election identifier, a persistent voter ID,
-a BLS eligibility signature proving the voter was elected, the hash of the EB
-being endorsed, and a BLS vote signature over that EB.</p>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="consensus"><a class="header" href="#consensus">Consensus</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
