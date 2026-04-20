@@ -1,0 +1,47 @@
+leiosBlockFetchMessage
+     = msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+     / msgLeiosVotesRequest
+     / msgLeiosVoteDelivery
+     / msgLeiosBlockRangeRequest
+     / msgLeiosNextBlockAndTxsInRange
+     / msgLeiosLastBlockAndTxsInRange
+     / msgClientDone
+
+msgLeiosBlockRequest           = [0, point]
+msgLeiosBlock                  = [1, endorser_block]
+msgLeiosBlockTxsRequest        = [2, point, bitmaps]
+msgLeiosBlockTxs               = [3, tx_list]
+msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
+msgLeiosVoteDelivery           = [5, [1* vote ]]
+msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
+msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
+msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
+msgClientDone                  = [9]
+
+point = (slot, eb_hash)
+start_slot = slot
+end_slot = slot
+start_hash = base.hash
+end_hash = base.hash
+slot = base.slotNo
+voter_id = base.word16  ; REVIEW: size?
+eb_hash = base.hash
+endorser_block = any ; TODO
+bitmaps = any ; TODO
+tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
+
+vote =
+  [ election_id           : base.slotNo
+  , persistent_voter_id   : base.word16
+  , eligibility_signature : leios_bls_signature
+  , endorser_block_hash   : base.hash
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
+
+;# import base as base
+;# import tx as tx
