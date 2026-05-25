@@ -3,7 +3,7 @@ leiosNotifyMessage
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
-     / msgLeiosVotesOffer
+     / msgLeiosVotes
      / msgClientDone
 
 msgLeiosNotificationRequestNext = [0]
@@ -15,7 +15,7 @@ msgClientDone                   = [5]
 
 announcement_header = any ; TODO
 point = (slot, eb_hash)
-slot = base.slotNo
+slot = base.slotno
 eb_hash = base.hash
 
 vote =
