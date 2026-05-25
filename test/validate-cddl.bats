@@ -69,7 +69,7 @@ setup_file() {
   done
 
   echo "# Downloading era CDDL files from cardano-ledger..." >&3
-  for era in allegra alonzo babbage conway mary shelley; do
+  for era in allegra alonzo babbage conway dijkstra mary shelley; do
     curl -sSfL "$LEDGER_RAW/eras/$era/impl/cddl/data/$era.cddl" -o "$INCLUDE_DIR/$era.cddl"
   done
   curl -sSfL "$LEDGER_RAW/eras/byron/ledger/impl/cddl-spec/byron.cddl" -o "$INCLUDE_DIR/byron.cddl"
