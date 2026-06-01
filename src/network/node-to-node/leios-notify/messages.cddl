@@ -26,8 +26,6 @@ vote =
   , vote_signature        : leios_bls_signature
   ]
 
-; FIXME: non-mocked signatures
-;leios_bls_signature = bytes .size 48
-leios_bls_signature = bool
+leios_bls_signature = bytes .size 48
 
 ;# import base as base
