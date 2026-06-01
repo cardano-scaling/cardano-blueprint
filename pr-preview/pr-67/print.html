@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c1e9cf8a.js";
+            window.path_to_searchindex_js = "searchindex-7b941ba2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-fb937a43.js"></script>
@@ -1377,15 +1377,8 @@ the data.</p>
    StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
 
-   StIdle --MsgLeiosVotesRequest--&gt; StVotes
-   StVotes --MsgLeiosVotes--&gt;StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 </pre>
 
 <h3 id="state-agencies-5"><a class="header" href="#state-agencies-5">State agencies</a></h3>
@@ -1412,14 +1405,9 @@ the data.</p>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
