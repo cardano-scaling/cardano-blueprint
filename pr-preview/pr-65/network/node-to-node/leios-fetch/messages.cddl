@@ -3,15 +3,13 @@ leiosBlockFetchMessage
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgLeiosBlockRangeRequest
-     / msgLeiosNextBlockAndTxsInRange
-     / msgLeiosLastBlockAndTxsInRange
      / msgClientDone
+
 
 msgLeiosBlockRequest = [0, leios.point]
 msgLeiosBlock = [1, endorser_block]
 msgLeiosBlockTxsRequest = [2, leios.point, bitmaps]
-msgLeiosBlockTxs = [3, leios.point, bitmaps, tx_list]
+msgLeiosBlockTxs = [3, leios.point, bitmaps, txList]
 msgClientDone = [4]
 
 endorser_block = any ; TODO

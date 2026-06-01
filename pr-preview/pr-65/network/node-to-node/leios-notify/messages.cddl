@@ -3,9 +3,10 @@ leiosNotifyMessage
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
+     / msgLeiosVotesOffer
      / msgClientDone
 
-msgLeiosNotificationRequestNext = [0]
+msgLeiosNotificationRequestNext = [0, 0]
 msgLeiosBlockAnnouncement = [1, announcement]
 msgLeiosBlockOffer = [2, leios.point, size]
 msgLeiosBlockTxsOffer = [3, leios.point]
