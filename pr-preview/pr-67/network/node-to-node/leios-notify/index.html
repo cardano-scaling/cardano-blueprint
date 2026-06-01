@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-87919809.js";
+            window.path_to_searchindex_js = "../../../searchindex-c1e9cf8a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -220,7 +220,7 @@ push announcements to downstream peers with minimal latency.</p>
    StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
    StBusy --MsgLeiosBlockOffer--&gt; StIdle
    StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
-   StBusy --MsgLeiosVotesOffer--&gt; StIdle
+   StBusy --MsgLeiosVotes--&gt; StIdle
 
    class StIdle client
    class StBusy server
@@ -250,7 +250,7 @@ push announcements to downstream peers with minimal latency.</p>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotesOffer</td><td><code>[1* (slot, voterId)]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -266,14 +266,15 @@ leiosNotifyMessage
      / msgClientDone
 
 msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement_header]
-msgLeiosBlockOffer              = [2, point]
+msgLeiosBlockAnnouncement       = [1, announcement]
+msgLeiosBlockOffer              = [2, point, eb_size]
 msgLeiosBlockTxsOffer           = [3, point]
 msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
-announcement_header = any ; TODO
+announcement = any ; TODO
 point = (slot, eb_hash)
+eb_size = base.word32 ; TODO should not be needed, because announcement
 slot = base.slotno
 eb_hash = base.hash
 
