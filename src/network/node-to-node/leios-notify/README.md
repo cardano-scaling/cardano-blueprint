@@ -42,7 +42,7 @@ graph LR
    StBusy --MsgLeiosBlockAnnouncement--> StIdle
    StBusy --MsgLeiosBlockOffer--> StIdle
    StBusy --MsgLeiosBlockTxsOffer--> StIdle
-   StBusy --MsgLeiosVotesOffer--> StIdle
+   StBusy --MsgLeiosVotes--> StIdle
 
    class StIdle client
    class StBusy server
@@ -57,14 +57,14 @@ graph LR
 
 ### State transitions
 
-| From state | Message                         | Parameters             | To state |
-| :--------- | :------------------------------ | ---------------------- | :------- |
-| StIdle     | MsgClientDone                   |                        | End      |
-| StIdle     | MsgLeiosNotificationRequestNext |                        | StBusy   |
-| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`         | StIdle   |
-| StBusy     | MsgLeiosBlockOffer              | `point`, `size`        | StIdle   |
-| StBusy     | MsgLeiosBlockTxsOffer           | `point`                | StIdle   |
-| StBusy     | MsgLeiosVotesOffer              | `[1* (slot, voterId)]` | StIdle   |
+| From state | Message                         | Parameters      | To state |
+| :--------- | :------------------------------ | --------------- | :------- |
+| StIdle     | MsgClientDone                   |                 | End      |
+| StIdle     | MsgLeiosNotificationRequestNext |                 | StBusy   |
+| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`  | StIdle   |
+| StBusy     | MsgLeiosBlockOffer              | `point`, `size` | StIdle   |
+| StBusy     | MsgLeiosBlockTxsOffer           | `point`         | StIdle   |
+| StBusy     | MsgLeiosVotes                   | `[1* vote]`     | StIdle   |
 
 ## Codecs
 
