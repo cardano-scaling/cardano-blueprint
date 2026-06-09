@@ -25,7 +25,7 @@ msgLeiosBlockTxs               = [3, point, bitmaps, tx_list]
 ; msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
 msgClientDone                  = [9]
 
-point = (slot, eb_hash)
+point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
