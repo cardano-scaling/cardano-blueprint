@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7b941ba2.js";
+            window.path_to_searchindex_js = "../../../searchindex-5fd90512.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -278,7 +278,7 @@ msgLeiosBlockTxs               = [3, point, bitmaps, tx_list]
 ; msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
 msgClientDone                  = [9]
 
-point = (slot, eb_hash)
+point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
