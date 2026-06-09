@@ -14,7 +14,7 @@ msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
 announcement = any ; TODO
-point = (slot, eb_hash)
+point = [slot, eb_hash]
 eb_size = base.word32 ; TODO should not be needed, because announcement
 slot = base.slotno
 eb_hash = base.hash
