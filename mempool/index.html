@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-cb030f73.js";
+            window.path_to_searchindex_js = "../searchindex-f4fac43f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-fb937a43.js"></script>
@@ -194,26 +194,55 @@ authorized actors can enact. Notice that such transactions are what makes up the
 contents of the block. In one way, one could see the ledger as being able to
 validate transactions, and by implication full blocks as those are mainly
 collections of transactions.</p>
-<p>The Mempool is the abstract component of the node that stores transactions which
-are valid on top of the latest known Ledger State (the one at the tip of the
-chain selected by <a href="../consensus/chainsel.html">Chain Selection</a> in the Consensus
-layer). The validity of transactions is defined by the Ledger layer. Notice a
-change in the selected chain should trigger a prompt revalidation of the pending
-transactions to discard those that became invalid on the new selection. Such
-collection of valid transactions will be requested by the Consensus layer to
-<a href="../consensus/forging.html">forge new blocks</a>.</p>
-<p>Once a transaction has been included in some block, it cannot be a <em>pending
-transaction</em> anymore, in fact from that point onwards it will be an <em>invalid
-transaction</em>, as in Cardano every transaction consumes at least one UTxO, in
-this case consumed by the instance of the transaction that was included in a
-block.</p>
+<p>Notice that <em>WHAT constitutes</em> a transaction is defined by the Ledger layer and
+it depends on the current era on the Ledger State that the transaction is being
+validated against.</p>
+<blockquote class="blockquote-tag blockquote-tag-tip">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p>The Ledger layer provides mechanisms to translate transactions from older eras
+to more recent ones. In the reference Haskell node, the original transaction
+is the one that will be forwarded to other peers, i.e. the “translated”
+version of the transaction <em>is not sent</em> over the network, but this is not a
+requirement.</p>
+</blockquote>
+<p>Transactions are <em>pending</em> on some Ledger State if they have not been included
+in any block since Genesis up until such Ledger State. Transactions are <em>valid</em>
+on some Ledger State if they can be applied to such Ledger State through the
+Ledger rules. Notice we can create a new Ledger State by applying a single
+transaction to an existing Ledger State.</p>
+<p>Once a transaction has been included in a block, it is not a <em>pending
+transaction</em> anymore in that fork of the chain, in fact from that point onwards
+it will be an <em>invalid transaction</em>, as in Cardano every transaction consumes at
+least one UTxO, in this case consumed by the instance of the transaction that
+was included in a block.</p>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>Notice a transaction can be invalid in a fork but valid or pending in a
+different fork.</p>
+</blockquote>
+<h2 id="purpose-of-the-mempool-component"><a class="header" href="#purpose-of-the-mempool-component">Purpose of the Mempool component</a></h2>
+<p>The Mempool serves two very different purposes:</p>
+<ul>
+<li>
+<p>Provide a sequence of pending (and therefore <em>valid</em>) transactions to include
+in the next block being <a href="../consensus/forging.html">forged</a>.</p>
+</li>
+<li>
+<p>Serve transactions that were pending (and therefore <em>valid</em>) on top of <em>some
+recent</em> <a href="../consensus/chainsel.html">Chain Selection</a> to which we will refer as
+<em>mempool anchor</em> (or <em>anchor</em>). Having transactions to serve means it also
+needs to validate incoming transactions.</p>
+</li>
+</ul>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p>Notice that a transaction might be considered valid in one peer, but invalid
-in another peer which has selected a different chain. Even in the case both
-peers have the same selection, the existence in the mempool (or lack thereof)
-of some other specific transaction that creates (or consumes) the inputs for
-this one could lead to different verdicts on each peer.</p>
+in another peer which uses a different anchor ledger state.</p>
+<p>Even in the case both peers have the same anchor, the existence in the mempool
+(or lack thereof) of some other specific transaction that creates (or
+consumes) the inputs for this one could lead to different verdicts on each
+peer. (This would not be the case if we validate transactions independently,
+but that was discarded)</p>
 </blockquote>
 <p>While only nodes that forge new blocks will use these transactions to create
 blocks, non-block-producing nodes are still expected to diffuse transactions to
@@ -226,6 +255,21 @@ pending transactions. The reference Haskell implementation discards them.
 However, it is conceivable for a node to store on disk the pending
 transactions from its mempool.</p>
 </blockquote>
+<h2 id="mempool-size"><a class="header" href="#mempool-size">Mempool size</a></h2>
+<p>In order to prevent overusing resources, the Ledger places a limit on the number
+of pending transactions it accepts on a single block, which should be enforced
+by the mempool. Once this limit is reached, requests to add new transactions
+will be rejected. This <em>back-pressure</em> mechanism is critically important in
+periods of intense traffic to preserve the overall throughput of the network.</p>
+<p>This limit is not defined as a raw number of transactions but as a cap on
+various metrics, currently 4 metrics:</p>
+<ul>
+<li>transaction size in bytes</li>
+<li>CPU execution units</li>
+<li>memory execution units</li>
+<li>reference scripts size</li>
+</ul>
+<h2 id="protocol-requirements-and-guarantees"><a class="header" href="#protocol-requirements-and-guarantees">Protocol requirements and guarantees</a></h2>
 <p>The <a href="../network/node-to-node/txsubmission2"><code>TxSubmission2</code></a> miniprotocol is the
 one used to diffuse the pending transactions through the network.</p>
 <p>To be able to diffuse transactions through <code>TxSubmission2</code> and to fulfill the
@@ -235,35 +279,55 @@ following requirements:</p>
 <li>Acquiring a snapshot of valid transactions for a newly forged block should be
 as fast as possible, as it will delay all other steps in the diffusion of such
 a block. This is required by the Consensus layer for <a href="../consensus/forging.html">forging
-blocks</a>.</li>
-<li>Cursor-like access to pending transactions. This is required by the
-<code>TxSubmission2</code> protocol.</li>
-<li>Re-validation on a new selected chain: it is useless to keep transactions that
-are no longer valid in the mempool. This is an inherent requirement of the
-mempool itself.</li>
+blocks</a> promptly.</li>
+<li>Cursor-like access to transactions which are pending (and therefore valid)
+with regards to a <em>mempool anchor</em>. This is required by the <code>TxSubmission2</code>
+protocol as it uses a ticketing counter to index transmitted transactions. If
+transaction X depends on transaction Y, then Y <em>must</em> have a lower ticket
+counter than X (i.e. Y must come before X in the transmitted sequence). See
+<a href="#dag-based-mempool">below</a> for a discussion on this.</li>
+<li>Eventual re-validation on a new selected chain: it is useless to keep
+transactions that are no longer valid in the mempool but a node does not need
+to eagerly evict transactions. This is an inherent requirement of the mempool
+itself.</li>
 </ul>
-<p>Notice that <em>what</em> a transaction actually is defined by the Ledger layer and it
-depends on the current era at the tip of the chain. The Ledger layer provides
-mechanisms to translate transactions from older eras to more recent ones. The
-original transaction is the one that will be forwarded to other peers, i.e. the
-“translated” version of the transaction <em>is not sent</em> over the network.</p>
-<blockquote class="blockquote-tag blockquote-tag-note">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>In order to prevent overusing resources, the Ledger places a limit on the
-number of pending transactions it accepts on a single block, which should be
-enforced by the mempool. Once this limit is reached, requests to add new
-transactions will be rejected. This <em>back-pressure</em> mechanism is critically
-important in periods of intense traffic to preserve the overall throughput of
-the network.</p>
-<p>This limit is not defined as a raw number of transactions but as a cap on
-various metrics, currently transaction size in bytes, execution units in CPU
-and Memory units.</p>
-</blockquote>
+<p>In particular, there are two important facts that derive from these requirements:</p>
+<ul>
+<li>
+<p>The transactions served by a peer were <em>valid</em> (and therefore <em>pending</em>) in
+some recent Ledger State the peer synced their mempool with. They might <em>not</em>
+be valid on the local node’s Ledger State or even on the current selected tip
+of the peer.</p>
+</li>
+<li>
+<p>The node can ingest transactions (and then serve them) as long as they are
+<em>valid</em> (and therefore <em>pending</em>) in some recent Ledger State, which means the
+node does not <em>need</em> to ensure a transaction is valid on the current selected
+tip.</p>
+</li>
+</ul>
 <h2 id="fairness"><a class="header" href="#fairness">Fairness</a></h2>
 <blockquote class="blockquote-tag blockquote-tag-warning">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
 <p>TODO: describe fairness and what should mempools do in this regard.</p>
 </blockquote>
+<h2 id="improvements"><a class="header" href="#improvements">Improvements</a></h2>
+<p>The reference Haskell node does <em>not</em> do these optimizations but they were
+discussed hence we record them for the future:</p>
+<h3 id="dag-based-mempool"><a class="header" href="#dag-based-mempool">DAG-based mempool</a></h3>
+<p>We require that:</p>
+<blockquote>
+<p>if transaction X depends on Y, then Y must have a lower ticket counter than
+transaction X.</p>
+</blockquote>
+<p>The reference Haskell node achieves this by storing the transactions in the
+mempool as a sequence that is always applied in order. As it doesn’t analyze
+dependency among transactions, when a transaction is invalidated, it needs to
+re-validate the transactions that come after it in the sequence, as they might
+now become invalid too.</p>
+<p>Amaru team suggested that a DAG-based mempool would allow the mempool to right
+away discard a branch of the DAG without having to revalidate unrelated
+transactions.</p>
 <h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
 <ul>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
