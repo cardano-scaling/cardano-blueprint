@@ -38,17 +38,18 @@
             binary = binaryFor.${pkgs.stdenv.hostPlatform.system} or null;
           in
           if binary != null then
-            pkgs.stdenv.mkDerivation {
-              pname = "mdbook-katex";
-              inherit version;
-              src = pkgs.fetchurl { inherit (binary) url hash; };
-              dontUnpack = true;
-              installPhase = ''
-                mkdir -p $out/bin
-                tar -xf $src -C $out/bin
-                chmod +x $out/bin/mdbook-katex
-              '';
-            }
+            pkgs.stdenv.mkDerivation
+              {
+                pname = "mdbook-katex";
+                inherit version;
+                src = pkgs.fetchurl { inherit (binary) url hash; };
+                dontUnpack = true;
+                installPhase = ''
+                  mkdir -p $out/bin
+                  tar -xf $src -C $out/bin
+                  chmod +x $out/bin/mdbook-katex
+                '';
+              }
           else
             pkgs.rustPlatform.buildRustPackage {
               pname = "mdbook-katex";
