@@ -84,11 +84,17 @@ Leios changes the block structure in two ways:
 ### Changed dijkstra header_body
 
 ```cddl
-{{#include ../eras/dijkstra.cddl:63:74}}
+{{#include ../eras/dijkstra.cddl:63:75}}
 ```
 
 ### Changed dijkstra block
 
 ```cddl
 {{#include ../eras/dijkstra.cddl:13:21}}
+```
+
+with
+
+```cddl
+{{#include ../eras/dijkstra.cddl:818:822}}
 ```
