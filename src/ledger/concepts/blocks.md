@@ -67,10 +67,10 @@ necessary but is helpful for efficient processing:
    separately since this map is provided, effectively, by the node which
    created the block, rather than by the creators of the transactions.
 
-
 ## Leios block structure changes (proposed)
 
 Leios changes the block structure in two ways:
+
 - Block headers are re-used as announcements of endorser blocks
 - Blocks may certify an EB and then
   - contain a `certified` in the header
