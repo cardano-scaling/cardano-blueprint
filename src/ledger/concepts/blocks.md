@@ -77,7 +77,7 @@ Leios changes the block structure in two ways:
   - contain a `leios_cert` instead of transactions in the body
 
 > [!NOTE]
-> The [djikstra.cddl](../dijkstra.cddl) in the `cardano-blueprint` is matching
+> The [djikstra.cddl](../eras/dijkstra.cddl) in the `cardano-blueprint` is matching
 > the same-named branch of the `cardano-ledger` upstream repository. This is the
 > block format currently used on the https://www.musashi.network/ Leios testnet.
 
