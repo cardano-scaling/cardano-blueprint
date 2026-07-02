@@ -20,8 +20,7 @@ slot = base.slotno
 eb_hash = base.hash
 
 vote =
-  [ slot
-  , eb_hash
+  [ announcing_rb_hash    : base.hash
   , voter_id              : base.word16
   , vote_signature        : leios_bls_signature
   ]
