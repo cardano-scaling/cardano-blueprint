@@ -36,7 +36,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-d2edd629.js";
+            window.path_to_searchindex_js = "../../searchindex-f46b57aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-fb937a43.js"></script>
@@ -267,16 +267,17 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
 <pre><code class="language-cddl">header_body = 
-  [ block_number      : block_number
-  , slot              : slot        
-  , prev_hash         : hash32/ nil 
-  , issuer_vkey       : vkey        
-  , vrf_vkey          : vrf_vkey    
-  , vrf_result        : vrf_cert    
-  , block_body_size   : uint .size 4
-  , block_body_hash   : hash32       ; merkle triple root
-  , operational_cert
-  , protocol_version
+  [   block_number        : block_number
+  ,   slot                : slot        
+  ,   prev_hash           : hash32/ nil 
+  ,   issuer_vkey         : vkey        
+  ,   vrf_vkey            : vrf_vkey    
+  ,   vrf_result          : vrf_cert    
+  ,   block_body_size     : uint .size 4
+  ,   block_body_hash     : hash32       ; merkle triple root
+  ,   operational_cert  
+  ,   protocol_version  
+  , ? leios_announcement
   ]
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
@@ -289,6 +290,13 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
   , leios_cert               : leios_cert/ nil                            
   , peras_cert               : peras_cert/ nil                            
   ]
+</code></pre>
+<p>with</p>
+<pre><code class="language-cddl">; Placeholder Leios certificate. The real cert payload will be filled in
+; once the Leios design lands; for now it serialises as an empty CBOR list
+; so the on-wire token is unambiguous against the surrounding 'null /
+; leios_cert' choice.
+leios_cert = []
 </code></pre>
 
                     </main>
