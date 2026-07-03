@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-f46b57aa.js";
+            window.path_to_searchindex_js = "../../../searchindex-d06bcead.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -279,8 +279,7 @@ slot = base.slotno
 eb_hash = base.hash
 
 vote =
-  [ slot
-  , eb_hash
+  [ announcing_rb_hash    : base.hash
   , voter_id              : base.word16
   , vote_signature        : leios_bls_signature
   ]
