@@ -36,7 +36,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-d06bcead.js";
+            window.path_to_searchindex_js = "../../searchindex-31bdc77b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-fb937a43.js"></script>
@@ -266,37 +266,37 @@ the same-named branch of the <code>cardano-ledger</code> upstream repository. Th
 block format currently used on the https://www.musashi.network/ Leios testnet.</p>
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
-<pre><code class="language-cddl">header_body = 
-  [   block_number        : block_number
-  ,   slot                : slot        
-  ,   prev_hash           : hash32/ nil 
-  ,   issuer_vkey         : vkey        
-  ,   vrf_vkey            : vrf_vkey    
-  ,   vrf_result          : vrf_cert    
-  ,   block_body_size     : uint .size 4
-  ,   block_body_hash     : hash32       ; merkle triple root
-  ,   operational_cert  
-  ,   protocol_version  
-  , ? leios_announcement
-  ]
+<pre><code class="language-cddl">  ]
+
+block_number = uint .size 8
+
+slot = uint .size 8
+
+hash32 = bytes .size 32
+
+vkey = bytes .size 32
+
+vrf_vkey = bytes .size 32
+
+vrf_cert = [bytes, bytes .size 80]
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">block = 
-  [ header                 
-  , transaction_bodies       : [* transaction_body]                   
-  , transaction_witness_sets : [* transaction_witness_set]            
-  , auxiliary_data_set       : {* transaction_index =&gt; auxiliary_data}
-  , invalid_transactions     : [* transaction_index]                  
-  , leios_cert               : leios_cert/ nil                            
-  , peras_cert               : peras_cert/ nil                            
-  ]
+<pre><code class="language-cddl">; In the next era `is_valid` flags will not be allowed even in mempool
+; transactions, so it's strongly recommended to encode transactions
+; according to the `transaction` rule.
+transaction_mempool =
+  transaction
+  / [transaction_body, transaction_witness_set, true, auxiliary_data/ nil]
+
+kes_signature = bytes .size 448
+
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">; Placeholder Leios certificate. The real cert payload will be filled in
-; once the Leios design lands; for now it serialises as an empty CBOR list
-; so the on-wire token is unambiguous against the surrounding 'null /
-; leios_cert' choice.
-leios_cert = []
+<pre><code class="language-cddl">  // inclusive_lower_bound : coin/ nil, exclusive_upper_bound : coin
+  ]
+
+transaction_witness_set =
+  { ? 0 : nonempty_set&lt;vkeywitness&gt;
 </code></pre>
 
                     </main>
