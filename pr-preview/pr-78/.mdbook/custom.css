@@ -1,0 +1,15 @@
+.agency-initiator {
+  color: black;
+  background-color: PaleGreen;
+  border: 1px solid DarkGreen;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.agency-responder {
+  color: black;
+  background-color: PowderBlue;
+  border: 1px solid DarkBlue;
+  padding: 0 4px;
+  border-radius: 3px;
+}
