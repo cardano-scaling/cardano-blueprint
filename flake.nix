@@ -97,10 +97,6 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = formattingPkgs ++ cddlPkgs;
-        };
-
-        devShells.book = pkgs.mkShell {
           inputsFrom = [ packages.mdbook ];
           buildInputs = formattingPkgs ++ cddlPkgs;
         };

@@ -173,6 +173,41 @@ $$
 > cargo install mdbook-alerts
 > ```
 
+## Marking proposed (Leios) changes
+
+Some blueprints describe changes that are not part of the currently active
+protocol yet, but are *proposed* future changes - most notably [Leios]. Such
+content is marked so readers can tell it apart from the current protocol and,
+ideally, turn it on or off.
+
+Wrap the proposed content in a `<div class="leios">` block:
+
+```markdown
+<div class="leios">
+
+## Leios block structure changes
+
+Leios changes the block structure in two ways:
+
+- ...
+
+</div>
+```
+
+Note the **blank lines** right after the opening `<div ...>` and right before
+the closing `</div>`. They are required so that the markdown inside the block
+(headings, lists, `{{#include}}` snippets, ...) is still rendered as markdown.
+
+Such blocks are **hidden by default** - a plain page shows the current protocol
+only. A very visible **`⚡ Leios changes`** toggle in the top menu bar reveals
+them, adding a `?leios=on` query parameter to the URL. The choice is sticky: it
+is carried onto the links you follow, so it persists while navigating the book,
+and a `?leios=on` link can be shared directly. When shown, each block is set off
+as a green, badged callout.
+
+When content is inside such a block there is no need to also add a "(proposed)"
+suffix to its headings - the callout badge already conveys that.
+
 ## Footnotes
 
 Additional information that would complicate the read-flow can be put into footnotes [^example].
@@ -182,3 +217,5 @@ Additional information that would complicate the read-flow can be put into footn
 The footnote should appear below. If not, we need to contribute this to `mdbook`.
 
 [^example]: Example footnote
+
+[leios]: https://leios.cardano.org

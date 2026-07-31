@@ -67,7 +67,9 @@ necessary but is helpful for efficient processing:
    separately since this map is provided, effectively, by the node which
    created the block, rather than by the creators of the transactions.
 
-## Leios block structure changes (proposed)
+<div class="leios">
+
+## Leios block structure changes
 
 Leios changes the block structure in two ways:
 
@@ -98,3 +100,5 @@ with
 ```cddl
 {{#include ../eras/dijkstra.cddl:818:822}}
 ```
+
+</div>

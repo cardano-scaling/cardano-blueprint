@@ -13,3 +13,75 @@
   padding: 0 4px;
   border-radius: 3px;
 }
+
+/* Proposed Leios changes.
+ *
+ * Content wrapped in `<div class="leios">` is hidden by default and revealed
+ * via the `?leios=on` query parameter (see .mdbook/leios-toggle.js). When shown
+ * it is set off as a badged callout so readers can tell current-protocol text
+ * apart from proposed future changes. */
+.leios {
+  display: none;
+}
+
+html.leios-on .leios {
+  display: block;
+  position: relative;
+  border: 1px solid #2e7d32;
+  border-left: 4px solid #2e7d32;
+  border-radius: 4px;
+  background-color: rgba(46, 125, 50, 0.07);
+  padding: 0.6em 1em 0.1em;
+  margin: 1em 0;
+}
+
+html.leios-on .leios::before {
+  content: "⚡ Leios · proposed";
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: white;
+  background-color: #2e7d32;
+  padding: 0.15em 0.6em;
+  border-radius: 3px;
+  margin-bottom: 0.6em;
+}
+
+/* The ::before badge sits above the first real child; keep that child from
+ * adding a second large top margin. */
+html.leios-on .leios > :first-child {
+  margin-top: 0.2em;
+}
+
+/* Very visible toggle button in the top menu bar. */
+#leios-toggle {
+  cursor: pointer;
+  height: 2em;
+  margin: auto 0 auto 8px;
+  padding: 0 10px;
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--fg);
+  background-color: transparent;
+  border: 1px solid #2e7d32;
+  border-radius: 4px;
+}
+
+#leios-toggle[aria-pressed="true"] {
+  color: white;
+  background-color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+/* Sidebar entries pointing at proposed Leios content, tagged by
+ * leios-toggle.js. Highlighted with a leading ⚡ icon and the same green as the
+ * callout so readers can spot proposed chapters in the table of contents. */
+.chapter-item a.leios-nav {
+  color: #2e7d32 !important;
+}
+
+.chapter-item a.leios-nav::before {
+  content: "⚡ ";
+}
