@@ -18,6 +18,7 @@
   - [Chain selection](consensus/chainsel.md)
   - [Forging new blocks](consensus/forging.md)
   - [Multi-era considerations](consensus/multiera.md)
+  - [Leios key registration and committee selection](consensus/leios-committee.md)
 - [Storage](storage/README.md)
   - [`cardano-node`'s ChainDB](storage/cardano-node-chaindb/README.md)
 - [Mempool](mempool/README.md)
