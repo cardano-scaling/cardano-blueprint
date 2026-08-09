@@ -1,11 +1,12 @@
 txId =
-  base.ns7<byronTxId,
+  base.ns8<byronTxId,
            shelley.transaction_id,
            allegra.transaction_id,
            mary.transaction_id,
            alonzo.transaction_id,
+           babbage.transaction_id,
            conway.transaction_id,
-           babbage.transaction_id>
+           dijkstra.transaction_id>
 
 byronTxId = [0, byron.txid]
           / [1, byron.certificateid]
@@ -13,7 +14,7 @@ byronTxId = [0, byron.txid]
           / [3, byron.voteid]
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7<>) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8<>) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -23,4 +24,5 @@ byronTxId = [0, byron.txid]
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base

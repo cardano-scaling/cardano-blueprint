@@ -3,20 +3,27 @@ leiosNotifyMessage
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
-     / msgLeiosVotesOffer
+     / msgLeiosVotes
      / msgClientDone
 
 msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement_header]
+msgLeiosBlockAnnouncement       = [1, announcement]
 msgLeiosBlockOffer              = [2, point]
 msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
+msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
-announcement_header = any ; TODO
-point = (slot, eb_hash)
-slot = base.slotNo
+announcement = any ; TODO
+point = [slot, eb_hash]
+slot = base.slotno
 eb_hash = base.hash
-voter_id = base.word16  ; REVIEW: size?
+
+vote =
+  [ announcing_rb_hash    : base.hash
+  , voter_id              : base.word16
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
 
 ;# import base as base

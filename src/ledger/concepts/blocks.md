@@ -66,3 +66,35 @@ necessary but is helpful for efficient processing:
    are [phase-2 invalid](../state-transition/validity.md). This is held
    separately since this map is provided, effectively, by the node which
    created the block, rather than by the creators of the transactions.
+
+## Leios block structure changes (proposed)
+
+Leios changes the block structure in two ways:
+
+- Block headers are re-used as announcements of endorser blocks
+- Blocks may certify an EB and then
+  - contain a `certified` in the header
+  - contain a `leios_cert` instead of transactions in the body
+
+> [!NOTE]
+> The [djikstra.cddl](../eras/dijkstra.cddl) in the `cardano-blueprint` is matching
+> the same-named branch of the `cardano-ledger` upstream repository. This is the
+> block format currently used on the https://www.musashi.network/ Leios testnet.
+
+### Changed dijkstra header_body
+
+```cddl
+{{#include ../eras/dijkstra.cddl:52:66}}
+```
+
+### Changed dijkstra block
+
+```cddl
+{{#include ../eras/dijkstra.cddl:102:107}}
+```
+
+with
+
+```cddl
+{{#include ../eras/dijkstra.cddl:897:902}}
+```
