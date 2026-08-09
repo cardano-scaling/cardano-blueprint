@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Principles - Cardano Blueprint</title>
+        <title>Leios key registration and committee selection - Cardano Blueprint</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main" title="Git repository" aria-label="Git repository">
                             <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
-                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/principles/README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/consensus/leios-committee.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
@@ -182,88 +182,165 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="principles"><a class="header" href="#principles">Principles</a></h1>
-<p>This section contains general principles to apply when developing Cardano nodes.</p>
-<h2 id="optimise-only-for-the-worst-case"><a class="header" href="#optimise-only-for-the-worst-case">Optimise only for the worst case</a></h2>
-<p>Algorithms often possess different performance characteristics in the best,
-average and worst cases. Quick sort has, for example, <code>O(n*log(n))</code> time
-complexity in the average case, but <code>O(n^2)</code> in the worst case.</p>
-<p>Often in software we are interested in optimising for the average case, since
-over time it tends to result in the highest overall performance. In Cardano,
-however, we take a different approach: we want to only optimise the worst case
-performance, and indeed, pick algorithms where <em>worst case is the same as best
-(or average) case</em>.</p>
-<h3 id="motivation"><a class="header" href="#motivation">Motivation</a></h3>
-<p>There are two motivating ideas behind this principle:</p>
-<ol>
-<li>
-<p><em>Performance will come to be relied upon</em>. This is an instance of Hyrum’s
-law in action:</p>
-<blockquote>
-<p>With a sufficient number of users of an API, it does not matter what you
-promise in the contract: all observable behaviors of your system will be
-depended on by somebody.</p>
+<h1 id="leios-key-registration-and-committee-selection"><a class="header" href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a></h1>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is specified
+as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
+an extension to the Ouroboros consensus protocol aimed at significantly
+increasing transaction throughput. Details are subject to change.</p>
 </blockquote>
-<p>If we manage to increase average performance, tools will be developed that
-come to expect this behaviour. If blocks can be processed faster, for
-example, there may be pressure to use that extra time to allow larger script
-execution budgets.</p>
+<p>Leios endorses transaction availability out-of-band from the Praos block chain
+via <a href="../network/node-to-node/leios-notify/README.html">Endorser Blocks</a> (EBs). An
+EB becomes part of the canonical history only once a <strong>Leios certificate</strong>
+attests that a stake-weighted <strong>voting committee</strong> has seen it. This page
+specifies how stake pools register the BLS keys used for that voting, how the
+committee is derived from the stake distribution, and how a certificate is
+constructed and validated.</p>
+<p>Committee derivation is <strong>deterministic</strong>: from a given stake distribution every
+node must arrive at the same committee, because a node that derives a different
+committee would reject certificates that were validly produced under the intended
+one. This page specifies that derivation and the certificate format independently
+of any particular implementation, so that all nodes agree.</p>
+<ul>
+<li><a href="#registering-a-leios-key">Registering a Leios key</a></li>
+<li><a href="#selecting-the-voting-committee">Selecting the voting committee</a></li>
+<li><a href="#leios-certificates">Leios certificates</a>
+<ul>
+<li><a href="#constructing-a-certificate">Constructing a certificate</a></li>
+<li><a href="#verifying-a-certificate">Verifying a certificate</a></li>
+</ul>
 </li>
-<li>
-<p>Forcing honest nodes to do more work provides an attack opportunity for the
-adversary. In the worst case, an adversary could potentially force nodes to
-fail to adopt or forge blocks, and hence potentially gain control of the
-chain.</p>
-</li>
-</ol>
-<h3 id="example-utxo-locality"><a class="header" href="#example-utxo-locality">Example: UTxO locality</a></h3>
-<p>As an example, there is certain evidence that the UTxO set exhibits a degree of
-temporal locality. That is, there are a number of long-lived UTxO entries that
-are unlikely to be spent, while recently created entries are quite likely to
-come up again.</p>
-<p>We could choose to take advantage of this to organise the UTxO along the form
-of a LRU (least recently used) cache. This would likely speed up UTxO lookup
-in the average case, particularly were the UTxO stored on disk.</p>
-<p>However, an attacker could then choose to deliberately craft a number of
-transactions containing UTxO that were created a long time ago. A block filled
-with such transactions, while being perfectly legitimate, might take
-significantly longer to process than a regular block. The attacker could use
-this delay to gain an advantage in block forging and thus magnify their
-effective stake.</p>
-<h3 id="considerations"><a class="header" href="#considerations">Considerations</a></h3>
-<p>Whilst we have written the above as a general principle, there are of course
-various considerations that effect how much we want to follow it:</p>
+<li><a href="#related-specifications">Related specifications</a></li>
+</ul>
+<h2 id="registering-a-leios-key"><a class="header" href="#registering-a-leios-key">Registering a Leios key</a></h2>
+<p>A stake pool advertises the BLS key it will vote with by including an optional
+<code>leios_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
+structure — see <a href="../ledger/eras/dijkstra.cddl"><code>dijkstra.cddl</code></a>):</p>
+<pre><code class="language-cddl">pool_params =
+  ( operator       : pool_keyhash
+  , vrf_keyhash    : vrf_keyhash
+  , ? leios_key    : leios_key/ nil   ; optional; pools without it cannot vote
+  , ...
+  )
+
+leios_key =
+  [ leios_pubkey          : bytes .size 96   ; BLS12-381 verification key (G2, minimal-signature-size)
+  , leios_possessionproof : bytes .size 48   ; proof of possession (G1 signature)
+  ]
+</code></pre>
+<ul>
+<li>The key pair is <strong>BLS12-381</strong> in the <em>minimal-signature-size</em> configuration:
+verification keys live in G2 (96 bytes), signatures in G1 (48 bytes).</li>
+<li><code>leios_possessionproof</code> is a <strong>proof of possession</strong> (PoP): a signature over
+the verification key under a fixed, Leios-specific domain-separation tag
+(DST). It proves the registrant holds the corresponding secret key and defends
+the aggregate signature scheme against rogue-key attacks. Implementations
+<strong>must</strong> verify the PoP with the same DST that certificate verification uses
+(see below); a key whose PoP does not verify is treated as absent.</li>
+<li>The field is optional, so existing (pre-Leios) registrations remain valid. A
+re-registration replaces the pool’s <code>leios_key</code> like any other pool parameter,
+taking effect at the next epoch boundary via the usual stake-snapshot pipeline.</li>
+<li>Because it is a pool parameter, the key travels with the pool through the stake
+distribution snapshots: the per-pool entry of the active stake distribution
+carries the pool’s <code>leios_key</code> alongside its relative stake. That distribution
+is the sole input to committee selection.</li>
+</ul>
+<p>To actually cast votes, the node operating the pool must hold the corresponding
+<strong>BLS signing key</strong>; a node that only knows the on-chain (public) registration
+validates certificates but does not vote.</p>
+<h2 id="selecting-the-voting-committee"><a class="header" href="#selecting-the-voting-committee">Selecting the voting committee</a></h2>
+<p>For each epoch the voting committee is derived <strong>deterministically</strong> from the
+active stake distribution — the same snapshot used for Praos leader election — so
+that all honest nodes agree on it without any coordination.</p>
+<p>The committee is an ordered list of <strong>seats</strong>. Seats are allocated to pools by
+relative stake so that the seated pools together cover a target fraction of the
+total stake — the <strong>P99</strong> committee-stake-coverage target that
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a> found feasible
+(chosen so an honest majority of committee stake holds with overwhelming
+probability). A seat is:</p>
+<ul>
+<li><strong>keyed</strong> if its pool registered a <code>leios_key</code> (with a valid PoP) — it can
+sign, and its <code>leios_pubkey</code> is the seat’s verification key; or</li>
+<li><strong>keyless</strong> if the pool has no usable <code>leios_key</code> — the seat exists (it still
+carries stake weight) but can never contribute a valid signature.</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p>The P99 coverage target is currently <strong>hard-coded</strong>, not a protocol parameter.
+It is therefore <strong>consensus-critical</strong>: every node on a network must use the
+identical value and the identical selection procedure. Two nodes that derive
+committees differing in seat membership, ordering, or keyed/keyless status will
+disagree on which certificates are valid and fork. Changing the target requires
+a coordinated update of every node until it is promoted to a governed
+protocol parameter.</p>
+</blockquote>
+<p>Seats are indexed from <code>0</code> in the committee’s canonical order; that index is what
+a certificate refers to.</p>
+<h2 id="leios-certificates"><a class="header" href="#leios-certificates">Leios certificates</a></h2>
+<p>A <a href="../ledger/eras/dijkstra.cddl">block body</a> may carry a <code>leios_certificate</code>
+attesting the EB announced by (a recent) block header. The certificate records
+<em>which</em> committee seats voted and an aggregate of their signatures:</p>
+<pre><code class="language-cddl">leios_certificate =
+  [ signers              : bytes            ; bitfield over committee seat indices
+  , aggregated_signature : leios_signature
+  ]
+
+leios_signature = bytes .size 48            ; aggregate BLS12-381 signature (G1)
+</code></pre>
+<ul>
+<li><code>signers</code> is a <strong>bitfield</strong>: bit <code>i</code> set means the committee seat with index
+<code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code> marks seats 0 and 2.)</li>
+<li>Each voter signs the same certified message — the EB reference — with its
+registered BLS key. <code>aggregated_signature</code> is the BLS aggregate of exactly the
+signatures of the seats marked in <code>signers</code>.</li>
+</ul>
+<h3 id="constructing-a-certificate"><a class="header" href="#constructing-a-certificate">Constructing a certificate</a></h3>
+<p>A block producer that has collected votes for an announced EB aggregates the
+signatures of the voting seats and sets the corresponding bits in <code>signers</code>. A
+certificate is only worth including once the marked seats’ <strong>combined stake meets
+the quorum threshold</strong> implied by the committee (again derived from the same
+P99-covered committee).</p>
+<h3 id="verifying-a-certificate"><a class="header" href="#verifying-a-certificate">Verifying a certificate</a></h3>
+<p>To validate a block carrying a <code>leios_certificate</code>, a node MUST:</p>
 <ol>
-<li>The situation we most want to avoid is where an attacker could control an
-input such that they can force the worst-case behaviour. The UTxO locality
-example above is one such.</li>
-<li>Still problematic are cases where an attacker cannot control the performance
-but can predict it, or less serious still, observe it. Either way a
-prepared attacker could take advantage of the degraded performance to launch
-an attack on the chain.</li>
-<li>Either of these cases are exacerbated if the same behaviour is coordinated
-across all nodes, since this allows an attacker to exploit a performance
-drop across the entire network.</li>
+<li>Reconstruct the committee for the certificate’s epoch from its own copy of the
+active stake distribution, using the exact selection procedure above.</li>
+<li>Resolve every seat index set in <code>signers</code> to that seat’s <code>leios_pubkey</code>. If
+any set bit resolves to a <strong>keyless</strong> seat, the certificate is invalid — it
+claims a vote from a seat that carries no registered key.</li>
+<li>Verify <code>aggregated_signature</code> as a BLS aggregate of the resolved public keys
+over the certified EB message, under the Leios DST.</li>
+<li>Check that the stake covered by the signing seats meets the committee’s quorum
+threshold.</li>
 </ol>
-<p>In situations where the inputs to a function are random or not observable by
-an adversary, or where the effects are purely local, it may therefore still be
-sensible to optimise for the average case. An example of such might be in
-local state query computations, since these are triggered only by a (trusted)
-local connection and do not lie on a critical path for block forging or
-adoption.</p>
-<p>The key point is that, in the Cardano setting, optimisations should be carefully
-considered and it is certainly not the case that better average-case performance
-is always desirable!</p>
+<p>A block whose certificate fails any of these checks is invalid. Steps 1 and 2
+together are why committee derivation must be deterministic and shared: a node
+whose committee diverges from the one the votes were cast under — through a
+different P99 value, a different selection or seat ordering, or a missing
+registered key — rejects legitimately signed certificates and cannot follow the
+chain.</p>
+<h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
+<ul>
+<li><a href="../network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
+<a href="../network/node-to-node/leios-fetch/README.html">LeiosFetch</a> — how EBs and their
+bodies are announced and fetched between peers.</li>
+<li><a href="../ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>leios_key</code>, <code>pool_params</code>,
+<code>leios_announcement</code>, <code>leios_certificate</code> and the block header’s
+<code>leios_certified</code> / <code>leios_announcement</code> fields.</li>
+<li><a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a> — the
+protocol design and the rationale for the P99 committee parameter.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../introduction/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../consensus/multiera.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../network/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../storage/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -273,11 +350,11 @@ is always desirable!</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../introduction/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../consensus/multiera.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../network/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../storage/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

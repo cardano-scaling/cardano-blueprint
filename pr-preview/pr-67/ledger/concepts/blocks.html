@@ -36,10 +36,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-7bf3bb52.js";
+            window.path_to_searchindex_js = "../../searchindex-5927ddf1.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-fb937a43.js"></script>
+        <script src="../../toc-a7518362.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -291,12 +291,12 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
   ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">leios_certificate =
-  [ signers              : bytes           ;bitfield
-  , aggregated_signature : leios_signature
-  ]
+<pre><code class="language-cddl">    , ? 4 : [* plutus_v3_script]
+    , ? 5 : [* plutus_v4_script]
+    }
+  )
 
-leios_signature = bytes .size 48
+leios_certificate =
 </code></pre>
 
                     </main>

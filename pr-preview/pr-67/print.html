@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7bf3bb52.js";
+            window.path_to_searchindex_js = "searchindex-5927ddf1.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-fb937a43.js"></script>
+        <script src="toc-a7518362.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -2212,6 +2212,156 @@ implementors need to take into account:</p>
 <h2 id="time"><a class="header" href="#time">Time</a></h2>
 <h2 id="forecast-range-1"><a class="header" href="#forecast-range-1">Forecast range</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="leios-key-registration-and-committee-selection"><a class="header" href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a></h1>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is specified
+as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
+an extension to the Ouroboros consensus protocol aimed at significantly
+increasing transaction throughput. Details are subject to change.</p>
+</blockquote>
+<p>Leios endorses transaction availability out-of-band from the Praos block chain
+via <a href="network/node-to-node/leios-notify/README.html">Endorser Blocks</a> (EBs). An
+EB becomes part of the canonical history only once a <strong>Leios certificate</strong>
+attests that a stake-weighted <strong>voting committee</strong> has seen it. This page
+specifies how stake pools register the BLS keys used for that voting, how the
+committee is derived from the stake distribution, and how a certificate is
+constructed and validated.</p>
+<p>Committee derivation is <strong>deterministic</strong>: from a given stake distribution every
+node must arrive at the same committee, because a node that derives a different
+committee would reject certificates that were validly produced under the intended
+one. This page specifies that derivation and the certificate format independently
+of any particular implementation, so that all nodes agree.</p>
+<ul>
+<li><a href="#registering-a-leios-key">Registering a Leios key</a></li>
+<li><a href="#selecting-the-voting-committee">Selecting the voting committee</a></li>
+<li><a href="#leios-certificates">Leios certificates</a>
+<ul>
+<li><a href="#constructing-a-certificate">Constructing a certificate</a></li>
+<li><a href="#verifying-a-certificate">Verifying a certificate</a></li>
+</ul>
+</li>
+<li><a href="#related-specifications">Related specifications</a></li>
+</ul>
+<h2 id="registering-a-leios-key"><a class="header" href="#registering-a-leios-key">Registering a Leios key</a></h2>
+<p>A stake pool advertises the BLS key it will vote with by including an optional
+<code>leios_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
+structure — see <a href="ledger/eras/dijkstra.cddl"><code>dijkstra.cddl</code></a>):</p>
+<pre><code class="language-cddl">pool_params =
+  ( operator       : pool_keyhash
+  , vrf_keyhash    : vrf_keyhash
+  , ? leios_key    : leios_key/ nil   ; optional; pools without it cannot vote
+  , ...
+  )
+
+leios_key =
+  [ leios_pubkey          : bytes .size 96   ; BLS12-381 verification key (G2, minimal-signature-size)
+  , leios_possessionproof : bytes .size 48   ; proof of possession (G1 signature)
+  ]
+</code></pre>
+<ul>
+<li>The key pair is <strong>BLS12-381</strong> in the <em>minimal-signature-size</em> configuration:
+verification keys live in G2 (96 bytes), signatures in G1 (48 bytes).</li>
+<li><code>leios_possessionproof</code> is a <strong>proof of possession</strong> (PoP): a signature over
+the verification key under a fixed, Leios-specific domain-separation tag
+(DST). It proves the registrant holds the corresponding secret key and defends
+the aggregate signature scheme against rogue-key attacks. Implementations
+<strong>must</strong> verify the PoP with the same DST that certificate verification uses
+(see below); a key whose PoP does not verify is treated as absent.</li>
+<li>The field is optional, so existing (pre-Leios) registrations remain valid. A
+re-registration replaces the pool’s <code>leios_key</code> like any other pool parameter,
+taking effect at the next epoch boundary via the usual stake-snapshot pipeline.</li>
+<li>Because it is a pool parameter, the key travels with the pool through the stake
+distribution snapshots: the per-pool entry of the active stake distribution
+carries the pool’s <code>leios_key</code> alongside its relative stake. That distribution
+is the sole input to committee selection.</li>
+</ul>
+<p>To actually cast votes, the node operating the pool must hold the corresponding
+<strong>BLS signing key</strong>; a node that only knows the on-chain (public) registration
+validates certificates but does not vote.</p>
+<h2 id="selecting-the-voting-committee"><a class="header" href="#selecting-the-voting-committee">Selecting the voting committee</a></h2>
+<p>For each epoch the voting committee is derived <strong>deterministically</strong> from the
+active stake distribution — the same snapshot used for Praos leader election — so
+that all honest nodes agree on it without any coordination.</p>
+<p>The committee is an ordered list of <strong>seats</strong>. Seats are allocated to pools by
+relative stake so that the seated pools together cover a target fraction of the
+total stake — the <strong>P99</strong> committee-stake-coverage target that
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a> found feasible
+(chosen so an honest majority of committee stake holds with overwhelming
+probability). A seat is:</p>
+<ul>
+<li><strong>keyed</strong> if its pool registered a <code>leios_key</code> (with a valid PoP) — it can
+sign, and its <code>leios_pubkey</code> is the seat’s verification key; or</li>
+<li><strong>keyless</strong> if the pool has no usable <code>leios_key</code> — the seat exists (it still
+carries stake weight) but can never contribute a valid signature.</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p>The P99 coverage target is currently <strong>hard-coded</strong>, not a protocol parameter.
+It is therefore <strong>consensus-critical</strong>: every node on a network must use the
+identical value and the identical selection procedure. Two nodes that derive
+committees differing in seat membership, ordering, or keyed/keyless status will
+disagree on which certificates are valid and fork. Changing the target requires
+a coordinated update of every node until it is promoted to a governed
+protocol parameter.</p>
+</blockquote>
+<p>Seats are indexed from <code>0</code> in the committee’s canonical order; that index is what
+a certificate refers to.</p>
+<h2 id="leios-certificates"><a class="header" href="#leios-certificates">Leios certificates</a></h2>
+<p>A <a href="ledger/eras/dijkstra.cddl">block body</a> may carry a <code>leios_certificate</code>
+attesting the EB announced by (a recent) block header. The certificate records
+<em>which</em> committee seats voted and an aggregate of their signatures:</p>
+<pre><code class="language-cddl">leios_certificate =
+  [ signers              : bytes            ; bitfield over committee seat indices
+  , aggregated_signature : leios_signature
+  ]
+
+leios_signature = bytes .size 48            ; aggregate BLS12-381 signature (G1)
+</code></pre>
+<ul>
+<li><code>signers</code> is a <strong>bitfield</strong>: bit <code>i</code> set means the committee seat with index
+<code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code> marks seats 0 and 2.)</li>
+<li>Each voter signs the same certified message — the EB reference — with its
+registered BLS key. <code>aggregated_signature</code> is the BLS aggregate of exactly the
+signatures of the seats marked in <code>signers</code>.</li>
+</ul>
+<h3 id="constructing-a-certificate"><a class="header" href="#constructing-a-certificate">Constructing a certificate</a></h3>
+<p>A block producer that has collected votes for an announced EB aggregates the
+signatures of the voting seats and sets the corresponding bits in <code>signers</code>. A
+certificate is only worth including once the marked seats’ <strong>combined stake meets
+the quorum threshold</strong> implied by the committee (again derived from the same
+P99-covered committee).</p>
+<h3 id="verifying-a-certificate"><a class="header" href="#verifying-a-certificate">Verifying a certificate</a></h3>
+<p>To validate a block carrying a <code>leios_certificate</code>, a node MUST:</p>
+<ol>
+<li>Reconstruct the committee for the certificate’s epoch from its own copy of the
+active stake distribution, using the exact selection procedure above.</li>
+<li>Resolve every seat index set in <code>signers</code> to that seat’s <code>leios_pubkey</code>. If
+any set bit resolves to a <strong>keyless</strong> seat, the certificate is invalid — it
+claims a vote from a seat that carries no registered key.</li>
+<li>Verify <code>aggregated_signature</code> as a BLS aggregate of the resolved public keys
+over the certified EB message, under the Leios DST.</li>
+<li>Check that the stake covered by the signing seats meets the committee’s quorum
+threshold.</li>
+</ol>
+<p>A block whose certificate fails any of these checks is invalid. Steps 1 and 2
+together are why committee derivation must be deterministic and shared: a node
+whose committee diverges from the one the votes were cast under — through a
+different P99 value, a different selection or seat ordering, or a missing
+registered key — rejects legitimately signed certificates and cannot follow the
+chain.</p>
+<h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
+<ul>
+<li><a href="network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
+<a href="network/node-to-node/leios-fetch/README.html">LeiosFetch</a> — how EBs and their
+bodies are announced and fetched between peers.</li>
+<li><a href="ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>leios_key</code>, <code>pool_params</code>,
+<code>leios_announcement</code>, <code>leios_certificate</code> and the block header’s
+<code>leios_certified</code> / <code>leios_announcement</code> fields.</li>
+<li><a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a> — the
+protocol design and the rationale for the P99 committee parameter.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="storage"><a class="header" href="#storage">Storage</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
@@ -2424,10 +2574,12 @@ validated against.</p>
 <blockquote class="blockquote-tag blockquote-tag-tip">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
 <p>The Ledger layer provides mechanisms to translate transactions from older eras
-to more recent ones. In the reference Haskell node, the original transaction
-is the one that will be forwarded to other peers, i.e. the “translated”
-version of the transaction <em>is not sent</em> over the network, but this is not a
+to more recent ones. In the reference Haskell node, the translated transaction
+is the one that will be forwarded to other peers, but this is not a
 requirement.</p>
+<p>The bytes in the serialized transaction do not change by translation, however
+the tag in the tagged-sum will. See
+<a href="#codecs-2">the TxSubmission2 codecs</a>.</p>
 </blockquote>
 <p>Transactions are <em>pending</em> on some Ledger State if they have not been included
 in any block since Genesis up until such Ledger State. Transactions are <em>valid</em>
@@ -2710,12 +2862,12 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
   ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">leios_certificate =
-  [ signers              : bytes           ;bitfield
-  , aggregated_signature : leios_signature
-  ]
+<pre><code class="language-cddl">    , ? 4 : [* plutus_v3_script]
+    , ? 5 : [* plutus_v4_script]
+    }
+  )
 
-leios_signature = bytes .size 48
+leios_certificate =
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="determinism"><a class="header" href="#determinism">Determinism</a></h1>
