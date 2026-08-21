@@ -2,7 +2,7 @@
 
 The Cardano mini-protocols are a set of protocols that each provides a
 particular aspect of the communication between nodes (node-to-node or NTN).
-They run over a [multiplexer](multiplexing.md) which allows multiple
+They run over a [multiplexer](multiplexing/README.md) which allows multiple
 mini-protocols to share the same underlying TCP or local socket connection.
 
 Each mini-protocol is represented by a state machine and a set of messages
@@ -17,16 +17,26 @@ are valid to send and receive in each state, the state machine also
 defines which side has *agency* - that is, should be the one to send
 the next message.
 
-The *initiator* of a connection is the one that requested the
-connection be opened - the client in a simple client/server model.
-
-The *responder* or is the one that responds to the connection request - the
-server, in other words.
+The *initiator* of a mini-protocol instance is the side that has agency
+first — the client in a simple client/server reading of that instance. The
+*responder* is the other side. This is not "who opened the TCP
+connection," except for [Handshake](node-to-node/handshake): that
+mini-protocol is started by the *bearer initiator*, which is also its
+mini-protocol initiator. On a duplex bearer a node typically runs both an
+initiator and a responder of each other protocol with the same peer; the
+mux [mode bit](multiplexing/README.md#the-mode-bit) keeps those two
+instances apart.
 
 In every case it is the initiator (client) which has agency first. In many
 cases the initiator and responder take turns to have agency (send messages),
 but in some cases where one party must wait for a response, the other will
 keep agency and send a follow-up message later.
+
+The responder must be ready to handle any legal request, including after a
+clean `MsgDone` when the initiator starts the same mini-protocol again.
+`StDone` has nobody’s agency: after `MsgDone` neither side may send. A
+clean `MsgDone` is not a connection close. See
+[Protocol lifecycle](multiplexing/lifecycle.md).
 
 We can draw this state machine in the standard way using circles and arrows, but
 with the addition of an indicator of which side has agency. This one is for the
