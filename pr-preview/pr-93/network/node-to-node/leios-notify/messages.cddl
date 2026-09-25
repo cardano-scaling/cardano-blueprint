@@ -8,14 +8,13 @@ leiosNotifyMessage
 
 msgLeiosNotificationRequestNext = [0]
 msgLeiosBlockAnnouncement       = [1, announcement]
-msgLeiosBlockOffer              = [2, point, eb_size]
+msgLeiosBlockOffer              = [2, point]
 msgLeiosBlockTxsOffer           = [3, point]
 msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
-eb_size = base.word32 ; TODO should not be needed, because announcement
 slot = base.slotno
 eb_hash = base.hash
 
