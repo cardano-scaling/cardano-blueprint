@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5927ddf1.js";
+            window.path_to_searchindex_js = "searchindex-b9094017.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a7518362.js"></script>
@@ -2837,37 +2837,37 @@ the same-named branch of the <code>cardano-ledger</code> upstream repository. Th
 block format currently used on the https://www.musashi.network/ Leios testnet.</p>
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
-<pre><code class="language-cddl">header_body =
-  [ block_number       : block_number
-  , slot               : slot
-  , prev_hash          : hash32/ nil
-  , issuer_vkey        : vkey
-  , vrf_vkey           : vrf_vkey
-  , vrf_result         : vrf_cert
-  , block_body_size    : uint .size 4
-  , block_body_hash    : hash32                   ; merkle triple root
-  , operational_cert
-  , protocol_version
-  , leios_certified    : bool                     ; whether the block certifies the previous announcement
-  , leios_announcement : leios_announcement
-                         / nil ; optional announcement of an EB
+<pre><code class="language-cddl">  // drep_unregistration_cert
+  // drep_update_cert
   ]
+
+header = [header_body, body_signature : kes_signature]
+
+header_body =
+  [ block_number                   : block_number
+  , slot                           : slot
+  , prev_hash                      : hash32/ nil
+  , issuer_vkey                    : vkey
+  , vrf_vkey                       : vrf_vkey
+  , vrf_result                     : vrf_cert
+  , block_body_size                : uint .size 4
+  , block_body_hash                : hash32                ; merkle triple root
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">block_body =
-  [ invalid_transactions : invalid_transactions/ nil
-  , transactions      : [* transaction]
-  , leios_certificate : leios_certificate/ nil
-  , peras_certificate : peras_certificate/ nil
+<pre><code class="language-cddl">major_protocol_version = 0 .. 13
+
+eb_announcement =
+  [ eb_hash : hash32
+  , eb_size : uint .size 4 ; size of the EB block closure
   ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">    , ? 4 : [* plutus_v3_script]
-    , ? 5 : [* plutus_v4_script]
-    }
-  )
+<pre><code class="language-cddl">  / [* metadatum]
+  / int
+  / bytes .size (0 .. 64)
+  / text .size (0 .. 64)
 
-leios_certificate =
+auxiliary_data_array =
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="determinism"><a class="header" href="#determinism">Determinism</a></h1>
