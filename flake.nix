@@ -89,6 +89,7 @@
             mdbook
             mdbook-mermaid
             mdbook-toc
+            python3 # runs .mdbook/leios-preprocessor.py
           ] ++ [ mdbook-katex ];
           phases = [ "unpackPhase" "buildPhase" ];
           buildPhase = ''

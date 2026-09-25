@@ -1,11 +1,8 @@
-# Leios key registration and committee selection
+---
+leios: new
+---
 
-> [!WARNING]
->
-> This is **proposed** and not yet part of the Cardano mainnet. It is specified
-> as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
+# Leios key registration and committee selection
 
 Leios endorses transaction availability out-of-band from the Praos block chain
 via [Endorser Blocks](../network/node-to-node/leios-notify/README.md) (EBs). An
