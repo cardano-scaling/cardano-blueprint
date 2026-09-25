@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7f5ede68.js";
+            window.path_to_searchindex_js = "../../../searchindex-4f18eb99.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-404c79fe.js"></script>
@@ -249,7 +249,7 @@ push announcements to downstream peers with minimal latency.</p>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>eb_size</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
@@ -268,13 +268,14 @@ leiosNotifyMessage
 
 msgLeiosNotificationRequestNext = [0]
 msgLeiosBlockAnnouncement       = [1, announcement]
-msgLeiosBlockOffer              = [2, point]
+msgLeiosBlockOffer              = [2, point, eb_size]
 msgLeiosBlockTxsOffer           = [3, point]
 msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
+eb_size = base.word32 ; TODO should be redundant, determined by the announcement
 slot = base.slotno
 eb_hash = base.hash
 
