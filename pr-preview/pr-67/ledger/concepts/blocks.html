@@ -36,10 +36,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-b9094017.js";
+            window.path_to_searchindex_js = "../../searchindex-bc834fc0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-a7518362.js"></script>
+        <script src="../../toc-790ba61d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -248,7 +248,8 @@ separately since this map is provided, effectively, by the node which
 created the block, rather than by the creators of the transactions.</p>
 </li>
 </ol>
-<h2 id="leios-block-structure-changes-proposed"><a class="header" href="#leios-block-structure-changes-proposed">Leios block structure changes (proposed)</a></h2>
+<div class="leios">
+<h2 id="leios-block-structure-changes"><a class="header" href="#leios-block-structure-changes">Leios block structure changes</a></h2>
 <p>Leios changes the block structure in two ways:</p>
 <ul>
 <li>Block headers are re-used as announcements of endorser blocks</li>
@@ -266,13 +267,7 @@ the same-named branch of the <code>cardano-ledger</code> upstream repository. Th
 block format currently used on the https://www.musashi.network/ Leios testnet.</p>
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
-<pre><code class="language-cddl">  // drep_unregistration_cert
-  // drep_update_cert
-  ]
-
-header = [header_body, body_signature : kes_signature]
-
-header_body =
+<pre><code class="language-cddl">header_body =
   [ block_number                   : block_number
   , slot                           : slot
   , prev_hash                      : hash32/ nil
@@ -281,23 +276,35 @@ header_body =
   , vrf_result                     : vrf_cert
   , block_body_size                : uint .size 4
   , block_body_hash                : hash32                ; merkle triple root
+  , operational_cert
+  , protocol_version
+  , block_body_contains_leios_cert : bool
+  , eb_announcement                : eb_announcement/ nil
+  ]
 </code></pre>
-<h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">major_protocol_version = 0 .. 13
-
-eb_announcement =
+<p>with</p>
+<pre><code class="language-cddl">eb_announcement =
   [ eb_hash : hash32
   , eb_size : uint .size 4 ; size of the EB block closure
   ]
 </code></pre>
-<p>with</p>
-<pre><code class="language-cddl">  / [* metadatum]
-  / int
-  / bytes .size (0 .. 64)
-  / text .size (0 .. 64)
-
-auxiliary_data_array =
+<h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
+<pre><code class="language-cddl">block_body =
+  [ transactions      : [* block_transaction]
+  , leios_certificate : leios_certificate/ nil
+  , peras_certificate : peras_certificate/ nil
+  ]
 </code></pre>
+<p>with</p>
+<pre><code class="language-cddl">leios_certificate =
+  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
+  , signature : leios_signature
+  ]
+
+leios_signature = bytes .size 48
+</code></pre>
+</div>
+
 
                     </main>
 
@@ -352,6 +359,7 @@ auxiliary_data_array =
         <!-- Custom JS scripts -->
         <script src="../../.mdbook/mermaid.min.js"></script>
         <script src="../../.mdbook/mermaid-init.js"></script>
+        <script src="../../.mdbook/leios-toggle.js"></script>
 
 
 

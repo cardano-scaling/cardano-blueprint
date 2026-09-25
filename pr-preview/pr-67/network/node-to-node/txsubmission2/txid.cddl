@@ -6,6 +6,8 @@ txId =
            alonzo.transaction_id,
            babbage.transaction_id,
            conway.transaction_id,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            dijkstra.transaction_id>
 
 byronTxId = [0, byron.txid]

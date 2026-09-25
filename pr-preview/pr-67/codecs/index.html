@@ -36,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-b9094017.js";
+            window.path_to_searchindex_js = "../searchindex-bc834fc0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-a7518362.js"></script>
+        <script src="../toc-790ba61d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -196,32 +196,7 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
-    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
-    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
-    [pastEra, currentEra&lt;shelley&gt;] /
-    [currentEra&lt;byron&gt;]
-
-ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [7, dijkstra] /
-    [6, conway] /
-    [5, babbage] /
-    [4, alonzo] /
-    [3, mary] /
-    [2, allegra] /
-    [1, shelley] /
-</code></pre>
-<p>In addition, we add the following types to represent tag-encoded
-alternatives, commonly used at the consensus level to encode a
-different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">
-;; Blockchain types
-pastEra = [bound, bound]
-currentEra&lt;st&gt; = [bound, st]
+<pre><code class="language-cddl">currentEra&lt;st&gt; = [bound, st]
 bound = [relativeTime, slotno, epochno]
 eraIdx = word8
 individualPoolStake = [stake, hash]
@@ -255,6 +230,31 @@ word8  = uint .size 1
 word16 = uint .size 2
 word32 = uint .size 4
 word64 = uint .size 8
+</code></pre>
+<p>In addition, we add the following types to represent tag-encoded
+alternatives, commonly used at the consensus level to encode a
+different tag for each one of the eras in the Cardano blockchain:</p>
+<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
+    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
+    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
+    [pastEra, currentEra&lt;shelley&gt;] /
+    [currentEra&lt;byron&gt;]
+
+ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [7, dijkstra] /
+    [6, conway] /
+    [5, babbage] /
+    [4, alonzo] /
+    [3, mary] /
+    [2, allegra] /
+    [1, shelley] /
+    [0, byron]
+
+;; Blockchain types
 </code></pre>
 <p>These definitions are made available in the
 <a href="base.cddl"><code>base.cddl</code></a>
@@ -324,6 +324,7 @@ in qualified by the era name. We will usually import the Ledger CDDLs as:</p>
         <!-- Custom JS scripts -->
         <script src="../.mdbook/mermaid.min.js"></script>
         <script src="../.mdbook/mermaid-init.js"></script>
+        <script src="../.mdbook/leios-toggle.js"></script>
 
 
 

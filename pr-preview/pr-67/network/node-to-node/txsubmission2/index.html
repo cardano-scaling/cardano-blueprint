@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-b9094017.js";
+            window.path_to_searchindex_js = "../../../searchindex-bc834fc0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-a7518362.js"></script>
+        <script src="../../../toc-790ba61d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -316,6 +316,8 @@ txId =
            alonzo.transaction_id,
            babbage.transaction_id,
            conway.transaction_id,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            dijkstra.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
@@ -349,6 +351,8 @@ tx =
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
            serialisedShelleyTx&lt;conway.transaction&gt;,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
@@ -421,6 +425,7 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
         <!-- Custom JS scripts -->
         <script src="../../../.mdbook/mermaid.min.js"></script>
         <script src="../../../.mdbook/mermaid-init.js"></script>
+        <script src="../../../.mdbook/leios-toggle.js"></script>
 
 
 

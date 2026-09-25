@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b9094017.js";
+            window.path_to_searchindex_js = "searchindex-bc834fc0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-a7518362.js"></script>
+        <script src="toc-790ba61d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -851,6 +851,8 @@ header
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
             serialisedShelleyHeader&lt;conway.header&gt;,
+            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+            ; introduced with it.
             serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
@@ -999,6 +1001,8 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
              / [8, dijkstra.block]
 
 ;# import byron as byron
@@ -1145,6 +1149,8 @@ txId =
            alonzo.transaction_id,
            babbage.transaction_id,
            conway.transaction_id,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            dijkstra.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
@@ -1178,6 +1184,8 @@ tx =
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
            serialisedShelleyTx&lt;conway.transaction&gt;,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
@@ -2819,7 +2827,8 @@ separately since this map is provided, effectively, by the node which
 created the block, rather than by the creators of the transactions.</p>
 </li>
 </ol>
-<h2 id="leios-block-structure-changes-proposed"><a class="header" href="#leios-block-structure-changes-proposed">Leios block structure changes (proposed)</a></h2>
+<div class="leios">
+<h2 id="leios-block-structure-changes"><a class="header" href="#leios-block-structure-changes">Leios block structure changes</a></h2>
 <p>Leios changes the block structure in two ways:</p>
 <ul>
 <li>Block headers are re-used as announcements of endorser blocks</li>
@@ -2837,13 +2846,7 @@ the same-named branch of the <code>cardano-ledger</code> upstream repository. Th
 block format currently used on the https://www.musashi.network/ Leios testnet.</p>
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
-<pre><code class="language-cddl">  // drep_unregistration_cert
-  // drep_update_cert
-  ]
-
-header = [header_body, body_signature : kes_signature]
-
-header_body =
+<pre><code class="language-cddl">header_body =
   [ block_number                   : block_number
   , slot                           : slot
   , prev_hash                      : hash32/ nil
@@ -2852,23 +2855,35 @@ header_body =
   , vrf_result                     : vrf_cert
   , block_body_size                : uint .size 4
   , block_body_hash                : hash32                ; merkle triple root
+  , operational_cert
+  , protocol_version
+  , block_body_contains_leios_cert : bool
+  , eb_announcement                : eb_announcement/ nil
+  ]
 </code></pre>
-<h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">major_protocol_version = 0 .. 13
-
-eb_announcement =
+<p>with</p>
+<pre><code class="language-cddl">eb_announcement =
   [ eb_hash : hash32
   , eb_size : uint .size 4 ; size of the EB block closure
   ]
 </code></pre>
-<p>with</p>
-<pre><code class="language-cddl">  / [* metadatum]
-  / int
-  / bytes .size (0 .. 64)
-  / text .size (0 .. 64)
-
-auxiliary_data_array =
+<h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
+<pre><code class="language-cddl">block_body =
+  [ transactions      : [* block_transaction]
+  , leios_certificate : leios_certificate/ nil
+  , peras_certificate : peras_certificate/ nil
+  ]
 </code></pre>
+<p>with</p>
+<pre><code class="language-cddl">leios_certificate =
+  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
+  , signature : leios_signature
+  ]
+
+leios_signature = bytes .size 48
+</code></pre>
+</div>
+
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="determinism"><a class="header" href="#determinism">Determinism</a></h1>
 <p>An important principle that occurs in a few places throughout the Cardano ledger
@@ -4042,32 +4057,7 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
-    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
-    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
-    [pastEra, currentEra&lt;shelley&gt;] /
-    [currentEra&lt;byron&gt;]
-
-ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [7, dijkstra] /
-    [6, conway] /
-    [5, babbage] /
-    [4, alonzo] /
-    [3, mary] /
-    [2, allegra] /
-    [1, shelley] /
-</code></pre>
-<p>In addition, we add the following types to represent tag-encoded
-alternatives, commonly used at the consensus level to encode a
-different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">
-;; Blockchain types
-pastEra = [bound, bound]
-currentEra&lt;st&gt; = [bound, st]
+<pre><code class="language-cddl">currentEra&lt;st&gt; = [bound, st]
 bound = [relativeTime, slotno, epochno]
 eraIdx = word8
 individualPoolStake = [stake, hash]
@@ -4101,6 +4091,31 @@ word8  = uint .size 1
 word16 = uint .size 2
 word32 = uint .size 4
 word64 = uint .size 8
+</code></pre>
+<p>In addition, we add the following types to represent tag-encoded
+alternatives, commonly used at the consensus level to encode a
+different tag for each one of the eras in the Cardano blockchain:</p>
+<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
+    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
+    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
+    [pastEra, currentEra&lt;shelley&gt;] /
+    [currentEra&lt;byron&gt;]
+
+ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [7, dijkstra] /
+    [6, conway] /
+    [5, babbage] /
+    [4, alonzo] /
+    [3, mary] /
+    [2, allegra] /
+    [1, shelley] /
+    [0, byron]
+
+;; Blockchain types
 </code></pre>
 <p>These definitions are made available in the
 <a href="codecs/base.cddl"><code>base.cddl</code></a>
@@ -4247,6 +4262,64 @@ How about code blocks?</p>
 <pre><code>cargo install mdbook-alerts
 </code></pre>
 </blockquote>
+<h2 id="marking-proposed-leios-changes"><a class="header" href="#marking-proposed-leios-changes">Marking proposed (Leios) changes</a></h2>
+<p>Some blueprints describe changes that are not part of the currently active
+protocol yet, but are <em>proposed</em> future changes - most notably <a href="https://leios.cardano.org">Leios</a>. Such
+content is marked so readers can tell it apart from the current protocol and,
+ideally, turn it on or off.</p>
+<p>Wrap the proposed content in a <code>&lt;div class="leios"&gt;</code> block:</p>
+<pre><code class="language-markdown">&lt;div class="leios"&gt;
+
+## Leios block structure changes
+
+Leios changes the block structure in two ways:
+
+- ...
+
+&lt;/div&gt;
+</code></pre>
+<p>Note the <strong>blank lines</strong> right after the opening <code>&lt;div ...&gt;</code> and right before
+the closing <code>&lt;/div&gt;</code>. They are required so that the markdown inside the block
+(headings, lists, <code>{{#include}}</code> snippets, …) is still rendered as markdown.</p>
+<p>Such blocks are <strong>hidden by default</strong> - a plain page shows the current protocol
+only. A very visible <strong><code>🌊 Leios changes</code></strong> toggle in the top menu bar reveals
+them, adding a <code>?leios=on</code> query parameter to the URL. The choice is sticky: it
+is carried onto the links you follow, so it persists while navigating the book,
+and a <code>?leios=on</code> link can be shared directly. When shown, each block is set off
+as a purple, badged callout.</p>
+<p>When content is inside such a block there is no need to also add a “(proposed)”
+suffix to its headings - the callout badge already conveys that.</p>
+<h3 id="whole-pages"><a class="header" href="#whole-pages">Whole pages</a></h3>
+<p>A page that describes proposed Leios changes in its entirety needs no <code>&lt;div&gt;</code>.
+Instead, put <code>leios</code> in its <strong>path</strong> - for example
+<code>network/node-to-node/leios-fetch/README.md</code>. Its sidebar entry (and that of
+any sub-chapters) is then hidden while the toggle is off and highlighted with a
+🌊 icon while it is on. The page itself stays reachable by direct link either
+way, and the entry of the page you are currently reading is never hidden, so
+toggling cannot lose your place in the table of contents.</p>
+<p>Do give such pages a “(proposed)” suffix in <code>SUMMARY.md</code>: the sidebar entry is
+also visible in the search results and the printed book, where the toggle does
+not apply.</p>
+<h3 id="cddl-shared-between-the-current-protocol-and-leios"><a class="header" href="#cddl-shared-between-the-current-protocol-and-leios">CDDL shared between the current protocol and Leios</a></h3>
+<p>A <code>{{#include}}</code> is atomic, so a code block cannot be partly hidden by the
+toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed rules</p>
+<ul>
+<li>as the network codecs do, where Leios is introduced with the Dijkstra era -
+do not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
+itself:</li>
+</ul>
+<pre><code class="language-cddl">cardanoBlock = byron.block
+             / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
+</code></pre>
+<p>The comment is part of the code block, so it is visible whichever way the
+toggle is set - which is the point, since the rule it explains is too.</p>
+<p>This is not an option for <code>src/ledger/eras/*.cddl</code>: those are generated and
+overwritten by the <code>sync-ledger-cddls</code> workflow, so any comment added by hand
+is lost on the next sync. Include them by line range, and re-check the ranges
+after a sync - they silently shift.</p>
 <h2 id="footnotes"><a class="header" href="#footnotes">Footnotes</a></h2>
 <p>Additional information that would complicate the read-flow can be put into footnotes <sup class="footnote-reference" id="fr-example-1"><a href="#footnote-example">1</a></sup>.</p>
 <h2 id="other-stuff"><a class="header" href="#other-stuff">Other stuff</a></h2>
@@ -4681,6 +4754,7 @@ limitations under the License.</p>
         <!-- Custom JS scripts -->
         <script src=".mdbook/mermaid.min.js"></script>
         <script src=".mdbook/mermaid-init.js"></script>
+        <script src=".mdbook/leios-toggle.js"></script>
 
         <script>
         window.addEventListener('load', function() {

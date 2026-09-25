@@ -6,6 +6,8 @@ tx =
            serialisedShelleyTx<alonzo.transaction>,
            serialisedShelleyTx<babbage.transaction>,
            serialisedShelleyTx<conway.transaction>,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
            serialisedShelleyTx<dijkstra.transaction>>
 
 serialisedShelleyTx<era> = #6.24(bytes .cbor era)
