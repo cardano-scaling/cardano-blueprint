@@ -1,13 +1,10 @@
+---
+leios: new
+---
+
 # LeiosFetch
 
 **Mini-protocol number: 19**
-
-> [!WARNING]
->
-> This protocol is **proposed** and not yet part of the Cardano mainnet. It is
-> specified as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
 
 `LeiosFetch` is the mini-protocol responsible for fetching Endorser Blocks (EBs)
 and their transaction payloads from peers. It is a pull-based protocol: the
@@ -36,15 +33,8 @@ graph LR
    StIdle --MsgLeiosBlockTxsRequest--> StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--> StIdle
 
-   StIdle --MsgLeiosVotesRequest--> StVotes
-   StVotes --MsgLeiosVotes-->StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--> StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--> StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--> StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 ```
 
 ### State agencies
@@ -59,18 +49,13 @@ graph LR
 
 ### State transitions
 
-| From state   | Message                        | Parameters                                         | To state     |
-| :----------- | :----------------------------- | -------------------------------------------------- | :----------- |
-| StIdle       | MsgClientDone                  |                                                    | End          |
-| StIdle       | MsgLeiosBlockRequest           | `point`                                            | StBlock      |
-| StIdle       | MsgLeiosBlockTxsRequest        | `point`, `bitmaps`                                 | StBlockTxs   |
-| StIdle       | MsgLeiosVotesRequest           | `[1* (slot, voter_id)]`                            | StVotes      |
-| StIdle       | MsgLeiosBlockRangeRequest      | `start_slot`, `end_slot`, `start_hash`, `end_hash` | StBlockRange |
-| StBlock      | MsgLeiosBlock                  | `endorser_block`                                   | StIdle       |
-| StBlockTxs   | MsgLeiosBlockTxs               | `point`, `bitmaps`, `tx_list`                      | StIdle       |
-| StVotes      | MsgLeiosVotes                  | `[1* vote]`                                        | StIdle       |
-| StBlockRange | MsgLeiosNextBlockAndTxsInRange | `endorser_block`, `tx_list`                        | StBlockRange |
-| StBlockRange | MsgLeiosLastBlockAndTxsInRange | `endorser_block`, `tx_list`                        | StIdle       |
+| From state | Message                 | Parameters                    | To state   |
+| :--------- | :---------------------- | ----------------------------- | :--------- |
+| StIdle     | MsgClientDone           |                               | End        |
+| StIdle     | MsgLeiosBlockRequest    | `point`                       | StBlock    |
+| StBlock    | MsgLeiosBlock           | `endorser_block`              | StIdle     |
+| StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps`            | StBlockTxs |
+| StBlockTxs | MsgLeiosBlockTxs        | `point`, `bitmaps`, `tx_list` | StIdle     |
 
 ## Codecs
 

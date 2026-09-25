@@ -1,13 +1,10 @@
+---
+leios: new
+---
+
 # LeiosNotify
 
 **Mini-protocol number: 18**
-
-> [!WARNING]
->
-> This protocol is **proposed** and not yet part of the Cardano mainnet. It is
-> specified as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
 
 `LeiosNotify` is the mini-protocol responsible for announcing Endorser Blocks
 (EBs) and offering EB bodies and their associated transaction closures to peers.
@@ -42,7 +39,7 @@ graph LR
    StBusy --MsgLeiosBlockAnnouncement--> StIdle
    StBusy --MsgLeiosBlockOffer--> StIdle
    StBusy --MsgLeiosBlockTxsOffer--> StIdle
-   StBusy --MsgLeiosVotesOffer--> StIdle
+   StBusy --MsgLeiosVotes--> StIdle
 
    class StIdle client
    class StBusy server
@@ -57,14 +54,14 @@ graph LR
 
 ### State transitions
 
-| From state | Message                         | Parameters             | To state |
-| :--------- | :------------------------------ | ---------------------- | :------- |
-| StIdle     | MsgClientDone                   |                        | End      |
-| StIdle     | MsgLeiosNotificationRequestNext |                        | StBusy   |
-| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`         | StIdle   |
-| StBusy     | MsgLeiosBlockOffer              | `point`, `size`        | StIdle   |
-| StBusy     | MsgLeiosBlockTxsOffer           | `point`                | StIdle   |
-| StBusy     | MsgLeiosVotesOffer              | `[1* (slot, voterId)]` | StIdle   |
+| From state | Message                         | Parameters         | To state |
+| :--------- | :------------------------------ | ------------------ | :------- |
+| StIdle     | MsgClientDone                   |                    | End      |
+| StIdle     | MsgLeiosNotificationRequestNext |                    | StBusy   |
+| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`     | StIdle   |
+| StBusy     | MsgLeiosBlockOffer              | `point`, `eb_size` | StIdle   |
+| StBusy     | MsgLeiosBlockTxsOffer           | `point`            | StIdle   |
+| StBusy     | MsgLeiosVotes                   | `[1* vote]`        | StIdle   |
 
 ## Codecs
 

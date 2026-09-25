@@ -173,6 +173,103 @@ $$
 > cargo install mdbook-alerts
 > ```
 
+## Marking proposed (Leios) changes
+
+Some blueprints describe changes that are not part of the currently active
+protocol yet, but are *proposed* future changes - most notably [Leios]. Such
+content is marked so readers can tell it apart from the current protocol and,
+ideally, turn it on or off.
+
+Wrap the proposed content in a `<div class="leios">` block:
+
+```markdown
+<div class="leios">
+
+## Leios block structure changes
+
+Leios changes the block structure in two ways:
+
+- ...
+
+</div>
+```
+
+Note the **blank lines** right after the opening `<div ...>` and right before
+the closing `</div>`. They are required so that the markdown inside the block
+(headings, lists, `{{#include}}` snippets, ...) is still rendered as markdown.
+
+Such blocks are **hidden by default** - a plain page shows the current protocol
+only. A very visible **`🌊 Leios changes`** toggle in the top menu bar reveals
+them, adding a `?leios=on` query parameter to the URL. The choice is sticky: it
+is carried onto the links you follow, so it persists while navigating the book,
+and a `?leios=on` link can be shared directly. When shown, each block is set off
+as a purple, badged callout.
+
+When content is inside such a block there is no need to also add a "(proposed)"
+suffix to its headings - the callout badge already conveys that.
+
+### Whole pages
+
+A page that describes proposed Leios changes in its entirety needs no `<div>`.
+Declare it in **front matter** instead:
+
+```markdown
+---
+leios: new
+---
+
+# LeiosFetch
+```
+
+Its sidebar entry (and that of any sub-chapters) is then hidden while the
+toggle is off and highlighted with a 🌊 icon while it is on. The entry of the
+page you are currently reading is never hidden, so toggling cannot lose your
+place in the table of contents.
+
+Such a page also gets a **banner** prepended automatically, saying that it is
+proposed and pointing at CIP-0164. The banner sits deliberately *outside* the
+toggle, because the page stays reachable by direct link and through the search
+even while the toggle is off - it must announce itself either way. So do not
+hand-write a "this is proposed" warning at the top of the page; the banner is
+that warning, and one generated copy cannot drift out of sync with the others.
+
+Do give such pages a "(proposed)" suffix in `SUMMARY.md`: the sidebar entry is
+also visible in the search results and the printed book, where the toggle does
+not apply.
+
+A page that merely *contains* a `<div class="leios">` section needs no front
+matter - it is detected automatically and its entry is highlighted (never
+hidden, since it documents the current protocol too).
+
+Both are collected by `.mdbook/leios-preprocessor.py` into a
+`window.LEIOS_PAGES` manifest, which `.mdbook/leios-toggle.js` uses to mark the
+table of contents. The detection ignores fenced and inline code, so this very
+page - which only quotes the convention - is not itself flagged.
+
+### CDDL shared between the current protocol and Leios
+
+A `{{#include}}` is atomic, so a code block cannot be partly hidden by the
+toggle. Where one `.cddl` file carries both current-protocol and proposed
+rules, as the network codecs do (Leios is introduced with the Dijkstra era), do
+not try to split it. Mark the proposed lines with a **comment in the CDDL**
+itself:
+
+```cddl
+cardanoBlock = byron.block
+             / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
+```
+
+The comment is part of the code block, so it is visible whichever way the
+toggle is set - which is the point, since the rule it explains is too.
+
+This is not an option for `src/ledger/eras/*.cddl`: those are generated and
+overwritten by the `sync-ledger-cddls` workflow, so any comment added by hand
+is lost on the next sync. Include them by line range, and re-check the ranges
+after a sync - they silently shift.
+
 ## Footnotes
 
 Additional information that would complicate the read-flow can be put into footnotes [^example].
@@ -182,3 +279,5 @@ Additional information that would complicate the read-flow can be put into footn
 The footnote should appear below. If not, we need to contribute this to `mdbook`.
 
 [^example]: Example footnote
+
+[leios]: https://leios.cardano-scaling.org
