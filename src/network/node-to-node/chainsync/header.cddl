@@ -6,6 +6,8 @@ header
             serialisedShelleyHeader<alonzo.header>,
             serialisedShelleyHeader<babbage.header>,
             serialisedShelleyHeader<conway.header>,
+            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+            ; introduced with it.
             serialisedShelleyHeader<dijkstra.header>>
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]

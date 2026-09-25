@@ -129,12 +129,12 @@ To validate a block carrying a `leios_certificate`, a node MUST:
 
 1. Reconstruct the committee for the certificate's epoch from its own copy of the
    active stake distribution, using the exact selection procedure above.
-2. Resolve every seat index set in `signers` to that seat's `leios_pubkey`. If
+1. Resolve every seat index set in `signers` to that seat's `leios_pubkey`. If
    any set bit resolves to a **keyless** seat, the certificate is invalid — it
    claims a vote from a seat that carries no registered key.
-3. Verify `aggregated_signature` as a BLS aggregate of the resolved public keys
+1. Verify `aggregated_signature` as a BLS aggregate of the resolved public keys
    over the certified EB message, under the Leios DST.
-4. Check that the stake covered by the signing seats meets the committee's quorum
+1. Check that the stake covered by the signing seats meets the committee's quorum
    threshold.
 
 A block whose certificate fails any of these checks is invalid. Steps 1 and 2
