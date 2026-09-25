@@ -54,14 +54,14 @@ graph LR
 
 ### State transitions
 
-| From state | Message                         | Parameters     | To state |
-| :--------- | :------------------------------ | -------------- | :------- |
-| StIdle     | MsgClientDone                   |                | End      |
-| StIdle     | MsgLeiosNotificationRequestNext |                | StBusy   |
-| StBusy     | MsgLeiosBlockAnnouncement       | `announcement` | StIdle   |
-| StBusy     | MsgLeiosBlockOffer              | `point`        | StIdle   |
-| StBusy     | MsgLeiosBlockTxsOffer           | `point`        | StIdle   |
-| StBusy     | MsgLeiosVotes                   | `[1* vote]`    | StIdle   |
+| From state | Message                         | Parameters         | To state |
+| :--------- | :------------------------------ | ------------------ | :------- |
+| StIdle     | MsgClientDone                   |                    | End      |
+| StIdle     | MsgLeiosNotificationRequestNext |                    | StBusy   |
+| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`     | StIdle   |
+| StBusy     | MsgLeiosBlockOffer              | `point`, `eb_size` | StIdle   |
+| StBusy     | MsgLeiosBlockTxsOffer           | `point`            | StIdle   |
+| StBusy     | MsgLeiosVotes                   | `[1* vote]`        | StIdle   |
 
 ## Codecs
 
