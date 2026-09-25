@@ -1,13 +1,10 @@
+---
+leios: new
+---
+
 # LeiosNotify
 
 **Mini-protocol number: 18**
-
-> [!WARNING]
->
-> This protocol is **proposed** and not yet part of the Cardano mainnet. It is
-> specified as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
 
 `LeiosNotify` is the mini-protocol responsible for announcing Endorser Blocks
 (EBs) and offering EB bodies and their associated transaction closures to peers.

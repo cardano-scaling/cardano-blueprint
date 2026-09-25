@@ -211,25 +211,48 @@ suffix to its headings - the callout badge already conveys that.
 ### Whole pages
 
 A page that describes proposed Leios changes in its entirety needs no `<div>`.
-Instead, put `leios` in its **path** - for example
-`network/node-to-node/leios-fetch/README.md`. Its sidebar entry (and that of
-any sub-chapters) is then hidden while the toggle is off and highlighted with a
-🌊 icon while it is on. The page itself stays reachable by direct link either
-way, and the entry of the page you are currently reading is never hidden, so
-toggling cannot lose your place in the table of contents.
+Declare it in **front matter** instead:
+
+```markdown
+---
+leios: new
+---
+
+# LeiosFetch
+```
+
+Its sidebar entry (and that of any sub-chapters) is then hidden while the
+toggle is off and highlighted with a 🌊 icon while it is on. The entry of the
+page you are currently reading is never hidden, so toggling cannot lose your
+place in the table of contents.
+
+Such a page also gets a **banner** prepended automatically, saying that it is
+proposed and pointing at CIP-0164. The banner sits deliberately *outside* the
+toggle, because the page stays reachable by direct link and through the search
+even while the toggle is off - it must announce itself either way. So do not
+hand-write a "this is proposed" warning at the top of the page; the banner is
+that warning, and one generated copy cannot drift out of sync with the others.
 
 Do give such pages a "(proposed)" suffix in `SUMMARY.md`: the sidebar entry is
 also visible in the search results and the printed book, where the toggle does
 not apply.
 
+A page that merely *contains* a `<div class="leios">` section needs no front
+matter - it is detected automatically and its entry is highlighted (never
+hidden, since it documents the current protocol too).
+
+Both are collected by `.mdbook/leios-preprocessor.py` into a
+`window.LEIOS_PAGES` manifest, which `.mdbook/leios-toggle.js` uses to mark the
+table of contents. The detection ignores fenced and inline code, so this very
+page - which only quotes the convention - is not itself flagged.
+
 ### CDDL shared between the current protocol and Leios
 
 A `{{#include}}` is atomic, so a code block cannot be partly hidden by the
-toggle. Where one `.cddl` file carries both current-protocol and proposed rules
-
-- as the network codecs do, where Leios is introduced with the Dijkstra era -
-  do not try to split it. Mark the proposed lines with a **comment in the CDDL**
-  itself:
+toggle. Where one `.cddl` file carries both current-protocol and proposed
+rules, as the network codecs do (Leios is introduced with the Dijkstra era), do
+not try to split it. Mark the proposed lines with a **comment in the CDDL**
+itself:
 
 ```cddl
 cardanoBlock = byron.block
