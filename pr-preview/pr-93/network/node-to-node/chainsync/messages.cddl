@@ -1,0 +1,26 @@
+chainSyncMessage
+    = msgRequestNext
+    / msgAwaitReply
+    / msgRollForward
+    / msgRollBackward
+    / msgFindIntersect
+    / msgIntersectFound
+    / msgIntersectNotFound
+    / chainSyncMsgDone
+
+msgRequestNext         = [0]
+msgAwaitReply          = [1]
+msgRollForward         = [2, header.header, tip]
+msgRollBackward        = [3, point, tip]
+msgFindIntersect       = [4, [* point]]
+msgIntersectFound      = [5, point, tip]
+msgIntersectNotFound   = [6, tip]
+chainSyncMsgDone       = [7]
+
+tip = [ point, base.blockNo ]
+
+point = []                         ; the genesis point
+      / [ base.slotNo, base.hash ]
+
+;# import base as base
+;# import header as header

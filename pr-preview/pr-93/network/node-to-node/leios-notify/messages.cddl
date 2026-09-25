@@ -1,0 +1,22 @@
+leiosNotifyMessage
+     = msgLeiosNotificationRequestNext
+     / msgLeiosBlockAnnouncement
+     / msgLeiosBlockOffer
+     / msgLeiosBlockTxsOffer
+     / msgLeiosVotesOffer
+     / msgClientDone
+
+msgLeiosNotificationRequestNext = [0]
+msgLeiosBlockAnnouncement       = [1, announcement_header]
+msgLeiosBlockOffer              = [2, point]
+msgLeiosBlockTxsOffer           = [3, point]
+msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
+msgClientDone                   = [5]
+
+announcement_header = any ; TODO
+point = (slot, eb_hash)
+slot = base.slotNo
+eb_hash = base.hash
+voter_id = base.word16  ; REVIEW: size?
+
+;# import base as base
