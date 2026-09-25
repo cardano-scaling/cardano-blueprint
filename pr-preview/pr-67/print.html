@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-bc834fc0.js";
+            window.path_to_searchindex_js = "searchindex-972d599b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-790ba61d.js"></script>
@@ -1185,8 +1185,10 @@ tx =
            serialisedShelleyTx&lt;babbage.transaction&gt;,
            serialisedShelleyTx&lt;conway.transaction&gt;,
            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it.
-           serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
+           ; introduced with it. Dijkstra splits `transaction` into
+           ; `block_transaction` and `mempool_transaction`, which differ in
+           ; where the `is_valid` flag sits; this protocol diffuses the latter.
+           serialisedShelleyTx&lt;dijkstra.mempool_transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 
@@ -4264,7 +4266,7 @@ How about code blocks?</p>
 </blockquote>
 <h2 id="marking-proposed-leios-changes"><a class="header" href="#marking-proposed-leios-changes">Marking proposed (Leios) changes</a></h2>
 <p>Some blueprints describe changes that are not part of the currently active
-protocol yet, but are <em>proposed</em> future changes - most notably <a href="https://leios.cardano.org">Leios</a>. Such
+protocol yet, but are <em>proposed</em> future changes - most notably <a href="https://leios.cardano-scaling.org">Leios</a>. Such
 content is marked so readers can tell it apart from the current protocol and,
 ideally, turn it on or off.</p>
 <p>Wrap the proposed content in a <code>&lt;div class="leios"&gt;</code> block:</p>

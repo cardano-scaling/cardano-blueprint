@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-bc834fc0.js";
+            window.path_to_searchindex_js = "../../../searchindex-972d599b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-790ba61d.js"></script>
@@ -352,8 +352,10 @@ tx =
            serialisedShelleyTx&lt;babbage.transaction&gt;,
            serialisedShelleyTx&lt;conway.transaction&gt;,
            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it.
-           serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
+           ; introduced with it. Dijkstra splits `transaction` into
+           ; `block_transaction` and `mempool_transaction`, which differ in
+           ; where the `is_valid` flag sits; this protocol diffuses the latter.
+           serialisedShelleyTx&lt;dijkstra.mempool_transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 

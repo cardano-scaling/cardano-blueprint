@@ -7,8 +7,10 @@ tx =
            serialisedShelleyTx<babbage.transaction>,
            serialisedShelleyTx<conway.transaction>,
            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it.
-           serialisedShelleyTx<dijkstra.transaction>>
+           ; introduced with it. Dijkstra splits `transaction` into
+           ; `block_transaction` and `mempool_transaction`, which differ in
+           ; where the `is_valid` flag sits; this protocol diffuses the latter.
+           serialisedShelleyTx<dijkstra.mempool_transaction>>
 
 serialisedShelleyTx<era> = #6.24(bytes .cbor era)
 
