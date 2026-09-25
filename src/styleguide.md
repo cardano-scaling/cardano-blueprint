@@ -222,6 +222,31 @@ Do give such pages a "(proposed)" suffix in `SUMMARY.md`: the sidebar entry is
 also visible in the search results and the printed book, where the toggle does
 not apply.
 
+### CDDL shared between the current protocol and Leios
+
+A `{{#include}}` is atomic, so a code block cannot be partly hidden by the
+toggle. Where one `.cddl` file carries both current-protocol and proposed rules
+
+- as the network codecs do, where Leios is introduced with the Dijkstra era -
+  do not try to split it. Mark the proposed lines with a **comment in the CDDL**
+  itself:
+
+```cddl
+cardanoBlock = byron.block
+             / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
+```
+
+The comment is part of the code block, so it is visible whichever way the
+toggle is set - which is the point, since the rule it explains is too.
+
+This is not an option for `src/ledger/eras/*.cddl`: those are generated and
+overwritten by the `sync-ledger-cddls` workflow, so any comment added by hand
+is lost on the next sync. Include them by line range, and re-check the ranges
+after a sync - they silently shift.
+
 ## Footnotes
 
 Additional information that would complicate the read-flow can be put into footnotes [^example].
@@ -232,4 +257,4 @@ The footnote should appear below. If not, we need to contribute this to `mdbook`
 
 [^example]: Example footnote
 
-[leios]: https://leios.cardano.org
+[leios]: https://leios.cardano-scaling.org

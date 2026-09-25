@@ -20,7 +20,7 @@ The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:
 
 ```cddl
-{{#include base.cddl:0:18}}
+{{#include base.cddl:21:}}
 ```
 
 In addition, we add the following types to represent tag-encoded
@@ -28,7 +28,7 @@ alternatives, commonly used at the consensus level to encode a
 different tag for each one of the eras in the Cardano blockchain:
 
 ```cddl
-{{#include base.cddl:20:}}
+{{#include base.cddl:1:19}}
 ```
 
 These definitions are made available in the
