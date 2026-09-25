@@ -208,6 +208,20 @@ as a purple, badged callout.
 When content is inside such a block there is no need to also add a "(proposed)"
 suffix to its headings - the callout badge already conveys that.
 
+### Whole pages
+
+A page that describes proposed Leios changes in its entirety needs no `<div>`.
+Instead, put `leios` in its **path** - for example
+`network/node-to-node/leios-fetch/README.md`. Its sidebar entry (and that of
+any sub-chapters) is then hidden while the toggle is off and highlighted with a
+⚡ icon while it is on. The page itself stays reachable by direct link either
+way, and the entry of the page you are currently reading is never hidden, so
+toggling cannot lose your place in the table of contents.
+
+Do give such pages a "(proposed)" suffix in `SUMMARY.md`: the sidebar entry is
+also visible in the search results and the printed book, where the toggle does
+not apply.
+
 ## Footnotes
 
 Additional information that would complicate the read-flow can be put into footnotes [^example].
