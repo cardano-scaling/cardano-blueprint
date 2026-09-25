@@ -86,7 +86,7 @@
         button.title = on
             ? "Hide proposed Leios changes"
             : "Show proposed Leios changes";
-        button.textContent = on ? "⚡ Leios changes: on" : "⚡ Leios changes: off";
+        button.textContent = on ? "🌊 Leios changes: on" : "🌊 Leios changes: off";
     };
 
     const setState = (on) => {

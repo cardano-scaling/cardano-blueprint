@@ -36,7 +36,7 @@ html.leios-on .leios {
 }
 
 html.leios-on .leios::before {
-  content: "⚡ Leios · proposed";
+  content: "🌊 Leios · proposed";
   display: inline-block;
   font-size: 0.75em;
   font-weight: 600;
@@ -82,12 +82,12 @@ html:not(.leios-on) .chapter-item.leios-chapter {
   display: none;
 }
 
-/* When shown, highlighted with a leading ⚡ icon and the same purple as the
+/* When shown, highlighted with a leading 🌊 icon and the same purple as the
  * callout so readers can spot proposed chapters in the table of contents. */
 .chapter-item a.leios-nav {
   color: #8c02c2 !important;
 }
 
 .chapter-item a.leios-nav::before {
-  content: "⚡ ";
+  content: "🌊 ";
 }
