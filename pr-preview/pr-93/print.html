@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2d2bf914.js";
+            window.path_to_searchindex_js = "searchindex-5947543b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-fb937a43.js"></script>
@@ -4085,6 +4085,17 @@ and a <code>?leios=on</code> link can be shared directly. When shown, each block
 as a purple, badged callout.</p>
 <p>When content is inside such a block there is no need to also add a “(proposed)”
 suffix to its headings - the callout badge already conveys that.</p>
+<h3 id="whole-pages"><a class="header" href="#whole-pages">Whole pages</a></h3>
+<p>A page that describes proposed Leios changes in its entirety needs no <code>&lt;div&gt;</code>.
+Instead, put <code>leios</code> in its <strong>path</strong> - for example
+<code>network/node-to-node/leios-fetch/README.md</code>. Its sidebar entry (and that of
+any sub-chapters) is then hidden while the toggle is off and highlighted with a
+⚡ icon while it is on. The page itself stays reachable by direct link either
+way, and the entry of the page you are currently reading is never hidden, so
+toggling cannot lose your place in the table of contents.</p>
+<p>Do give such pages a “(proposed)” suffix in <code>SUMMARY.md</code>: the sidebar entry is
+also visible in the search results and the printed book, where the toggle does
+not apply.</p>
 <h2 id="footnotes"><a class="header" href="#footnotes">Footnotes</a></h2>
 <p>Additional information that would complicate the read-flow can be put into footnotes <sup class="footnote-reference" id="fr-example-1"><a href="#footnote-example">1</a></sup>.</p>
 <h2 id="other-stuff"><a class="header" href="#other-stuff">Other stuff</a></h2>

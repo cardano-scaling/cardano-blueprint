@@ -75,9 +75,15 @@ html.leios-on .leios > :first-child {
   border-color: #8c02c2;
 }
 
-/* Sidebar entries pointing at proposed Leios content, tagged by
- * leios-toggle.js. Highlighted with a leading ⚡ icon and the same purple as
- * the callout so readers can spot proposed chapters in the table of contents. */
+/* Sidebar entries pointing at whole pages of proposed Leios content, tagged by
+ * leios-toggle.js. Hidden entirely while the toggle is off, so the table of
+ * contents describes the current protocol only. */
+html:not(.leios-on) .chapter-item.leios-chapter {
+  display: none;
+}
+
+/* When shown, highlighted with a leading ⚡ icon and the same purple as the
+ * callout so readers can spot proposed chapters in the table of contents. */
 .chapter-item a.leios-nav {
   color: #8c02c2 !important;
 }
