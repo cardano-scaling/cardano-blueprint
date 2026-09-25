@@ -199,7 +199,7 @@ the closing `</div>`. They are required so that the markdown inside the block
 (headings, lists, `{{#include}}` snippets, ...) is still rendered as markdown.
 
 Such blocks are **hidden by default** - a plain page shows the current protocol
-only. A very visible **`⚡ Leios changes`** toggle in the top menu bar reveals
+only. A very visible **`🌊 Leios changes`** toggle in the top menu bar reveals
 them, adding a `?leios=on` query parameter to the URL. The choice is sticky: it
 is carried onto the links you follow, so it persists while navigating the book,
 and a `?leios=on` link can be shared directly. When shown, each block is set off
@@ -214,7 +214,7 @@ A page that describes proposed Leios changes in its entirety needs no `<div>`.
 Instead, put `leios` in its **path** - for example
 `network/node-to-node/leios-fetch/README.md`. Its sidebar entry (and that of
 any sub-chapters) is then hidden while the toggle is off and highlighted with a
-⚡ icon while it is on. The page itself stays reachable by direct link either
+🌊 icon while it is on. The page itself stays reachable by direct link either
 way, and the entry of the page you are currently reading is never hidden, so
 toggling cannot lose your place in the table of contents.
 
