@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Leios key registration and committee selection (proposed) - Cardano Blueprint</title>
+        <title>Leios key registration and committee selection - Cardano Blueprint</title>
 
 
         <!-- Custom HTML head -->
@@ -36,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-142e427c.js";
+            window.path_to_searchindex_js = "../searchindex-530fbfbc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-790ba61d.js"></script>
+        <script src="../toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -182,14 +182,15 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leios-key-registration-and-committee-selection"><a class="header" href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a></h1>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is specified
-as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p>Leios endorses transaction availability out-of-band from the Praos block chain
 via <a href="../network/node-to-node/leios-notify/README.html">Endorser Blocks</a> (EBs). An
 EB becomes part of the canonical history only once a <strong>Leios certificate</strong>
@@ -331,6 +332,7 @@ bodies are announced and fetched between peers.</li>
 <li><a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a> — the
 protocol design and the rationale for the P99 committee parameter.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 

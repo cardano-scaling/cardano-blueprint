@@ -82,12 +82,46 @@ html:not(.leios-on) .chapter-item.leios-chapter {
   display: none;
 }
 
-/* When shown, highlighted with a leading 🌊 icon and the same purple as the
- * callout so readers can spot proposed chapters in the table of contents. */
-.chapter-item a.leios-nav {
+/* While the toggle is on, entries of pages carrying Leios content - both the
+ * wholly proposed ones revealed above and those that merely contain a `.leios`
+ * section - are highlighted with a leading 🌊 icon and the same purple as the
+ * callout, so readers can spot them in the table of contents. Scoped to the on
+ * state: a `modified` entry stays listed while off and must look ordinary
+ * there, since the content it is flagging is hidden. */
+html.leios-on .chapter-item a.leios-nav {
   color: #8c02c2 !important;
 }
 
-.chapter-item a.leios-nav::before {
+html.leios-on .chapter-item a.leios-nav::before {
   content: "🌊 ";
+}
+
+/* Banner prepended by .mdbook/leios-preprocessor.py to a wholly proposed page.
+ * Deliberately outside the toggle - the page is reachable by direct link and
+ * from the search results, so it must announce itself even while off. */
+.leios-banner {
+  position: relative;
+  border: 1px solid #8c02c2;
+  border-left: 4px solid #8c02c2;
+  border-radius: 4px;
+  background-color: rgba(140, 2, 194, 0.07);
+  padding: 0.6em 1em 0.1em;
+  margin: 1em 0 1.5em;
+}
+
+.leios-banner::before {
+  content: "🌊 Leios · proposed";
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: white;
+  background-color: #8c02c2;
+  padding: 0.15em 0.6em;
+  border-radius: 3px;
+  margin-bottom: 0.6em;
+}
+
+.leios-banner > :first-child {
+  margin-top: 0.2em;
 }

@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-142e427c.js";
+            window.path_to_searchindex_js = "searchindex-530fbfbc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-790ba61d.js"></script>
+        <script src="toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -235,6 +235,7 @@
     BP --&gt; C
 </pre>
 
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="principles"><a class="header" href="#principles">Principles</a></h1>
 <p>This section contains general principles to apply when developing Cardano nodes.</p>
@@ -308,6 +309,7 @@ adoption.</p>
 <p>The key point is that, in the Cardano setting, optimisations should be carefully
 considered and it is certainly not the case that better average-case performance
 is always desirable!</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="network"><a class="header" href="#network">Network</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -364,6 +366,7 @@ Cardano chain</li>
 <li><a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-design/network-design.pdf">Technical report: Data Diffusion and Network</a>: Original design document of the peer-to-peer network protocols and diffusion semantics</li>
 <li><a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-spec/network-spec.pdf">Ouroboros Network Specification</a>: Document generated from the Haskell implementation of the Cardano network stack. Contains definitions of all mini-protocols and some documentation the connection management.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="multiplexing"><a class="header" href="#multiplexing">Multiplexing</a></h1>
 <p>The multiplexing layer is a simple binary protocol which runs on top of the
@@ -436,6 +439,7 @@ of payload. Multiple payload segments can be combined to form a full message.</p
 <p>How are multi-segment messages delimited? - there is no ‘start of message’
 flag or ‘N of M’ counter</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-agnostic">
@@ -524,6 +528,7 @@ compact binary encoding of JSON, while the schema of valid messages is expressed
 in CDDL (<a href="https://datatracker.ietf.org/doc/rfc8610/">Concise Data Definition
 Language</a>). See <a href="codecs">Codec
 basics</a> for more details.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="handshake-mini-protocol"><a class="header" href="#handshake-mini-protocol">Handshake mini-protocol</a></h1>
 <p><strong>Mini-protocol number: 0</strong></p>
@@ -677,6 +682,7 @@ refuseReasonVersionMismatch      = [0, [ *versionNumber ] ]
 refuseReasonHandshakeDecodeError = [1, versionNumber, tstr]
 refuseReasonRefused              = [2, versionNumber, tstr]
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chainsync"><a class="header" href="#chainsync">ChainSync</a></h1>
 <p><strong>Mini-protocol number: 2</strong></p>
@@ -877,6 +883,7 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="blockfetch"><a class="header" href="#blockfetch">BlockFetch</a></h1>
 <p><strong>Mini-protocol number: 3</strong></p>
@@ -1014,6 +1021,7 @@ cardanoBlock = byron.block
 ;# import conway as conway
 ;# import dijkstra as dijkstra
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="txsubmission2"><a class="header" href="#txsubmission2">TxSubmission2</a></h1>
 <p><strong>Mini-protocol number: 4</strong></p>
@@ -1206,6 +1214,7 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="keepalive"><a class="header" href="#keepalive">KeepAlive</a></h1>
 <p>TODO: fill this section</p>
@@ -1238,16 +1247,18 @@ msgDone = [ 2 ]
 
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leiosnotify"><a class="header" href="#leiosnotify">LeiosNotify</a></h1>
 <p><strong>Mini-protocol number: 18</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p><code>LeiosNotify</code> is the mini-protocol responsible for announcing Endorser Blocks
 (EBs) and offering EB bodies and their associated transaction closures to peers.
 It is a pull-based protocol: the client drives progress by requesting the next
@@ -1350,16 +1361,18 @@ leios_bls_signature = bytes .size 48
 further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
 for rationale and ongoing discussion.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leiosfetch"><a class="header" href="#leiosfetch">LeiosFetch</a></h1>
 <p><strong>Mini-protocol number: 19</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p><code>LeiosFetch</code> is the mini-protocol responsible for fetching Endorser Blocks (EBs)
 and their transaction payloads from peers. It is a pull-based protocol: the
 client explicitly requests either a full EB or a subset of its transactions
@@ -1476,6 +1489,7 @@ encoding is still under discussion. See
 <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
 for the latest design decisions.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="consensus"><a class="header" href="#consensus">Consensus</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -1705,6 +1719,7 @@ near future.</p>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org">Website: ouroboros-consensus</a>: Collection of developer articles on the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chain-validity"><a class="header" href="#chain-validity">Chain validity</a></h1>
 <p>A chain of blocks has to be valid in order to be considered for adoption. In
@@ -1828,6 +1843,7 @@ validly extend a single chain.</p>
 <p>This can be leveraged to skip such checks when replaying a chain that has
 already been validated, for example when restarting a node and having to replay
 the chain from scratch.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chain-selection"><a class="header" href="#chain-selection">Chain selection</a></h1>
 <p><em>Chain selection</em> is the mechanism, specified in the Protocol associated to the
@@ -2058,6 +2074,7 @@ were implemented on top of the Genesis specification:</p>
 <p>Once the node finishes syncing with the network, this rule gracefully converges
 into the usual length-based comparison used in Praos, so the node can safely
 switch to running only Ouroboros Praos.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="forging-new-blocks"><a class="header" href="#forging-new-blocks">Forging new blocks</a></h1>
 <p>Forging new blocks is the process of packing data that has not yet been included
@@ -2134,6 +2151,7 @@ parties.</li>
 advance, the stability periods, the parts of the epoch, which distribution is
 used (2 epochs ago?)</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="multi-era-considerations"><a class="header" href="#multi-era-considerations">Multi-era considerations</a></h1>
 <p>With the blockchain network evolving, the block format and ledger
@@ -2221,15 +2239,17 @@ and evolve.</p>
 implementors need to take into account:</p>
 <h2 id="time"><a class="header" href="#time">Time</a></h2>
 <h2 id="forecast-range-1"><a class="header" href="#forecast-range-1">Forecast range</a></h2>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leios-key-registration-and-committee-selection"><a class="header" href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a></h1>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is specified
-as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p>Leios endorses transaction availability out-of-band from the Praos block chain
 via <a href="network/node-to-node/leios-notify/README.html">Endorser Blocks</a> (EBs). An
 EB becomes part of the canonical history only once a <strong>Leios certificate</strong>
@@ -2371,6 +2391,7 @@ bodies are announced and fetched between peers.</li>
 <li><a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a> — the
 protocol design and the rationale for the P99 committee parameter.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="storage"><a class="header" href="#storage">Storage</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2453,6 +2474,7 @@ best selection).</p>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org">Website: ouroboros-consensus</a>: Collection of developer articles on the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="cardano-nodes-chaindb"><a class="header" href="#cardano-nodes-chaindb"><code>cardano-node</code>’s ChainDB</a></h1>
 <p>In the Haskell reference implementation, the Storage layer manages a <code>ChainDB</code>,
@@ -2565,6 +2587,7 @@ checking consistency and detect hardware corruptions.</p>
 <p>Conversion among backends is also provided by <a href="https://github.com/IntersectMBO/ouroboros-consensus/tree/main/ouroboros-consensus-cardano/app/snapshot-converter.hs">the
 <code>snapshot-converter</code>
 tool</a>.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="mempool"><a class="header" href="#mempool">Mempool</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2718,6 +2741,7 @@ transactions.</p>
 <ul>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-1"><a class="header" href="#ledger-1">Ledger</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2762,6 +2786,7 @@ and also the ledger implementations against each other is crucial. For this
 purpose, a conformance test suite with <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main/src/ledger/conformance-test-vectors">implementation-independent test
 vectors</a>
 can be used.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-blocks"><a class="header" href="#ledger-blocks">Ledger: Blocks</a></h1>
 <p>Blocks are a fundamental component of all blockchains and represent one of two
@@ -2886,6 +2911,7 @@ leios_signature = bytes .size 48
 </code></pre>
 </div>
 
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="determinism"><a class="header" href="#determinism">Determinism</a></h1>
 <p>An important principle that occurs in a few places throughout the Cardano ledger
@@ -2921,6 +2947,7 @@ exist.</li>
 <p>To take advantage of these properties, ledger implementers must distinguish
 between these checks in the ledger in such a way as to allow transactions to be
 (re-)processed without repeating expensive computation.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="the-ledger-state-transition"><a class="header" href="#the-ledger-state-transition">The ledger state transition</a></h1>
 <p>The ledger can be fundamentally seen as a state transition function. Given a
@@ -2971,6 +2998,7 @@ the network. Consequently, the full function is defined in the ledger specs -
 formal or semi-formal expressions of the computation to be performed. More
 detail on how to read the specs is detailed in
 <a href="#how-to-read-the-ledger-specs">How to read the ledger specs</a></p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="block-validity"><a class="header" href="#block-validity">Block Validity</a></h1>
 <blockquote>
@@ -3063,6 +3091,7 @@ here and only apply the transition.</li>
 </ol>
 <p>Node developers should bear these scenarios in mind when considering how to
 structure their node transition function.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1">
@@ -3083,6 +3112,7 @@ script. <a href="#fr-1-1">↩</a></p>
 <blockquote>
 <p>TODO This section is a stub</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="transaction-fee"><a class="header" href="#transaction-fee">Transaction fee</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -3181,6 +3211,7 @@ TODO: Explain protocol parameters somewhere</p>
 </ul>
 <p>Thus, the total minimum fee is <code>578786</code> lovelace.</p>
 <p>Note that historically calculating this has been pretty opaque, and so many people have resorted to slightly padding the minimum fee, and I believe this is why the on-chain minimum fee (which is declared in the transaction body) is <code>601677</code> lovelace.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-block-validation"><a class="header" href="#ledger-block-validation">Ledger: Block Validation</a></h1>
 <p>Block validation is the process of applying a set of ledger rules to a candidate block before adding it to the blockchain and updating the state of the ledger.
@@ -3525,6 +3556,7 @@ EUC[EraRule UTXOW Conway]
             ABBT --&gt; BBodyState[(BbodyState @era ls')]
 </pre>
 
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="plutus"><a class="header" href="#plutus">Plutus</a></h1>
 <p>Plutus is Cardano’s on-chain smart contract platform.
@@ -3556,6 +3588,7 @@ You can find the Haddock <a href="https://plutus.cardano.intersectmbo.org/haddoc
 <p><a href="https://en.wikipedia.org/wiki/CEK_Machine">CEK machine Wikipedia page</a>.</p>
 </li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="syntax"><a class="header" href="#syntax">Syntax</a></h1>
 <p>The following listing shows the concrete syntax of Plutus.
@@ -3597,6 +3630,7 @@ De Bruijn indices are used in serialized scripts.
 It therefore makes the most sense for a CEK machine implementation to use de Bruijn indices.</p>
 <p>When using de Bruijn indices, the binder <code>𝑥</code> in <code>(lam 𝑥 𝑀)</code> is irrelevant, and any number can be used.
 0 is a good choice since it is not a valid de Bruijn index.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="built-in-types-and-functions"><a class="header" href="#built-in-types-and-functions">Built-in Types and Functions</a></h1>
 <h2 id="built-in-types"><a class="header" href="#built-in-types">Built-in Types</a></h2>
@@ -3707,6 +3741,7 @@ Moreover, not all built-in functions are available in every Plutus ledger langua
 Scripts using an unavailable built-in function will be rejected by the Cardano node.
 More details will be provided in Script Deserialization and Execution.</p>
 <p>For the full list of UPLC built-in functions, their signatures, semantics, and supported Plutus ledger language versions and protocol versions, refer to the <a href="https://plutus.cardano.intersectmbo.org/resources/plutus-core-spec.pdf">Plutus Core Spec</a>, Section 4.3 (Built-in types and functions).</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="the-cek-machine"><a class="header" href="#the-cek-machine">The CEK Machine</a></h1>
 <p>This page presents the operational semantics of the Plutus language using an abstract machine - a <a href="https://en.wikipedia.org/wiki/CEK_Machine">CEK machine</a>.
@@ -3845,6 +3880,7 @@ In this case the <code>force</code> makes the builtin application saturated, so 
 In this case, all arguments have been evaluated, so the machine pops the frame and returns a <code>constr</code> value.</p>
 <p><a id="25" href="#25"><strong>25.</strong></a> If the returned value is a constructor application with index <code>𝑖</code>, and the top stack frame is a <code>case</code> frame, the machine will evaluate the <code>𝑖</code>th branch - <code>𝑀𝑖</code> - applied to arguments <code>𝑉ₘ … 𝑉₁</code> (it is important to note that arguments under <code>constr</code> are reversed when passing to a <code>case</code> branch - this is done for performance reasons).
 To do so, it pops the frame, and pushes <code>m</code> frames, each representing an application, with the top frame corresponding to <code>𝑉ₘ</code> (the first argument).</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="serialization"><a class="header" href="#serialization">Serialization</a></h1>
 <h2 id="serializing-data-objects-using-the-cbor-format"><a class="header" href="#serializing-data-objects-using-the-cbor-format">Serializing Data Objects Using the CBOR Format</a></h2>
@@ -3870,6 +3906,7 @@ The serialization method used by the Haskell node is described in the Plutus Cor
 <p>The <code>flat</code>-serialized script is then serialized into CBOR, based on which script hashes are calculated.</p>
 <p>All Cardano node implementations must agree on how Plutus scripts are serialized.
 The serialization method used by the Haskell node is described in the Plutus Core script, Appendix C.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="client-interfaces"><a class="header" href="#client-interfaces">Client interfaces</a></h1>
 <p>Node implementations may offer interfaces to clients for submitting new data to
@@ -3912,6 +3949,7 @@ with other UTxO-based blockchains.</li>
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p>Please help us keep this list up-to-date by <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/client/README.md">suggesting an edit</a>.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="node-to-client-ntc"><a class="header" href="#node-to-client-ntc">Node-To-Client (NTC)</a></h1>
 <p><code>cardano-node</code> implements a set of mini-protocols that follow rules very similar
@@ -3929,6 +3967,7 @@ client/server APIs.</p>
 <li><a href="#node-to-client-ntc">TxMonitor</a>: to monitor the status of transactions,</li>
 <li><a href="#node-to-client-ntc">LocalChainSync</a>: to retrieve chains of blocks from the node.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="localstatequery"><a class="header" href="#localstatequery">LocalStateQuery</a></h1>
 <blockquote>
@@ -4034,6 +4073,7 @@ timeOfDayPico = bigint
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
 <p>TODO: Era-specific query with an involved answer</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1-1">
@@ -4044,6 +4084,7 @@ timeOfDayPico = bigint
 <h1 id="utxo-rpc"><a class="header" href="#utxo-rpc">UTxO-RPC</a></h1>
 <p>A gRPC interface for UTxO Blockchains that is implemented by a few Cardano components.</p>
 <p>See the official website <a href="https://utxorpc.org/">utxorpc.org</a> for a full introduction and documentation.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="codec-basics"><a class="header" href="#codec-basics">Codec basics</a></h1>
 <p>Common encoding format and binary interface description used across blueprints.</p>
@@ -4133,6 +4174,7 @@ in qualified by the era name. We will usually import the Ledger CDDLs as:</p>
 ;# include babbage as babbage
 ;# include conway as conway
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="styleguide"><a class="header" href="#styleguide">Styleguide</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -4293,23 +4335,39 @@ as a purple, badged callout.</p>
 suffix to its headings - the callout badge already conveys that.</p>
 <h3 id="whole-pages"><a class="header" href="#whole-pages">Whole pages</a></h3>
 <p>A page that describes proposed Leios changes in its entirety needs no <code>&lt;div&gt;</code>.
-Instead, put <code>leios</code> in its <strong>path</strong> - for example
-<code>network/node-to-node/leios-fetch/README.md</code>. Its sidebar entry (and that of
-any sub-chapters) is then hidden while the toggle is off and highlighted with a
-🌊 icon while it is on. The page itself stays reachable by direct link either
-way, and the entry of the page you are currently reading is never hidden, so
-toggling cannot lose your place in the table of contents.</p>
+Declare it in <strong>front matter</strong> instead:</p>
+<pre><code class="language-markdown">---
+leios: new
+---
+
+# LeiosFetch
+</code></pre>
+<p>Its sidebar entry (and that of any sub-chapters) is then hidden while the
+toggle is off and highlighted with a 🌊 icon while it is on. The entry of the
+page you are currently reading is never hidden, so toggling cannot lose your
+place in the table of contents.</p>
+<p>Such a page also gets a <strong>banner</strong> prepended automatically, saying that it is
+proposed and pointing at CIP-0164. The banner sits deliberately <em>outside</em> the
+toggle, because the page stays reachable by direct link and through the search
+even while the toggle is off - it must announce itself either way. So do not
+hand-write a “this is proposed” warning at the top of the page; the banner is
+that warning, and one generated copy cannot drift out of sync with the others.</p>
 <p>Do give such pages a “(proposed)” suffix in <code>SUMMARY.md</code>: the sidebar entry is
 also visible in the search results and the printed book, where the toggle does
 not apply.</p>
+<p>A page that merely <em>contains</em> a <code>&lt;div class="leios"&gt;</code> section needs no front
+matter - it is detected automatically and its entry is highlighted (never
+hidden, since it documents the current protocol too).</p>
+<p>Both are collected by <code>.mdbook/leios-preprocessor.py</code> into a
+<code>window.LEIOS_PAGES</code> manifest, which <code>.mdbook/leios-toggle.js</code> uses to mark the
+table of contents. The detection ignores fenced and inline code, so this very
+page - which only quotes the convention - is not itself flagged.</p>
 <h3 id="cddl-shared-between-the-current-protocol-and-leios"><a class="header" href="#cddl-shared-between-the-current-protocol-and-leios">CDDL shared between the current protocol and Leios</a></h3>
 <p>A <code>{{#include}}</code> is atomic, so a code block cannot be partly hidden by the
-toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed rules</p>
-<ul>
-<li>as the network codecs do, where Leios is introduced with the Dijkstra era -
-do not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
-itself:</li>
-</ul>
+toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed
+rules, as the network codecs do (Leios is introduced with the Dijkstra era), do
+not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
+itself:</p>
 <pre><code class="language-cddl">cardanoBlock = byron.block
              / [7, conway.block]
              ; The Dijkstra era is proposed and not yet on mainnet - Leios is
@@ -4326,6 +4384,7 @@ after a sync - they silently shift.</p>
 <p>Additional information that would complicate the read-flow can be put into footnotes <sup class="footnote-reference" id="fr-example-1"><a href="#footnote-example">1</a></sup>.</p>
 <h2 id="other-stuff"><a class="header" href="#other-stuff">Other stuff</a></h2>
 <p>The footnote should appear below. If not, we need to contribute this to <code>mdbook</code>.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-example">
@@ -4416,6 +4475,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <p>Besides the many ways to engage through issues and discussions, we also use text and video channels on the <a href="https://discord.gg/47YkBFaTtT">Cardano Scaling Discord server</a> for informal chats.</p>
 <p>There is a weekly <a href="https://discord.gg/xvmdpdsM?event=1346780137806626816">office hours event</a> to which anyone is welcome and we are looking forward to see you there!</p>
 <p>Last but not least and probably the best way to contribute: Share the love for blueprints! 📘📐💙</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="logbook"><a href="#logbook" class="header">Logbook</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4500,6 +4560,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <li>Socket/plug seems to be CDDL extension point: https://datatracker.ietf.org/doc/html/rfc8610#section-3.9</li>
 <li>There is also <code>generics</code> feature, which seems even more powerful way to parameterize cddl rules</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="logo"><a href="#logo" class="header">Logo</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4519,6 +4580,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <p><img src="logo/logo-dark.svg" alt=""></p>
 <br />
 <p><img src="logo/logo-wordmark-dark.svg" alt=""></p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="license"><a href="#license" class="header">License</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4714,6 +4776,7 @@ distributed under the License is distributed on an “AS IS” BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 

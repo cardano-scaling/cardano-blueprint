@@ -3,10 +3,11 @@
 // Content marked up as `<div class="leios">...</div>` is hidden by default and
 // revealed when the URL carries `?leios=on`. A button in the top menu bar flips
 // the parameter, and the choice is propagated onto internal links so it sticks
-// while navigating the book. Whole pages that are proposed Leios changes are
-// recognized by `leios` in their path: their sidebar entries are hidden while
-// off and highlighted with an icon and color while on. See the Styleguide for
-// the convention.
+// while navigating the book. Pages carrying Leios content are listed in
+// `window.LEIOS_PAGES`, built by .mdbook/leios-preprocessor.py: entries for a
+// `new` (wholly proposed) page are hidden while off, entries for a `modified`
+// page stay put, and both are highlighted while on. See the Styleguide for the
+// conventions.
 (() => {
     "use strict";
 
@@ -35,19 +36,37 @@
         return url.origin === window.location.origin ? url : null;
     };
 
-    // Tag a sidebar entry pointing at a whole Leios page, so CSS can highlight
-    // it (on the link) and hide it while the toggle is off (on the list item).
-    // mdBook nests sub-chapters inside the parent `<li class="chapter-item">`,
-    // so hiding it takes any children with it.
-    const tagChapter = (a, url) => {
+    // How the page a link points at relates to Leios: "new", "modified" or
+    // undefined. Keys of the manifest are page paths relative to the book root,
+    // so match them against the end of the link's path.
+    const kindOf = (url) => {
+        const pages = window.LEIOS_PAGES;
+        if (!pages) {
+            return undefined;
+        }
+        const path = url.pathname;
+        for (const page in pages) {
+            if (path === page || path.endsWith("/" + page)) {
+                return pages[page];
+            }
+        }
+        return undefined;
+    };
+
+    // Tag a sidebar entry pointing at Leios content, so CSS can highlight it
+    // (on the link) and, for a wholly proposed page, hide it while the toggle
+    // is off (on the list item). mdBook nests sub-chapters inside the parent
+    // `<li class="chapter-item">`, so hiding it takes any children with it.
+    const tagChapter = (a, url, kind) => {
         const item = a.closest(".chapter-item");
         if (!item) {
             return;
         }
         a.classList.add("leios-nav");
-        // Never hide the page currently being read: the reader would lose
-        // their place in the table of contents when toggling Leios off.
-        if (url.pathname !== window.location.pathname) {
+        // A `modified` page documents the current protocol too, so it must stay
+        // listed. Never hide the page currently being read either - the reader
+        // would lose their place in the table of contents.
+        if (kind === "new" && url.pathname !== window.location.pathname) {
             item.classList.add("leios-chapter");
         }
     };
@@ -62,10 +81,9 @@
             if (!url) {
                 continue;
             }
-            // Match on the path only: the `?leios=on` we may have just added
-            // must not make every link look like Leios content.
-            if (/leios/i.test(url.pathname)) {
-                tagChapter(a, url);
+            const kind = kindOf(url);
+            if (kind) {
+                tagChapter(a, url, kind);
             }
             if (on) {
                 url.searchParams.set(PARAM, ON);

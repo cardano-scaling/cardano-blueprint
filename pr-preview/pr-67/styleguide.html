@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-142e427c.js";
+            window.path_to_searchindex_js = "searchindex-530fbfbc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-790ba61d.js"></script>
+        <script src="toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -341,23 +341,39 @@ as a purple, badged callout.</p>
 suffix to its headings - the callout badge already conveys that.</p>
 <h3 id="whole-pages"><a class="header" href="#whole-pages">Whole pages</a></h3>
 <p>A page that describes proposed Leios changes in its entirety needs no <code>&lt;div&gt;</code>.
-Instead, put <code>leios</code> in its <strong>path</strong> - for example
-<code>network/node-to-node/leios-fetch/README.md</code>. Its sidebar entry (and that of
-any sub-chapters) is then hidden while the toggle is off and highlighted with a
-🌊 icon while it is on. The page itself stays reachable by direct link either
-way, and the entry of the page you are currently reading is never hidden, so
-toggling cannot lose your place in the table of contents.</p>
+Declare it in <strong>front matter</strong> instead:</p>
+<pre><code class="language-markdown">---
+leios: new
+---
+
+# LeiosFetch
+</code></pre>
+<p>Its sidebar entry (and that of any sub-chapters) is then hidden while the
+toggle is off and highlighted with a 🌊 icon while it is on. The entry of the
+page you are currently reading is never hidden, so toggling cannot lose your
+place in the table of contents.</p>
+<p>Such a page also gets a <strong>banner</strong> prepended automatically, saying that it is
+proposed and pointing at CIP-0164. The banner sits deliberately <em>outside</em> the
+toggle, because the page stays reachable by direct link and through the search
+even while the toggle is off - it must announce itself either way. So do not
+hand-write a “this is proposed” warning at the top of the page; the banner is
+that warning, and one generated copy cannot drift out of sync with the others.</p>
 <p>Do give such pages a “(proposed)” suffix in <code>SUMMARY.md</code>: the sidebar entry is
 also visible in the search results and the printed book, where the toggle does
 not apply.</p>
+<p>A page that merely <em>contains</em> a <code>&lt;div class="leios"&gt;</code> section needs no front
+matter - it is detected automatically and its entry is highlighted (never
+hidden, since it documents the current protocol too).</p>
+<p>Both are collected by <code>.mdbook/leios-preprocessor.py</code> into a
+<code>window.LEIOS_PAGES</code> manifest, which <code>.mdbook/leios-toggle.js</code> uses to mark the
+table of contents. The detection ignores fenced and inline code, so this very
+page - which only quotes the convention - is not itself flagged.</p>
 <h3 id="cddl-shared-between-the-current-protocol-and-leios"><a class="header" href="#cddl-shared-between-the-current-protocol-and-leios">CDDL shared between the current protocol and Leios</a></h3>
 <p>A <code>{{#include}}</code> is atomic, so a code block cannot be partly hidden by the
-toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed rules</p>
-<ul>
-<li>as the network codecs do, where Leios is introduced with the Dijkstra era -
-do not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
-itself:</li>
-</ul>
+toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed
+rules, as the network codecs do (Leios is introduced with the Dijkstra era), do
+not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
+itself:</p>
 <pre><code class="language-cddl">cardanoBlock = byron.block
              / [7, conway.block]
              ; The Dijkstra era is proposed and not yet on mainnet - Leios is
@@ -374,6 +390,7 @@ after a sync - they silently shift.</p>
 <p>Additional information that would complicate the read-flow can be put into footnotes <sup class="footnote-reference" id="fr-example-1"><a href="#footnote-example">1</a></sup>.</p>
 <h2 id="other-stuff"><a class="header" href="#other-stuff">Other stuff</a></h2>
 <p>The footnote should appear below. If not, we need to contribute this to <code>mdbook</code>.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-example">

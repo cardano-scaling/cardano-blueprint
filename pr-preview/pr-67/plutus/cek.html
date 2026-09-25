@@ -36,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-142e427c.js";
+            window.path_to_searchindex_js = "../searchindex-530fbfbc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-790ba61d.js"></script>
+        <script src="../toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -319,6 +319,7 @@ In this case the <code>force</code> makes the builtin application saturated, so 
 In this case, all arguments have been evaluated, so the machine pops the frame and returns a <code>constr</code> value.</p>
 <p><a id="25" href="#25"><strong>25.</strong></a> If the returned value is a constructor application with index <code>𝑖</code>, and the top stack frame is a <code>case</code> frame, the machine will evaluate the <code>𝑖</code>th branch - <code>𝑀𝑖</code> - applied to arguments <code>𝑉ₘ … 𝑉₁</code> (it is important to note that arguments under <code>constr</code> are reversed when passing to a <code>case</code> branch - this is done for performance reasons).
 To do so, it pops the frame, and pushes <code>m</code> frames, each representing an application, with the top frame corresponding to <code>𝑉ₘ</code> (the first argument).</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 
