@@ -59,7 +59,7 @@ graph LR
 | StIdle     | MsgClientDone                   |                 | End      |
 | StIdle     | MsgLeiosNotificationRequestNext |                 | StBusy   |
 | StBusy     | MsgLeiosBlockAnnouncement       | `announcement`  | StIdle   |
-| StBusy     | MsgLeiosBlockOffer              | `point`, `size` | StIdle   |
+| StBusy     | MsgLeiosBlockOffer              | `point`         | StIdle   |
 | StBusy     | MsgLeiosBlockTxsOffer           | `point`         | StIdle   |
 | StBusy     | MsgLeiosVotes                   | `[1* vote]`     | StIdle   |
 
