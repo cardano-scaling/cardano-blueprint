@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-a723a5dd.js";
+            window.path_to_searchindex_js = "../../../searchindex-ce912898.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -309,13 +309,14 @@ for each of the eras. Note that in Byron there are 4 alternatives for
 a transaction ID:</p>
 <pre><code class="language-cddl">;; txid.cddl
 txId =
-  base.ns7&lt;byronTxId,
+  base.ns8&lt;byronTxId,
            shelley.transaction_id,
            allegra.transaction_id,
            mary.transaction_id,
            alonzo.transaction_id,
+           babbage.transaction_id,
            conway.transaction_id,
-           babbage.transaction_id&gt;
+           dijkstra.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
           / [1, byron.certificateid]
@@ -323,7 +324,7 @@ byronTxId = [0, byron.txid]
           / [3, byron.voteid]
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -333,6 +334,7 @@ byronTxId = [0, byron.txid]
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 <p>A transaction as transmitted in <code>TxSubmission2</code> is a tag-encoded
@@ -340,18 +342,19 @@ alternative of the transactions for each of the eras. Note that for
 Shelley-onwards, the transaction is serialized in CBOR-in-CBOR:</p>
 <pre><code class="language-cddl">;; tx.cddl
 tx =
-  base.ns7&lt;byron.tx,
+  base.ns8&lt;byron.tx,
            serialisedShelleyTx&lt;shelley.transaction&gt;,
            serialisedShelleyTx&lt;allegra.transaction&gt;,
            serialisedShelleyTx&lt;mary.transaction&gt;,
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
-           serialisedShelleyTx&lt;conway.transaction&gt;&gt;
+           serialisedShelleyTx&lt;conway.transaction&gt;,
+           serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -361,6 +364,7 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 

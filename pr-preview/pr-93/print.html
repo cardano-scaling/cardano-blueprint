@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a723a5dd.js";
+            window.path_to_searchindex_js = "searchindex-ce912898.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-fb937a43.js"></script>
@@ -832,10 +832,10 @@ msgIntersectFound      = [5, point, tip]
 msgIntersectNotFound   = [6, tip]
 chainSyncMsgDone       = [7]
 
-tip = [ point, base.blockNo ]
+tip = [ point, base.blockno ]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# import base as base
 ;# import header as header
@@ -844,13 +844,14 @@ point = []                         ; the genesis point
 for the particular era:</p>
 <pre><code class="language-cddl">;; header.cddl
 header
- = base.ns7&lt;byronHeader,
+ = base.ns8&lt;byronHeader,
             serialisedShelleyHeader&lt;shelley.header&gt;,
             serialisedShelleyHeader&lt;allegra.header&gt;,
             serialisedShelleyHeader&lt;mary.header&gt;,
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
-            serialisedShelleyHeader&lt;conway.header&gt;&gt;
+            serialisedShelleyHeader&lt;conway.header&gt;,
+            serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
             / [byronBoundaryIdx, #6.24(bytes .cbor byron.ebbhead)]
@@ -861,7 +862,7 @@ byronRegularIdx = [1, base.word32]
 serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -871,6 +872,7 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -979,7 +981,7 @@ msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# include block as block
 ;# import base as base
@@ -997,6 +999,7 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
+             / [8, dijkstra.block]
 
 ;# import byron as byron
 ;# import shelley as shelley
@@ -1005,6 +1008,7 @@ cardanoBlock = byron.block
 ;# import alonzo as alonzo
 ;# import babbage as babbage
 ;# import conway as conway
+;# import dijkstra as dijkstra
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="txsubmission2"><a class="header" href="#txsubmission2">TxSubmission2</a></h1>
@@ -1134,13 +1138,14 @@ for each of the eras. Note that in Byron there are 4 alternatives for
 a transaction ID:</p>
 <pre><code class="language-cddl">;; txid.cddl
 txId =
-  base.ns7&lt;byronTxId,
+  base.ns8&lt;byronTxId,
            shelley.transaction_id,
            allegra.transaction_id,
            mary.transaction_id,
            alonzo.transaction_id,
+           babbage.transaction_id,
            conway.transaction_id,
-           babbage.transaction_id&gt;
+           dijkstra.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
           / [1, byron.certificateid]
@@ -1148,7 +1153,7 @@ byronTxId = [0, byron.txid]
           / [3, byron.voteid]
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -1158,6 +1163,7 @@ byronTxId = [0, byron.txid]
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 <p>A transaction as transmitted in <code>TxSubmission2</code> is a tag-encoded
@@ -1165,18 +1171,19 @@ alternative of the transactions for each of the eras. Note that for
 Shelley-onwards, the transaction is serialized in CBOR-in-CBOR:</p>
 <pre><code class="language-cddl">;; tx.cddl
 tx =
-  base.ns7&lt;byron.tx,
+  base.ns8&lt;byron.tx,
            serialisedShelleyTx&lt;shelley.transaction&gt;,
            serialisedShelleyTx&lt;allegra.transaction&gt;,
            serialisedShelleyTx&lt;mary.transaction&gt;,
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
-           serialisedShelleyTx&lt;conway.transaction&gt;&gt;
+           serialisedShelleyTx&lt;conway.transaction&gt;,
+           serialisedShelleyTx&lt;dijkstra.transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -1186,6 +1193,7 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -1259,7 +1267,7 @@ push announcements to downstream peers with minimal latency.</p>
    StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
    StBusy --MsgLeiosBlockOffer--&gt; StIdle
    StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
-   StBusy --MsgLeiosVotesOffer--&gt; StIdle
+   StBusy --MsgLeiosVotes--&gt; StIdle
 
    class StIdle client
    class StBusy server
@@ -1289,7 +1297,7 @@ push announcements to downstream peers with minimal latency.</p>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotesOffer</td><td><code>[1* (slot, voterId)]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -1301,21 +1309,29 @@ leiosNotifyMessage
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
-     / msgLeiosVotesOffer
+     / msgLeiosVotes
      / msgClientDone
 
 msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement_header]
-msgLeiosBlockOffer              = [2, point]
+msgLeiosBlockAnnouncement       = [1, announcement]
+msgLeiosBlockOffer              = [2, point, eb_size]
 msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
+msgLeiosVotes                   = [4, [1* vote]]
 msgClientDone                   = [5]
 
-announcement_header = any ; TODO
-point = (slot, eb_hash)
-slot = base.slotNo
+announcement = any ; TODO
+point = [slot, eb_hash]
+eb_size = base.word32 ; TODO should not be needed, because announcement
+slot = base.slotno
 eb_hash = base.hash
-voter_id = base.word16  ; REVIEW: size?
+
+vote =
+  [ announcing_rb_hash    : base.hash
+  , voter_id              : base.word16
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
 
 ;# import base as base
 </code></pre>
@@ -1358,15 +1374,8 @@ the data.</p>
    StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
 
-   StIdle --MsgLeiosVotesRequest--&gt; StVotes
-   StVotes --MsgLeiosVotes--&gt;StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 </pre>
 
 <h3 id="state-agencies-5"><a class="header" href="#state-agencies-5">State agencies</a></h3>
@@ -1393,14 +1402,9 @@ the data.</p>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -1412,45 +1416,40 @@ leiosBlockFetchMessage
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgLeiosVotesRequest
-     / msgLeiosVoteDelivery
-     / msgLeiosBlockRangeRequest
-     / msgLeiosNextBlockAndTxsInRange
-     / msgLeiosLastBlockAndTxsInRange
      / msgClientDone
+; TODO not implemented yet in leios-prototype
+;     / msgLeiosBlockRangeRequest
+;     / msgLeiosNextBlockAndTxsInRange
+;     / msgLeiosLastBlockAndTxsInRange
 
 msgLeiosBlockRequest           = [0, point]
 msgLeiosBlock                  = [1, endorser_block]
 msgLeiosBlockTxsRequest        = [2, point, bitmaps]
-msgLeiosBlockTxs               = [3, tx_list]
-msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
-msgLeiosVoteDelivery           = [5, [1* vote ]]
-msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
-msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
-msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
+msgLeiosBlockTxs               = [3, point, bitmaps, tx_list]
+; TODO not implemented yet in leios-prototype
+; msgLeiosBlockRangeRequest =
+;   [ 6
+;   , start_slot  : base.slotno
+;   , end_slot    : base.slotno
+;   , start_hash  : base.hash
+;   , end_hash    : base.hash
+;   ]
+; msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
+; msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
 msgClientDone                  = [9]
 
-point = (slot, eb_hash)
-start_slot = slot
-end_slot = slot
-start_hash = base.hash
-end_hash = base.hash
-slot = base.slotNo
-voter_id = base.word16  ; REVIEW: size?
+point = [slot, eb_hash]
+slot = base.slotno
 eb_hash = base.hash
-endorser_block = any ; TODO
-bitmaps = any ; TODO
-tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
-vote =
-  [ election_id           : base.slotNo
-  , persistent_voter_id   : base.word16
-  , eligibility_signature : leios_bls_signature
-  , endorser_block_hash   : base.hash
-  , vote_signature        : leios_bls_signature
-  ]
+; map from tx hash to serialized tx byte size
+; TODO: add valdity indices analogous to Dijkstra block body
+endorser_block = { * base.hash =&gt; base.word32 }
 
-leios_bls_signature = bytes .size 48
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 =&gt; base.word64 }
+
+tx_list = [ *tx.tx ] ; REVIEW: only length-definite?
 
 ;# import base as base
 ;# import tx as tx
@@ -2690,13 +2689,37 @@ the same-named branch of the <code>cardano-ledger</code> upstream repository. Th
 block format currently used on the https://www.musashi.network/ Leios testnet.</p>
 </blockquote>
 <h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
-<pre><code class="language-cddl">{{#include ../eras/dijkstra.cddl:63:75}}
+<pre><code class="language-cddl">header_body = 
+  [   block_number        : block_number
+  ,   slot                : slot        
+  ,   prev_hash           : hash32/ nil 
+  ,   issuer_vkey         : vkey        
+  ,   vrf_vkey            : vrf_vkey    
+  ,   vrf_result          : vrf_cert    
+  ,   block_body_size     : uint .size 4
+  ,   block_body_hash     : hash32       ; merkle triple root
+  ,   operational_cert  
+  ,   protocol_version  
+  , ? leios_announcement
+  ]
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">{{#include ../eras/dijkstra.cddl:13:21}}
+<pre><code class="language-cddl">block = 
+  [ header                 
+  , transaction_bodies       : [* transaction_body]                   
+  , transaction_witness_sets : [* transaction_witness_set]            
+  , auxiliary_data_set       : {* transaction_index =&gt; auxiliary_data}
+  , invalid_transactions     : [* transaction_index]                  
+  , leios_cert               : leios_cert/ nil                            
+  , peras_cert               : peras_cert/ nil                            
+  ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">{{#include ../eras/dijkstra.cddl:818:822}}
+<pre><code class="language-cddl">; Placeholder Leios certificate. The real cert payload will be filled in
+; once the Leios design lands; for now it serialises as an empty CBOR list
+; so the on-wire token is unambiguous against the surrounding 'null /
+; leios_cert' choice.
+leios_cert = []
 </code></pre>
 </div>
 
@@ -3873,30 +3896,9 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">blockNo = word64
-epochNo = word64
-slotNo = word64
-
-coin = word64
-
-rational = [int, int]
-
-keyhash = bstr .size 28
-hash = bstr .size 32
-
-relativeTime = int
-
-; Words
-word8  = uint .size 1; 1 byte
-word16 = uint .size 2; 2 bytes
-word32 = uint .size 4; 4 bytes
-word64 = uint .size 8; 8 bytes
-</code></pre>
-<p>In addition, we add the following types to represent tag-encoded
-alternatives, commonly used at the consensus level to encode a
-different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">telescope7&lt;byron, shelley, allegra, mary, alonzo, babbage, conway&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
+<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
     [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
     [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
     [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
@@ -3904,14 +3906,55 @@ different tag for each one of the eras in the Cardano blockchain:</p>
     [pastEra, currentEra&lt;shelley&gt;] /
     [currentEra&lt;byron&gt;]
 
-ns7&lt;byron, shelley, allegra, mary, alonzo, babbage, conway&gt;
-  = [6, conway] /
+ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [7, dijkstra] /
+    [6, conway] /
     [5, babbage] /
     [4, alonzo] /
     [3, mary] /
     [2, allegra] /
     [1, shelley] /
-    [0, byron]
+</code></pre>
+<p>In addition, we add the following types to represent tag-encoded
+alternatives, commonly used at the consensus level to encode a
+different tag for each one of the eras in the Cardano blockchain:</p>
+<pre><code class="language-cddl">
+;; Blockchain types
+pastEra = [bound, bound]
+currentEra&lt;st&gt; = [bound, st]
+bound = [relativeTime, slotno, epochno]
+eraIdx = word8
+individualPoolStake = [stake, hash]
+nonce = [0] / [1, hash]
+point = [] / [ slotno, hash ]
+poolDistr = map&lt;keyhash, individualPoolStake&gt;
+slotno = word64
+roundno = word64
+stake = rational
+
+withOrigin&lt;v&gt; = [] / [v]
+
+;; Collections
+either&lt;x, y&gt; = [0, x] / [1, y]
+map&lt;x, y&gt; = { * x =&gt; y }
+maybe&lt;x&gt; = [] / [x]
+seq&lt;x&gt; = [*23 x] / [24* x] ; encoded with indefinite-length encoding
+set&lt;x&gt; = #6.258([* x])
+
+;; Types from other packages
+blockno = word64
+epochno = word64
+coin = word64
+rational = [int, int]
+keyhash = bstr .size 28
+hash = bstr .size 32
+relativeTime = int
+
+;; Base word types
+word8  = uint .size 1
+word16 = uint .size 2
+word32 = uint .size 4
+word64 = uint .size 8
 </code></pre>
 <p>These definitions are made available in the
 <a href="codecs/base.cddl"><code>base.cddl</code></a>

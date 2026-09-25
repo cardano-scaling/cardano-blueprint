@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-a723a5dd.js";
+            window.path_to_searchindex_js = "../../../searchindex-ce912898.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -287,7 +287,7 @@ msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# include block as block
 ;# import base as base
@@ -305,6 +305,7 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
+             / [8, dijkstra.block]
 
 ;# import byron as byron
 ;# import shelley as shelley
@@ -313,6 +314,7 @@ cardanoBlock = byron.block
 ;# import alonzo as alonzo
 ;# import babbage as babbage
 ;# import conway as conway
+;# import dijkstra as dijkstra
 </code></pre>
 
                     </main>

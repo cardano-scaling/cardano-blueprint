@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-a723a5dd.js";
+            window.path_to_searchindex_js = "../../../searchindex-ce912898.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-fb937a43.js"></script>
@@ -214,15 +214,8 @@ the data.</p>
    StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
 
-   StIdle --MsgLeiosVotesRequest--&gt; StVotes
-   StVotes --MsgLeiosVotes--&gt;StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -249,14 +242,9 @@ the data.</p>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -268,45 +256,40 @@ leiosBlockFetchMessage
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgLeiosVotesRequest
-     / msgLeiosVoteDelivery
-     / msgLeiosBlockRangeRequest
-     / msgLeiosNextBlockAndTxsInRange
-     / msgLeiosLastBlockAndTxsInRange
      / msgClientDone
+; TODO not implemented yet in leios-prototype
+;     / msgLeiosBlockRangeRequest
+;     / msgLeiosNextBlockAndTxsInRange
+;     / msgLeiosLastBlockAndTxsInRange
 
 msgLeiosBlockRequest           = [0, point]
 msgLeiosBlock                  = [1, endorser_block]
 msgLeiosBlockTxsRequest        = [2, point, bitmaps]
-msgLeiosBlockTxs               = [3, tx_list]
-msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
-msgLeiosVoteDelivery           = [5, [1* vote ]]
-msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
-msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
-msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
+msgLeiosBlockTxs               = [3, point, bitmaps, tx_list]
+; TODO not implemented yet in leios-prototype
+; msgLeiosBlockRangeRequest =
+;   [ 6
+;   , start_slot  : base.slotno
+;   , end_slot    : base.slotno
+;   , start_hash  : base.hash
+;   , end_hash    : base.hash
+;   ]
+; msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
+; msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
 msgClientDone                  = [9]
 
-point = (slot, eb_hash)
-start_slot = slot
-end_slot = slot
-start_hash = base.hash
-end_hash = base.hash
-slot = base.slotNo
-voter_id = base.word16  ; REVIEW: size?
+point = [slot, eb_hash]
+slot = base.slotno
 eb_hash = base.hash
-endorser_block = any ; TODO
-bitmaps = any ; TODO
-tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
-vote =
-  [ election_id           : base.slotNo
-  , persistent_voter_id   : base.word16
-  , eligibility_signature : leios_bls_signature
-  , endorser_block_hash   : base.hash
-  , vote_signature        : leios_bls_signature
-  ]
+; map from tx hash to serialized tx byte size
+; TODO: add valdity indices analogous to Dijkstra block body
+endorser_block = { * base.hash =&gt; base.word32 }
 
-leios_bls_signature = bytes .size 48
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 =&gt; base.word64 }
+
+tx_list = [ *tx.tx ] ; REVIEW: only length-definite?
 
 ;# import base as base
 ;# import tx as tx
