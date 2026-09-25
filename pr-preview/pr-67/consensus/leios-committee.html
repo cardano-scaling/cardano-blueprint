@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-530fbfbc.js";
+            window.path_to_searchindex_js = "../searchindex-7f5ede68.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-404c79fe.js"></script>
@@ -204,7 +204,11 @@ committee would reject certificates that were validly produced under the intende
 one. This page specifies that derivation and the certificate format independently
 of any particular implementation, so that all nodes agree.</p>
 <ul>
-<li><a href="#registering-a-leios-key">Registering a Leios key</a></li>
+<li><a href="#registering-a-voting-key">Registering a voting key</a>
+<ul>
+<li><a href="#expiry-and-rotation">Expiry and rotation</a></li>
+</ul>
+</li>
 <li><a href="#selecting-the-voting-committee">Selecting the voting committee</a></li>
 <li><a href="#leios-certificates">Leios certificates</a>
 <ul>
@@ -214,123 +218,165 @@ of any particular implementation, so that all nodes agree.</p>
 </li>
 <li><a href="#related-specifications">Related specifications</a></li>
 </ul>
-<h2 id="registering-a-leios-key"><a class="header" href="#registering-a-leios-key">Registering a Leios key</a></h2>
+<h2 id="registering-a-voting-key"><a class="header" href="#registering-a-voting-key">Registering a voting key</a></h2>
 <p>A stake pool advertises the BLS key it will vote with by including an optional
-<code>leios_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
+<code>bls_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
 structure — see <a href="../ledger/eras/dijkstra.cddl"><code>dijkstra.cddl</code></a>):</p>
-<pre><code class="language-cddl">pool_params =
-  ( operator       : pool_keyhash
-  , vrf_keyhash    : vrf_keyhash
-  , ? leios_key    : leios_key/ nil   ; optional; pools without it cannot vote
-  , ...
+<pre><code class="language-cddl">; Pool parameters for stake pool registration
+pool_params =
+  (   operator       : pool_keyhash
+  ,   vrf_keyhash    : vrf_keyhash
+  , ? bls_key        : bls_key/ nil
+  ,   pledge         : coin
+  ,   cost           : coin
+  ,   margin         : unit_interval
+  ,   reward_account : reward_account
+  ,   pool_owners    : set&lt;addr_keyhash&gt;
+  ,   relays         : [* relay]
+  ,   pool_metadata  : pool_metadata/ nil
   )
 
-leios_key =
-  [ leios_pubkey          : bytes .size 96   ; BLS12-381 verification key (G2, minimal-signature-size)
-  , leios_possessionproof : bytes .size 48   ; proof of possession (G1 signature)
-  ]
+vrf_keyhash = hash32
+
+; BLS key
+bls_key = [bls_pubkey : bytes .size 96, bls_possession_proof : bytes .size 48]
 </code></pre>
 <ul>
 <li>The key pair is <strong>BLS12-381</strong> in the <em>minimal-signature-size</em> configuration:
 verification keys live in G2 (96 bytes), signatures in G1 (48 bytes).</li>
-<li><code>leios_possessionproof</code> is a <strong>proof of possession</strong> (PoP): a signature over
+<li><code>bls_possession_proof</code> is a <strong>proof of possession</strong> (PoP): a signature over
 the verification key under a fixed, Leios-specific domain-separation tag
 (DST). It proves the registrant holds the corresponding secret key and defends
 the aggregate signature scheme against rogue-key attacks. Implementations
 <strong>must</strong> verify the PoP with the same DST that certificate verification uses
-(see below); a key whose PoP does not verify is treated as absent.</li>
+(see below); a key whose PoP does not verify is rejected at registration and
+the pool is treated as having no key.</li>
 <li>The field is optional, so existing (pre-Leios) registrations remain valid. A
-re-registration replaces the pool’s <code>leios_key</code> like any other pool parameter,
+re-registration replaces the pool’s <code>bls_key</code> like any other pool parameter,
 taking effect at the next epoch boundary via the usual stake-snapshot pipeline.</li>
 <li>Because it is a pool parameter, the key travels with the pool through the stake
 distribution snapshots: the per-pool entry of the active stake distribution
-carries the pool’s <code>leios_key</code> alongside its relative stake. That distribution
+carries the pool’s <code>bls_key</code> alongside its relative stake. That distribution
 is the sole input to committee selection.</li>
 </ul>
 <p>To actually cast votes, the node operating the pool must hold the corresponding
 <strong>BLS signing key</strong>; a node that only knows the on-chain (public) registration
 validates certificates but does not vote.</p>
+<h3 id="expiry-and-rotation"><a class="header" href="#expiry-and-rotation">Expiry and rotation</a></h3>
+<p>A registered voting key is honoured for a bounded number of epochs after its
+registration. A pool that has not re-registered by then keeps its seat but
+loses its key, so it can no longer sign. Expiry takes effect at an epoch
+boundary, like activation, so the set of usable keys is stable throughout an
+epoch.</p>
+<p>The bound is <strong>not a protocol parameter</strong>. It is derived from the KES setup
+already fixed in genesis:</p>
+<pre><code>maxKeyAgeEpochs = ceil(slotsPerKESPeriod * maxKESEvolutions / epochLength) + 2
+</code></pre>
+<p>that is, the KES key lifetime rounded up to whole epochs plus the two epochs of
+activation delay. On mainnet this evaluates to <strong>21 epochs</strong>. Deriving the bound
+rather than governing it keeps voting-key rotation on the same schedule as the
+KES rotation pools must perform anyway, with no second knob that could drift out
+of step.</p>
+<p>Expiry is judged against the epoch the committee is selected <em>for</em>, not the
+epoch its stake snapshot was taken in: a seat’s key arrives through a snapshot
+and may have been registered several epochs earlier, while the age bound is
+applied afresh at each epoch boundary.</p>
 <h2 id="selecting-the-voting-committee"><a class="header" href="#selecting-the-voting-committee">Selecting the voting committee</a></h2>
 <p>For each epoch the voting committee is derived <strong>deterministically</strong> from the
 active stake distribution — the same snapshot used for Praos leader election — so
 that all honest nodes agree on it without any coordination.</p>
-<p>The committee is an ordered list of <strong>seats</strong>. Seats are allocated to pools by
-relative stake so that the seated pools together cover a target fraction of the
-total stake — the <strong>P99</strong> committee-stake-coverage target that
-<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a> found feasible
-(chosen so an honest majority of committee stake holds with overwhelming
-probability). A seat is:</p>
+<p>The committee is an ordered list of <strong>seats</strong>. It consists of the top <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>
+pools by active stake, where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the <code>leios committee size</code> protocol
+parameter (key 43 of <code>protocol_param_update</code>). Pools are ordered by active
+stake descending, ties broken by pool ID ascending (byte-wise on the pool’s key
+hash); the first <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are seated, or all of them if fewer than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> pools are
+registered. A pool’s position in that order is its <strong>seat index</strong>, counted from
+<code>0</code>, and that index is what a vote and a certificate refer to.</p>
+<p>A seat is:</p>
 <ul>
-<li><strong>keyed</strong> if its pool registered a <code>leios_key</code> (with a valid PoP) — it can
-sign, and its <code>leios_pubkey</code> is the seat’s verification key; or</li>
-<li><strong>keyless</strong> if the pool has no usable <code>leios_key</code> — the seat exists (it still
-carries stake weight) but can never contribute a valid signature.</li>
+<li><strong>keyed</strong> if its pool has a <code>bls_key</code> that is both valid (PoP verified) and
+unexpired — it can sign, and its <code>bls_pubkey</code> is the seat’s verification key;
+or</li>
+<li><strong>keyless</strong> otherwise — the seat exists and still carries its pool’s stake
+weight, but can never contribute a valid signature.</li>
 </ul>
+<p>Committee membership is thus by stake alone, independent of key registration.</p>
 <blockquote class="blockquote-tag blockquote-tag-important">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
-<p>The P99 coverage target is currently <strong>hard-coded</strong>, not a protocol parameter.
-It is therefore <strong>consensus-critical</strong>: every node on a network must use the
-identical value and the identical selection procedure. Two nodes that derive
-committees differing in seat membership, ordering, or keyed/keyless status will
-disagree on which certificates are valid and fork. Changing the target requires
-a coordinated update of every node until it is promoted to a governed
-protocol parameter.</p>
+<p>Committee derivation is <strong>consensus-critical</strong>: every node on a network must
+use the identical <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and the identical selection procedure. Two nodes that
+derive committees differing in seat membership, ordering, or keyed/keyless
+status will disagree on which certificates are valid and fork.</p>
 </blockquote>
-<p>Seats are indexed from <code>0</code> in the committee’s canonical order; that index is what
-a certificate refers to.</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a <strong>liveness</strong> parameter rather than a safety-critical one. Because each
+seat carries its own pool’s stake and the quorum is a predicate on stake (see
+below), a seat count cannot mis-weight or under-represent any pool; it only
+decides how much active stake is <em>eligible</em> to vote. Setting it too low means the
+seated pools together hold less stake than the quorum demands, and then no
+certificate can be formed even with unanimous support. The share of active stake
+held by the top <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> pools drifts as stake moves, so <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> must be governed to
+keep that share above the quorum threshold with headroom for members that are
+offline, keyless, or too slow to vote.</p>
 <h2 id="leios-certificates"><a class="header" href="#leios-certificates">Leios certificates</a></h2>
 <p>A <a href="../ledger/eras/dijkstra.cddl">block body</a> may carry a <code>leios_certificate</code>
 attesting the EB announced by (a recent) block header. The certificate records
 <em>which</em> committee seats voted and an aggregate of their signatures:</p>
 <pre><code class="language-cddl">leios_certificate =
-  [ signers              : bytes            ; bitfield over committee seat indices
-  , aggregated_signature : leios_signature
+  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
+  , signature : leios_signature
   ]
 
-leios_signature = bytes .size 48            ; aggregate BLS12-381 signature (G1)
+leios_signature = bytes .size 48
 </code></pre>
 <ul>
-<li><code>signers</code> is a <strong>bitfield</strong>: bit <code>i</code> set means the committee seat with index
-<code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code> marks seats 0 and 2.)</li>
-<li>Each voter signs the same certified message — the EB reference — with its
-registered BLS key. <code>aggregated_signature</code> is the BLS aggregate of exactly the
-signatures of the seats marked in <code>signers</code>.</li>
+<li><code>signers</code> is a <strong>bitfield</strong> over seat indices: bit <code>i</code> set means the committee
+seat with index <code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code>
+marks seats 0 and 2.) It is <code>⌈N/8⌉</code> bytes, where <code>N</code> is the committee size for
+the epoch in which the announcing RB was produced.</li>
+<li>Each voter signs the same certified message — the hash of the RB header that
+announced the EB — with its registered BLS key. <code>signature</code> is the BLS
+aggregate of exactly the signatures of the seats marked in <code>signers</code>.</li>
 </ul>
+<p>The certificate repeats neither the announcing RB’s slot nor the EB hash: the
+announcing RB is determined from the certifying RB’s own chain context, so both
+would be redundant on the wire.</p>
 <h3 id="constructing-a-certificate"><a class="header" href="#constructing-a-certificate">Constructing a certificate</a></h3>
 <p>A block producer that has collected votes for an announced EB aggregates the
 signatures of the voting seats and sets the corresponding bits in <code>signers</code>. A
-certificate is only worth including once the marked seats’ <strong>combined stake meets
-the quorum threshold</strong> implied by the committee (again derived from the same
-P99-covered committee).</p>
+certificate is only worth including once the marked seats’ <strong>combined stake
+meets the quorum threshold</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> — the <code>leios quorum stake threshold</code>
+protocol parameter (key 44), expressed as a fraction of <em>total active stake</em>,
+not of the stake seated on the committee.</p>
 <h3 id="verifying-a-certificate"><a class="header" href="#verifying-a-certificate">Verifying a certificate</a></h3>
 <p>To validate a block carrying a <code>leios_certificate</code>, a node MUST:</p>
 <ol>
 <li>Reconstruct the committee for the certificate’s epoch from its own copy of the
 active stake distribution, using the exact selection procedure above.</li>
-<li>Resolve every seat index set in <code>signers</code> to that seat’s <code>leios_pubkey</code>. If
+<li>Resolve every seat index set in <code>signers</code> to that seat’s <code>bls_pubkey</code>. If
 any set bit resolves to a <strong>keyless</strong> seat, the certificate is invalid — it
-claims a vote from a seat that carries no registered key.</li>
-<li>Verify <code>aggregated_signature</code> as a BLS aggregate of the resolved public keys
-over the certified EB message, under the Leios DST.</li>
-<li>Check that the stake covered by the signing seats meets the committee’s quorum
-threshold.</li>
+claims a vote from a seat that carries no usable key.</li>
+<li>Verify <code>signature</code> as a BLS aggregate of the resolved public keys over the
+hash of the announcing RB header, under the Leios DST.</li>
+<li>Check that the stake covered by the signing seats meets <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> times the
+total active stake.</li>
 </ol>
 <p>A block whose certificate fails any of these checks is invalid. Steps 1 and 2
 together are why committee derivation must be deterministic and shared: a node
 whose committee diverges from the one the votes were cast under — through a
-different P99 value, a different selection or seat ordering, or a missing
-registered key — rejects legitimately signed certificates and cannot follow the
-chain.</p>
+different <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, a different selection or seat ordering, or a differing view of
+which keys are usable — rejects legitimately signed certificates and cannot
+follow the chain.</p>
 <h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
 <ul>
 <li><a href="../network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
 <a href="../network/node-to-node/leios-fetch/README.html">LeiosFetch</a> — how EBs and their
-bodies are announced and fetched between peers.</li>
-<li><a href="../ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>leios_key</code>, <code>pool_params</code>,
-<code>leios_announcement</code>, <code>leios_certificate</code> and the block header’s
-<code>leios_certified</code> / <code>leios_announcement</code> fields.</li>
-<li><a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a> — the
-protocol design and the rationale for the P99 committee parameter.</li>
+bodies are announced and fetched between peers, and the <code>vote</code> structure whose
+<code>voter_id</code> is the seat index used here.</li>
+<li><a href="../ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>bls_key</code>, <code>pool_params</code>,
+<code>eb_announcement</code>, <code>leios_certificate</code> and the block header’s
+<code>block_body_contains_leios_cert</code> / <code>eb_announcement</code> fields.</li>
+<li><a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164">Leios (CIP-0164)</a>
+— the protocol design and the rationale for stake-based committee selection.</li>
 </ul>
 <script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 

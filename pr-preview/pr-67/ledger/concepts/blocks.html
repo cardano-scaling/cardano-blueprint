@@ -36,7 +36,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-530fbfbc.js";
+            window.path_to_searchindex_js = "../../searchindex-7f5ede68.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-404c79fe.js"></script>
@@ -252,14 +252,18 @@ created the block, rather than by the creators of the transactions.</p>
 <h2 id="leios-block-structure-changes"><a class="header" href="#leios-block-structure-changes">Leios block structure changes</a></h2>
 <p>Leios changes the block structure in two ways:</p>
 <ul>
-<li>Block headers are re-used as announcements of endorser blocks</li>
+<li>Block headers are re-used as announcements of endorser blocks, via an
+<code>eb_announcement</code> field</li>
 <li>Blocks may certify an EB and then
 <ul>
-<li>contain a <code>certified</code> in the header</li>
-<li>contain a <code>leios_cert</code> instead of transactions in the body</li>
+<li>set <code>block_body_contains_leios_cert</code> in the header</li>
+<li>contain a <code>leios_certificate</code> instead of transactions in the body</li>
 </ul>
 </li>
 </ul>
+<p>How the committee behind such a certificate is derived, and how the certificate
+is verified against it, is described under
+<a href="../../consensus/leios-committee.html">Leios key registration and committee selection</a>.</p>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p>The <a href="../eras/dijkstra.cddl">djikstra.cddl</a> in the <code>cardano-blueprint</code> is matching
