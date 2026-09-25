@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-972d599b.js";
+            window.path_to_searchindex_js = "../searchindex-142e427c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-790ba61d.js"></script>
@@ -196,7 +196,9 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">currentEra&lt;st&gt; = [bound, st]
+<pre><code class="language-cddl">;; Blockchain types
+pastEra = [bound, bound]
+currentEra&lt;st&gt; = [bound, st]
 bound = [relativeTime, slotno, epochno]
 eraIdx = word8
 individualPoolStake = [stake, hash]
@@ -253,8 +255,6 @@ ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
     [2, allegra] /
     [1, shelley] /
     [0, byron]
-
-;; Blockchain types
 </code></pre>
 <p>These definitions are made available in the
 <a href="base.cddl"><code>base.cddl</code></a>
