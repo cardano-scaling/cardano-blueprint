@@ -70,7 +70,7 @@ orientation:
 | :------------ | ---------------------: |
 | Handshake     | (not buffered this way) |
 | ChainSync     | 462000                 |
-| BlockFetch    | 230686940              |
+| BlockFetch    | 23068694               |
 | TxSubmission2 | 721424                 |
 | KeepAlive     | 1408                   |
 | PeerSharing   | 5760                   |
@@ -96,12 +96,15 @@ are one implementation’s choice, not a requirement on other nodes.
 
 ## A formal model
 
-The informal account above is equivalent to the following model, taken from
-[CIP-0164][cip-0164-pipelining]. Implementations need not run several
-state machines; they must behave as if they did.
+The informal account above is equivalent to the following model, inspired by
+[CIP-0164][cip-0164-pipelining] discussions. Please note that the model is
+not meant to be implemented as is, it is meant to describe the behaviour of
+a mini-protocol **initiator only**. Implementations need not run several
+state machines; they must behave as if they did. The model does not apply to
+the responder side.
 
 Protocol pipelining with factor *N* conceptually runs *N* instances of the
-mini-protocol on one mux stream (one protocol ID and `M`). Each instance has its
+mini-protocol initiator on one mux stream (one protocol ID and `M`). Each instance has its
 own state and agency. One protocol state is the *switch state*. It must be a
 state in which the initiator has agency.
 
@@ -138,9 +141,9 @@ The sequence in the previous section is then three instances:
 | 2        | `MsgRequestNext` C  | `MsgRollForward` C   |
 
 The ingress buffer holds the not-yet-selected instances' incoming bytes.
-Its size is the implementation's bound on *N* and on the size of one
-reply. Overflow means the client assumed a larger *N* (or larger
-messages) than the server provisioned.
+Its size corresponds to the implementation's bound on *N* multiplied by the size of one
+reply. Since requests are much smaller than responses for all Ouroboros
+mini-protocols, no special consideration is required on the responder side.
 
 A counter of uncollected pipelined yields (the `Outstanding` depth in
 typed-protocols) is the same model: increment when leaving the switch

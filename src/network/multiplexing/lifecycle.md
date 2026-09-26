@@ -59,7 +59,8 @@ other side must answer it, and must answer a later Handshake on the same
 bearer.
 
 For every mini-protocol, the responder must be ready to handle any legal
-request at any time, including after a clean `MsgDone` when the initiator
+request at any time as long as the bearer is considered to be alive,
+including after a clean `MsgDone` when the initiator
 starts the protocol again. A restarted responder is in its initial state
 and sends nothing — the initiator has agency.
 
@@ -168,7 +169,7 @@ maintenance.
 
 > [!NOTE]
 >
-> The Haskell node waits up to 300 seconds for the diffusion group to
+> The Haskell node times out after 300 seconds for the diffusion group to
 > stop, and up to 120 seconds when stopping maintenance as well. After
 > every protocol that was active towards us has `MsgDone`, if we are not
 > Using the bearer, it closes after 5 seconds idle.
@@ -184,7 +185,11 @@ when any of the following happens:
 - A mux SDU timeout or a mini-protocol per-state time or size limit is
   exceeded
 - A `KeepAlive` response cookie does not match the cookie that was sent
+- A mini-protocol group shutdown timeout is exceeded
 
+This list is not exhaustive, it is the node’s obligation to robustly
+detect and handle peer behaviour that aims at consuming resources in
+an undue fashion, or that accidentally causes such abuse.
 Protocol errors skip any idle grace period: the connection is reset at
 once.
 

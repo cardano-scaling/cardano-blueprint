@@ -8,17 +8,20 @@ no longer than that request. It is how nodes enlarge their known-peer
 set from other nodes, rather than only from a static topology file or
 the ledger.
 
-The protocol is optional. Handshake version data carries a peer-sharing
+While the protocol is required for a Cardano node implementation, it can
+be switched off by the node operator (this is best practice for block
+producer nodes). Handshake version data carries a peer-sharing
 flag. The protocol runs on a bearer only if that flag is enabled after
 negotiation. It belongs to the [maintenance
 group](../../multiplexing/lifecycle.md#groups-that-start-and-stop-together).
 
 > [!NOTE]
 >
-> Handshake version data is a pair of flags, one from each side. The
-> Haskell node enables `PeerSharing` only if *both* sides offer it
-> (conjunction). The network specification text says the value SHOULD be
-> taken from the remote side; live interop follows the Haskell rule.
+> Handshake version data has a pair of flags for peer sharing, one from each side.
+> The Haskell node enables `PeerSharing` only if *both* sides offer it
+> (conjunction). The network specification text stated that the value SHOULD be
+> taken from the remote side while later requiring that the decision must be
+> symmetric; this inconsistency is being fixed.
 
 A node that negotiated initiator-only diffusion mode does not run a
 `PeerSharing` responder: it has no inbound sessions to advertise and
@@ -28,8 +31,7 @@ The connection is torn down if:
 
 - The responder returns more addresses than the initiator requested,
 - A `peerAddress` uses a constructor that is not legal for the
-  negotiated version: SRV on a v14 bearer, or any tag other than 0
-  (IPv4), 1 (IPv6), and — on v15 only — 2 (SRV).
+  negotiated version.
 
 ## State machine
 
@@ -89,30 +91,9 @@ dial. Unix-socket paths are not valid.
 | :--- | :--- | :------- |
 | IPv4 | v14 and v15 | `[0, word32, port]` |
 | IPv6 | v14 and v15 | `[1, word32, word32, word32, word32, port]` |
-| SRV  | v15 only    | `[2, srvName]` |
 
 `port` is a CBOR unsigned integer 0–65535: the TCP port as a number
 (3001 means port 3001), not a byte-swapped `htons` value.
-
-The IPv4 and IPv6 forms are in the [PeerSharing CDDL][ps-cddl]. The SRV form is
-the v15 extension of that schema (next free tag). `srvName` is a CBOR text
-string: the DNS name as registered on the ledger or in topology, *without* the
-[CIP-0155][cip-0155] prefix. The receiver looks it up as
-`_cardano._tcp.<srvName>` and uses the SRV target host, port, priority, and
-weight. There is no port field in the PeerSharing encoding.
-
-SRV may appear in a `MsgSharePeers` list only when **both** sides
-negotiated NTN version **15**. On a v14 bearer, or from a v15 node to a
-v14 peer, only IPv4 and IPv6 are legal. A v15 node that knows a peer
-only as an SRV name and cannot send `[2, srvName]` (peer is v14) either
-shares a currently resolved IP+port or omits that peer.
-
-> [!NOTE]
->
-> The published `peer-sharing-v14.cddl` still lists only tags 0 and 1.
-> Haskell `encodeRemoteAddress` ignores the NTN version and only emits
-> IPv4/IPv6 `SockAddr`. It encodes a non-empty address list as an
-> indefinite-length CBOR array.
 
 ### IPv4 `word32`
 

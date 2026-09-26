@@ -2,7 +2,7 @@
 
 **Mini-protocol number: 3**
 
-`BlockFetch` transfers **block bodies** for a range of points the
+`BlockFetch` transfers **blocks** for a range of points the
 initiator already learned (usually via `ChainSync`). It is pull-based
 and part of the [diffusion
 group](../../multiplexing/lifecycle.md#groups-that-start-and-stop-together).
@@ -87,10 +87,10 @@ or a chain that never contained that interval).
 The responder has the range and will stream bodies in chain order,
 `from` first.
 
-### `MsgBlock` — `[4, body]`
+### `MsgBlock` — `[4, block]`
 
-One block body. Repeat until the range is done. `body` is the Cardano
-multi-era block; see [Codecs](#codecs).
+One whole block (header and body). Repeat until the range is done.
+`block` is the Cardano multi-era block; see [Codecs](#codecs).
 
 ### `MsgBatchDone` — `[5]`
 

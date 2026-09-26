@@ -6,7 +6,9 @@ on or off (by accepting connections or not), the upstream behaviour depends on
 actively establishing connections to other peers. There are two basic ways in
 which this is configured:
 
-- a static configuration lists known peers by DNS name or IP address and port
+- a static configuration lists known peers by IP address and port or by a DNS name,
+  which either has an SRV record as per [CIP-0155](https://cips.cardano.org/cip/CIP-0155)
+  or is accompanied by a port
 - a dynamic configuration states how many peers to connect to, with peers being
   discovered either through the ledger or through the
   [peer sharing](../network/node-to-node/peer-sharing) protocol.
@@ -17,9 +19,11 @@ which this is configured:
 
 ## Safety considerations
 
-In general, a Cardano node with fully dynamic peer selection is vulnerable to
+In general, a Cardano node with fully dynamic peer selection may be exposed to
 eclipse attacks (being nudged by malicious peers into connecting only to
-malicious peers). A solution to this problem has been formulated in the
+malicious peers); an attacker with sufficient control over the infrastructure can
+also route statically selected peers to its own nodes (by forging DNS or routing
+information). A solution to this problem while syncing has been formulated in the
 [Ouroboros Genesis paper](https://iohk.io/en/research/library/papers/ouroboros-genesis-composable-proof-of-stake-blockchains-with-dynamic-availability/).
 
 A statically configured node can avoid these issues by having a fixed connection
@@ -74,9 +78,10 @@ by the Haskell implementation.
 
 Before choosing the above strategy the expected outcomes on a whole network
 level have been simulated. The churn rate of 20% per hour has been selected
-based on those outcomes ([Santos 2023][p2p-eng]; the Close-Random and
+based on those outcomes ([Santos 2023][p2p-eng]; possible Close-Random and
 header-first scoring policies are [CougaR][cougar] and
-[SCRamble][scramble]). In private discussions, the IOG network working
+[SCRamble][scramble]), the Haskell implementation uses [custom metrics][metrics].
+In private discussions, the IOG network working
 group has indicated that 40%/h might lead to the network falling apart
 into multiple disconnected pieces. That possibility is not in the
 published simulations. This note is left here as a cautionary tale that
@@ -85,3 +90,4 @@ changing this strategy will require stringent analysis.
 [cougar]: https://doi.org/10.1145/3524860.3539805
 [p2p-eng]: https://www.essentialcardano.io/article/engineering-dive-into-cardanos-dynamic-p2p-design
 [scramble]: https://arxiv.org/abs/2601.10277
+[metrics]: https://ouroboros-network.cardano.intersectmbo.org/ouroboros-network/Ouroboros-Network-PeerSelection-PeerMetric.html#g:2

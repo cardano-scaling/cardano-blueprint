@@ -82,6 +82,9 @@ This is the time when the block body has been received in full, no matter
 from which peer. The time at which further requests are fully served is not
 needed for monitoring on the whole network level.
 
+It is very useful to monitor the block arrival latencies (relative to slot onset),
+e.g. by plotting which fraction arrives within 1s, 3s, 5s, respectively.
+
 ### Block adopted
 
 After having received the block body, the node will validate its contents and

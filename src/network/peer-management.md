@@ -187,6 +187,8 @@ What should stay common is the frame around that choice:
 - Do not all churn at once (fuzz the interval).
 - Stay near the 20%/h replacement rate unless the alternative has
   been simulated.
+- Use proven algorithms for peer ranking and selection, and keep
+  a handful of big ledger peers to evade eclipse attacks.
 - Do not promote a peer that was just classified, or that has
   exhausted its failure count, as if it were a fresh random
   neighbour.
@@ -209,6 +211,13 @@ What should stay common is the frame around that choice:
 > peers with failures are more likely to be forgotten. Big-ledger
 > peers are churned first, as their own target counters. None of
 > that ranking is a wire rule.
+>
+> An alternative peer selection algorithm should be well studied
+> and simulated. Network topology is an emergent property of the
+> system and if nodes are using invalidated protocol it can have
+> security implications, since Praos security argument requires
+> that blocks reach the honest peers within Δ. We encourage novelty,
+> but in a responsible way.
 
 ## Recommended time constants
 

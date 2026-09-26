@@ -22,7 +22,8 @@ different version data; see [Client interfaces](../../../client).
 The connection is torn down if:
 
 - There is no mutually acceptable version, or version data cannot be
-  agreed (the responder sends `MsgRefuse`; the initiator then closes),
+  agreed (the responder sends `MsgRefuse`; the initiator then closes,
+  if it doesn’t then the responder must time out and close the bearer),
 - The `query` flag is set: the responder sends `MsgQueryReply` and the
   session does not proceed,
 - Simultaneous open cannot agree a version (either side resets).
@@ -34,7 +35,7 @@ graph LR
     classDef client color:black,fill:PaleGreen,stroke:DarkGreen;
     classDef server color:black,fill:PowderBlue,stroke:DarkBlue;
     linkStyle default stroke:gray
-    
+
     StDone(((StDone)))
 
     i(( )) --> StPropose
