@@ -5,12 +5,12 @@
 > This blueprint is a work in progress.
 > See also [Resources](#resources)
 
-The network layer is responsible of implementing the Node-To-Node interface of a
-node, for transmitting data between nodes.
+The network layer is responsible for implementing the Node-To-Node interface of
+a node, for transmitting data between nodes.
 
-The network protocols consist of a [multiplexing layer](multiplexing.md) which
-carries one or more [mini-protocols](mini-protocols.md), according to the type
-of connection - for example:
+The node runs a bundle of [mini-protocols](mini-protocols.md) on each
+connection and uses a [multiplexing layer](multiplexing/README.md) to carry
+them over one bearer — for example:
 
 ```mermaid
 graph TB
@@ -36,10 +36,11 @@ graph TB
 
 ## Node-to-node mini-protocols
 
-> Current node-to-node protocol version: v14
+> Current node-to-node protocol version: v15
+> (v14 is the still-valid baseline; the wire protocols are the same)
 
-The set of Node-To-Node mini-protocols needed for participating in the Cardano
-network (combined by the multiplexing wrapper) is:
+The set of Node-To-Node mini-protocols a node runs to participate in the
+Cardano network is:
 
 - [Handshake](node-to-node/handshake) - for connection and version negotiation
 - [Chain Sync](node-to-node/chainsync) - for synchronization of changes to the
@@ -47,8 +48,13 @@ network (combined by the multiplexing wrapper) is:
 - [Block Fetch](node-to-node/blockfetch) - for transferring blocks between nodes
 - [TxSubmission2](node-to-node/txsubmission2) - for propagating transactions between nodes
 - [Keep Alive](node-to-node/keep-alive) - for maintaining and measuring timing of the connection
-- [Peer Sharing](<>) - for exchanging peer information to create the peer-to-peer
-  (P2P) network
+- [Peer Sharing](node-to-node/peer-sharing) - for exchanging peer information to
+  create the peer-to-peer (P2P) network
+
+How that bundle is started, restarted, and torn down is described in
+[Protocol lifecycle](multiplexing/lifecycle.md). Whom to dial, why a
+peer is dropped, and how that differs for churn, protocol errors, and
+adversarial classification is [Peer management](peer-management.md).
 
 ## Resources
 

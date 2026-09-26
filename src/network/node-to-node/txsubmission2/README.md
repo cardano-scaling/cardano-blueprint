@@ -2,43 +2,34 @@
 
 **Mini-protocol number: 4**
 
-`TxSubmission2` is the mini protocol in charge of diffusing pending transactions
-through the network. It is a pull-based miniprotocol: data is transmitted only
-upon explicit request from the client.
+`TxSubmission2` diffuses mempool transactions. It is pull-based, but
+transaction payloads travel **from** the mini-protocol initiator **to**
+the responder — the opposite of headers and blocks. The initiator
+**has** the transactions; the responder **asks** for them. Agency
+therefore looks flipped relative to `ChainSync`.
 
-The goal of `TxSubmission2` is to let other peers know about the transactions
-that the local node considers valid (with respects to the chain that the local
-node has selected in [Chain Selection](../../../consensus/chainsel.md) in the
-consensus layer), and transmit such transactions if requested.
+The protocol is part of the [diffusion
+group](../../multiplexing/lifecycle.md#groups-that-start-and-stop-together).
+A node offers transactions it considers valid against its
+[selected chain](../../../consensus/chainsel.md).
 
-An important piece of information is that transactions flow in the
-opposite direction than blocks/headers. Blocks flow from
-block-producers to their clients reaching the entirety of the network,
-while transactions flow from all the network aiming to reach
-block-producers. For this reason, in the state machine below it might
-seem that agency is flipped but this is intentional. It is the
-"client" (or the "initiator") the one that gives transactions to the
-"server" (or "responder).
+It maintains a FIFO of **outstanding** transaction ids: announced by
+the initiator, not yet acknowledged by the responder. Only outstanding
+ids may be requested, each at most once. Acknowledgements consume the
+FIFO in the same order the ids were announced.
 
-Honest nodes will try to validate every transaction they come to know about.
+The connection is torn down if:
 
-There are some situations in which this miniprotocol would terminate abruptly,
-closing all the connections to the remote peer. Actions that are considered as
-misbehaviour are (not exclusively):
-
-- Violation of the miniprotocol state machine,
-- Too many or not enough transactions sent or acknowledged via the client or
-  server,
-- Requesting zero transactions,
-- The client requesting a transaction that was not announced by the server.
-
-> [!WARNING]
->
-> TODO: Make this list exhaustive
+- The outstanding FIFO would grow beyond **10** ids,
+- A blocking request asks for zero ids, or a non-blocking request has
+  both `ack = 0` and `req = 0`,
+- The initiator replies with more ids than `req`,
+- A blocking reply is empty,
+- The responder requests an id that was not announced, is no longer
+  outstanding, or was already requested,
+- `MsgDone` is sent from any state other than `StTxIdsBlocking`.
 
 ## State machine
-
-The state machine for TxSubmission2 is as follows:
 
 ```mermaid
 graph LR
@@ -82,31 +73,72 @@ graph LR
 | StTxIdsBlocking    | MsgReplyTxIds              | `[(id, size)]` | StIdle             |
 | StIdle             | MsgRequestTxs              | `[id]`         | StTxs              |
 | StTxs              | MsgReplyTxs                | `[tx]`         | StIdle             |
-| StIdle             | MsgDone                    |                | End                |
+| StTxIdsBlocking    | MsgDone                    |                | End                |
+
+On the wire the two request-id messages are one CBOR shape with a
+boolean; see below. `StIdle` and `StTxIdsBlocking` have no receive
+timeout. `StTxIdsNonBlocking` and `StTxs` wait at most 10 seconds.
+
+## Messages
+
+### `MsgInit` — `[6]`
+
+The mini-protocol initiator (the side that will *send* transactions)
+goes first, then waits in `StIdle` for the responder to pull.
+
+### `MsgRequestTxIds` — `[0, blocking, ack, req]`
+
+The responder asks for more ids and acknowledges `ack` of the oldest
+outstanding ones (`ack` and `req` are `word16`).
+
+`blocking` is `true` or `false`:
+
+- **Blocking** (`true`, `StTxIdsBlocking`): use when, after this
+  `ack`, the FIFO would be empty. `req` must be at least 1. The reply
+  must be non-empty and may wait until a transaction appears.
+- **Non-blocking** (`false`, `StTxIdsNonBlocking`): use when the FIFO
+  would still be non-empty. At least one of `ack` and `req` must be
+  non-zero. The reply may be empty and must be prompt.
+
+`req` must not make the FIFO longer than 10.
+
+### `MsgReplyTxIds` — `[1, [[id, size], …]]`
+
+At most `req` pairs. `size` is the transaction size in bytes
+(`word32`). Order is mempool order, so dependents stay after their
+inputs. These ids are appended to the FIFO.
+
+The list is a **definite-length** CBOR array.
+
+### `MsgRequestTxs` — `[2, [id, …]]`
+
+Ask for bodies of outstanding ids, any order, each id at most once.
+The id list is an **indefinite-length** CBOR array.
+
+### `MsgReplyTxs` — `[3, [tx, …]]`
+
+The requested transactions that are still available. An announced id
+that is omitted (invalidated, already on chain, dropped) is treated as
+if it had never been announced. The tx list is indefinite-length.
+
+### `MsgDone` — `[4]`
+
+The initiator ends the instance. Only legal in `StTxIdsBlocking`
+(the responder was waiting for more ids).
 
 ## Codecs
 
-The messages depicted in the state machine follow this CDDL specification:
+Messages (`txId` and `tx` are type parameters):
 
-```cddl
-;; messages.cddl
-{{#include messages.cddl}}
-```
+- [tx-submission2.cddl][tx-cddl]
+- [network.base.cddl][tx-base]
 
-A transaction ID is a tag-encoded alternative of the transaction IDs
-for each of the eras. Note that in Byron there are 4 alternatives for
-a transaction ID:
+Cardano `txId` and `tx` are era-tagged. Wrappers:
+[txid.cddl](txid.cddl) (Byron has four id alternatives),
+[tx.cddl](tx.cddl) (Shelley-onwards is CBOR-in-CBOR tag 24). Era
+payloads are in `cardano-ledger`, for example Conway
+[`transaction`][conway-cddl] / `transaction_id`.
 
-```cddl
-;; txid.cddl
-{{#include txid.cddl}}
-```
-
-A transaction as transmitted in `TxSubmission2` is a tag-encoded
-alternative of the transactions for each of the eras. Note that for
-Shelley-onwards, the transaction is serialized in CBOR-in-CBOR:
-
-```cddl
-;; tx.cddl
-{{#include tx.cddl}}
-```
+[conway-cddl]: https://github.com/IntersectMBO/cardano-ledger/blob/9f6b6f1ab10d7cc730dae3328f4003e7fa55afe2/eras/conway/impl/cddl/data/conway.cddl
+[tx-base]: https://github.com/IntersectMBO/ouroboros-network/blob/ouroboros-network-protocols-0.15.2.0/ouroboros-network-protocols/cddl/specs/network.base.cddl
+[tx-cddl]: https://github.com/IntersectMBO/ouroboros-network/blob/ouroboros-network-protocols-0.15.2.0/ouroboros-network-protocols/cddl/specs/tx-submission2.cddl

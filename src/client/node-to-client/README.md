@@ -7,7 +7,7 @@ trust between peers and consequently they behave more like traditional
 client/server APIs.
 
 In particular, these mini-protocols will also be wrapped by a
-[multiplexer](../../network/multiplexing.md).
+[multiplexer](../../network/multiplexing/README.md).
 
 These mini-protocols are:
 
