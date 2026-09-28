@@ -8,6 +8,11 @@ title = "Cardano Blueprint"
 [build]
 build-dir = "out"
 
+[preprocessor.leios]
+command = "python3 .mdbook/leios-preprocessor.py"
+# Runs first so that the others never see the front matter it strips.
+before = ["mermaid", "toc", "katex"]
+
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
@@ -20,7 +25,7 @@ after = ["links"]
 
 [output.html]
 additional-css = [".mdbook/custom.css"]
-additional-js = [".mdbook/mermaid.min.js", ".mdbook/mermaid-init.js"]
+additional-js = [".mdbook/mermaid.min.js", ".mdbook/mermaid-init.js", ".mdbook/leios-toggle.js"]
 smart-punctuation = true
 site-url = "/cardano-blueprint/"
 git-repository-url = "https://github.com/cardano-scaling/cardano-blueprint/tree/main"
