@@ -22,6 +22,11 @@ msgLeiosVotes                   = [7, [1* vote]]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
+
+; Not redundant with the announcement's size: the point alone does not say
+; which announcement is being offered, and two announcements -- even from
+; different elections -- can name one endorser block in one slot at different
+; sizes.
 eb_size = base.word32
 slot = base.slotno
 eb_hash = base.hash
