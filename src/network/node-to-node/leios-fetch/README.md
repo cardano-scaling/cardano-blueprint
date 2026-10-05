@@ -39,19 +39,17 @@ graph LR
 
 ### State agencies
 
-| State        | Agency                                          |
-| :----------- | :---------------------------------------------- |
-| StIdle       | <span class="agency-initiator">Initiator</span> |
-| StBlock      | <span class="agency-responder">Responder</span> |
-| StBlockTxs   | <span class="agency-responder">Responder</span> |
-| StVotes      | <span class="agency-responder">Responder</span> |
-| StBlockRange | <span class="agency-responder">Responder</span> |
+| State      | Agency                                          |
+| :--------- | :---------------------------------------------- |
+| StIdle     | <span class="agency-initiator">Initiator</span> |
+| StBlock    | <span class="agency-responder">Responder</span> |
+| StBlockTxs | <span class="agency-responder">Responder</span> |
 
 ### State transitions
 
 | From state | Message                 | Parameters                    | To state   |
 | :--------- | :---------------------- | ----------------------------- | :--------- |
-| StIdle     | MsgClientDone           |                               | End        |
+| StIdle     | MsgDone                 |                               | End        |
 | StIdle     | MsgLeiosBlockRequest    | `point`                       | StBlock    |
 | StBlock    | MsgLeiosBlock           | `endorser_block`              | StIdle     |
 | StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps`            | StBlockTxs |
@@ -68,13 +66,12 @@ The messages depicted in the state machine follow this CDDL specification:
 
 > [!NOTE]
 >
-> The CBOR tags in this specification are provisional (`MsgClientDone` at `[9]`
-> in particular). The `endorser_block`, `bitmaps`, and `tx` types remain
-> underspecified (`any`) pending further protocol design, including the
-> length-definite encoding for `txList`. Additionally, the protocol is known
-> to be incomplete: catch-up oriented batch request messages are likely to be
-> added, and the bitmap-based transaction request structure
-> (`MsgLeiosBlockTxsRequest`) may change significantly as the roaring bitmap
-> encoding is still under discussion. See
-> [CIP-0164 PR #1167](https://github.com/cardano-foundation/CIPs/pull/1167)
-> for the latest design decisions.
+> The `endorser_block`, `bitmaps` and `tx` types remain underspecified
+> pending further protocol design, including whether `tx_list` is
+> length-definite, and the bitmap-based transaction request
+> (`MsgLeiosBlockTxsRequest`) may yet change as the roaring bitmap encoding is
+> still under discussion.
+>
+> Catch-up oriented batch requests were once expected here
+> (`MsgLeiosBlockRangeRequest` and its replies). They were never implemented
+> and are no longer planned, so they are not specified.
