@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-cd26fa83.js";
+            window.path_to_searchindex_js = "../../../searchindex-00732440.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-404c79fe.js"></script>
@@ -216,17 +216,34 @@ push announcements to downstream peers with minimal latency.</p>
    StDone(((StDone)))
 
    i(( )) --&gt; StIdle
-   StIdle --MsgClientDone--&gt; StDone
+   StIdle --MsgQuit--&gt; StQuit
+   StQuit --MsgDone--&gt; StDone
    StIdle --MsgLeiosNotificationRequestNext--&gt; StBusy
    StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
    StBusy --MsgLeiosBlockOffer--&gt; StIdle
    StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
    StBusy --MsgLeiosVotes--&gt; StIdle
+   StBusy --MsgCanceled--&gt; StIdle
 
    class StIdle client
    class StBusy server
+   class StQuit server
 </pre>
 
+<h3 id="terminating"><a class="header" href="#terminating">Terminating</a></h3>
+<p>The client cannot simply stop. It only has agency in <code>StIdle</code>, and a request
+leaves it in <code>StBusy</code> awaiting a reply the server may have no reason to send:
+under light load there may be nothing to announce for a long while. A node
+being demoted from hot to warm has a bounded time to shut the protocol down
+cleanly, and losing that race costs the whole connection rather than just this
+mini-protocol.</p>
+<p>Two messages resolve that. <code>MsgCanceled</code> lets the server answer “nothing for
+you” and hand agency back, so the client is never stranded in <code>StBusy</code>. And
+<code>MsgQuit</code> lets the client declare it is leaving without first draining the
+replies it has outstanding – it may be pipelining many requests, and waiting
+for each in turn would make shutdown latency a function of pipeline depth. The
+server closes with <code>MsgDone</code>, so termination is a two-step handshake rather
+than a unilateral act by either side.</p>
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
 <div class="table-wrapper">
 <table>
@@ -236,6 +253,7 @@ push announcements to downstream peers with minimal latency.</p>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StQuit</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -246,36 +264,50 @@ push announcements to downstream peers with minimal latency.</p>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgQuit</td><td></td><td style="text-align: left">StQuit</td></tr>
+<tr><td style="text-align: left">StQuit</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>eb_size</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgCanceled</td><td></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
+; Termination first, then the request, then the responses it can draw. Votes
+; come last so a future votes mini-protocol can take them away without
+; renumbering anything else.
 leiosNotifyMessage
-     = msgLeiosNotificationRequestNext
+     = msgDone
+     / msgQuit
+     / msgCanceled
+     / msgLeiosNotificationRequestNext
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
      / msgLeiosVotes
-     / msgClientDone
 
-msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement]
-msgLeiosBlockOffer              = [2, point, eb_size]
-msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotes                   = [4, [1* vote]]
-msgClientDone                   = [5]
+msgDone                         = [0]
+msgQuit                         = [1]
+msgCanceled                     = [2]
+msgLeiosNotificationRequestNext = [3]
+msgLeiosBlockAnnouncement       = [4, announcement]
+msgLeiosBlockOffer              = [5, point, eb_size]
+msgLeiosBlockTxsOffer           = [6, point]
+msgLeiosVotes                   = [7, [1* vote]]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
-eb_size = base.word32 ; TODO should be redundant, determined by the announcement
+
+; Not redundant with the announcement's size: the point alone does not say
+; which announcement is being offered, and two announcements -- even from
+; different elections -- can name one endorser block in one slot at different
+; sizes.
+eb_size = base.word32
 slot = base.slotno
 eb_hash = base.hash
 

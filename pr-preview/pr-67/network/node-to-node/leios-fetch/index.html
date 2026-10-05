@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-cd26fa83.js";
+            window.path_to_searchindex_js = "../../../searchindex-00732440.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-404c79fe.js"></script>
@@ -229,8 +229,6 @@ the data.</p>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -241,7 +239,7 @@ the data.</p>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
@@ -252,61 +250,46 @@ the data.</p>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
+; Termination first, as in LeiosNotify, then each request beside the response
+; it draws.
 leiosBlockFetchMessage
-     = msgLeiosBlockRequest
+     = msgDone
+     / msgLeiosBlockRequest
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgClientDone
-; TODO not implemented yet in leios-prototype
-;     / msgLeiosBlockRangeRequest
-;     / msgLeiosNextBlockAndTxsInRange
-;     / msgLeiosLastBlockAndTxsInRange
 
-msgLeiosBlockRequest           = [0, point]
-msgLeiosBlock                  = [1, endorser_block]
-msgLeiosBlockTxsRequest        = [2, point, bitmaps]
-msgLeiosBlockTxs               = [3, point, bitmaps, tx_list]
-; TODO not implemented yet in leios-prototype
-; msgLeiosBlockRangeRequest =
-;   [ 6
-;   , start_slot  : base.slotno
-;   , end_slot    : base.slotno
-;   , start_hash  : base.hash
-;   , end_hash    : base.hash
-;   ]
-; msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
-; msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
-msgClientDone                  = [9]
+msgDone                        = [0]
+msgLeiosBlockRequest           = [1, point]
+msgLeiosBlock                  = [2, endorser_block]
+msgLeiosBlockTxsRequest        = [3, point, bitmaps]
+msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
 
 point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
 ; map from tx hash to serialized tx byte size
-; TODO: add valdity indices analogous to Dijkstra block body
 endorser_block = { * base.hash =&gt; base.word32 }
 
 ; indefinite-length map from 64-tx window index to 64-bit presence bitmap
 bitmaps = { * base.word16 =&gt; base.word64 }
 
-tx_list = [ *tx.tx ] ; REVIEW: only length-definite?
+tx_list = [ *tx.tx ]
 
 ;# import base as base
 ;# import tx as tx
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional (<code>MsgClientDone</code> at <code>[9]</code>
-in particular). The <code>endorser_block</code>, <code>bitmaps</code>, and <code>tx</code> types remain
-underspecified (<code>any</code>) pending further protocol design, including the
-length-definite encoding for <code>txList</code>. Additionally, the protocol is known
-to be incomplete: catch-up oriented batch request messages are likely to be
-added, and the bitmap-based transaction request structure
-(<code>MsgLeiosBlockTxsRequest</code>) may change significantly as the roaring bitmap
-encoding is still under discussion. See
-<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
-for the latest design decisions.</p>
+<p>The <code>endorser_block</code>, <code>bitmaps</code> and <code>tx</code> types remain underspecified
+pending further protocol design, including whether <code>tx_list</code> is
+length-definite, and the bitmap-based transaction request
+(<code>MsgLeiosBlockTxsRequest</code>) may yet change as the roaring bitmap encoding is
+still under discussion.</p>
+<p>Catch-up oriented batch requests were once expected here
+(<code>MsgLeiosBlockRangeRequest</code> and its replies). They were never implemented
+and are no longer planned, so they are not specified.</p>
 </blockquote>
 <script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
