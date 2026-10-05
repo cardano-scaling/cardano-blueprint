@@ -4,14 +4,18 @@ leiosNotifyMessage
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
      / msgLeiosVotes
-     / msgClientDone
+     / msgQuit
+     / msgCanceled
+     / msgDone
 
 msgLeiosNotificationRequestNext = [0]
 msgLeiosBlockAnnouncement       = [1, announcement]
 msgLeiosBlockOffer              = [2, point, eb_size]
 msgLeiosBlockTxsOffer           = [3, point]
 msgLeiosVotes                   = [4, [1* vote]]
-msgClientDone                   = [5]
+msgDone                         = [5]
+msgQuit                         = [6]
+msgCanceled                     = [7]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
