@@ -1,25 +1,28 @@
+; Termination first, then the request, then the responses it can draw. Votes
+; come last so a future votes mini-protocol can take them away without
+; renumbering anything else.
 leiosNotifyMessage
-     = msgLeiosNotificationRequestNext
+     = msgDone
+     / msgQuit
+     / msgCanceled
+     / msgLeiosNotificationRequestNext
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
      / msgLeiosVotes
-     / msgQuit
-     / msgCanceled
-     / msgDone
 
-msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement]
-msgLeiosBlockOffer              = [2, point, eb_size]
-msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotes                   = [4, [1* vote]]
-msgDone                         = [5]
-msgQuit                         = [6]
-msgCanceled                     = [7]
+msgDone                         = [0]
+msgQuit                         = [1]
+msgCanceled                     = [2]
+msgLeiosNotificationRequestNext = [3]
+msgLeiosBlockAnnouncement       = [4, announcement]
+msgLeiosBlockOffer              = [5, point, eb_size]
+msgLeiosBlockTxsOffer           = [6, point]
+msgLeiosVotes                   = [7, [1* vote]]
 
 announcement = any ; TODO
 point = [slot, eb_hash]
-eb_size = base.word32 ; TODO should be redundant, determined by the announcement
+eb_size = base.word32
 slot = base.slotno
 eb_hash = base.hash
 
