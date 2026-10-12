@@ -97,6 +97,5 @@ The messages depicted in the state machine follow this CDDL specification:
 
 > [!NOTE]
 >
-> The CBOR tags in this specification are provisional. Several types remain underspecified (`any`) pending
-> further protocol design. See [CIP-0164](https://github.com/cardano-foundation/CIPs/pull/1167)
-> for rationale and ongoing discussion.
+> See [CIP-0164](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164#leios-mini-protocols)
+> for the rationale behind these messages.

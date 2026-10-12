@@ -20,7 +20,10 @@ msgLeiosBlockOffer              = [5, point, eb_size]
 msgLeiosBlockTxsOffer           = [6, point]
 msgLeiosVotes                   = [7, [1* vote]]
 
-announcement = any ; TODO
+; A ranking block header announces the endorser block its body references,
+; so an announcement is exactly the bytes ChainSync diffuses for that header
+; and carries its own KES signature.
+announcement = header.header
 point = [slot, eb_hash]
 
 ; Not redundant with the announcement's size: the point alone does not say
@@ -40,3 +43,4 @@ vote =
 leios_bls_signature = bytes .size 48
 
 ;# import base as base
+;# import header as header
