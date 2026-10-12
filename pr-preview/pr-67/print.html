@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-00732440.js";
+            window.path_to_searchindex_js = "searchindex-2fef21d8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-404c79fe.js"></script>
@@ -2297,7 +2297,8 @@ of any particular implementation, so that all nodes agree.</p>
 <p>A stake pool advertises the BLS key it will vote with by including an optional
 <code>bls_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
 structure — see <a href="ledger/eras/dijkstra.cddl"><code>dijkstra.cddl</code></a>):</p>
-<pre><code class="language-cddl">; Pool parameters for stake pool registration
+<pre><code class="language-cddl">
+; Pool parameters for stake pool registration
 pool_params =
   (   operator       : pool_keyhash
   ,   vrf_keyhash    : vrf_keyhash
@@ -2314,7 +2315,6 @@ pool_params =
 vrf_keyhash = hash32
 
 ; BLS key
-bls_key = [bls_pubkey : bytes .size 96, bls_possession_proof : bytes .size 48]
 </code></pre>
 <ul>
 <li>The key pair is <strong>BLS12-381</strong> in the <em>minimal-signature-size</em> configuration:
@@ -2396,12 +2396,12 @@ offline, keyless, or too slow to vote.</p>
 <p>A <a href="ledger/eras/dijkstra.cddl">block body</a> may carry a <code>leios_certificate</code>
 attesting the EB announced by (a recent) block header. The certificate records
 <em>which</em> committee seats voted and an aggregate of their signatures:</p>
-<pre><code class="language-cddl">leios_certificate =
-  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
-  , signature : leios_signature
-  ]
+<pre><code class="language-cddl">auxiliary_scripts = [* native_script]
 
-leios_signature = bytes .size 48
+auxiliary_data_map =
+  #6.259(
+    { ? 0 : metadata
+    , ? 1 : [* native_script]
 </code></pre>
 <ul>
 <li><code>signers</code> is a <strong>bitfield</strong> over seat indices: bit <code>i</code> set means the committee
@@ -2448,8 +2448,8 @@ follow the chain.</p>
 bodies are announced and fetched between peers, and the <code>vote</code> structure whose
 <code>voter_id</code> is the seat index used here.</li>
 <li><a href="ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>bls_key</code>, <code>pool_params</code>,
-<code>eb_announcement</code>, <code>leios_certificate</code> and the block header’s
-<code>block_body_contains_leios_cert</code> / <code>eb_announcement</code> fields.</li>
+<code>eb_references_announcement</code>, <code>leios_certificate</code> and the block header’s
+<code>block_body_contains_leios_cert</code> / <code>eb_references_announcement</code> fields.</li>
 <li><a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164">Leios (CIP-0164)</a>
 — the protocol design and the rationale for stake-based committee selection.</li>
 </ul>
@@ -2921,7 +2921,7 @@ created the block, rather than by the creators of the transactions.</p>
 <p>Leios changes the block structure in two ways:</p>
 <ul>
 <li>Block headers are re-used as announcements of endorser blocks, via an
-<code>eb_announcement</code> field</li>
+<code>eb_references_announcement</code> field</li>
 <li>Blocks may certify an EB and then
 <ul>
 <li>set <code>block_body_contains_leios_cert</code> in the header</li>
@@ -2947,33 +2947,33 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
   , vrf_vkey                       : vrf_vkey
   , vrf_result                     : vrf_cert
   , block_body_size                : uint .size 4
-  , block_body_hash                : hash32                ; merkle triple root
+  , block_body_hash                : hash32                           ; merkle triple root
   , operational_cert
-  , protocol_version
+  , header_version_info
   , block_body_contains_leios_cert : bool
-  , eb_announcement                : eb_announcement/ nil
+  , eb_references_announcement     : eb_references_announcement/ nil
   ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">eb_announcement =
+<pre><code class="language-cddl">
+eb_references_announcement =
   [ eb_hash : hash32
   , eb_size : uint .size 4 ; size of the EB references
-  ]
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">block_body =
+<pre><code class="language-cddl">
+block_body =
   [ transactions      : [* block_transaction]
   , leios_certificate : leios_certificate/ nil
   , peras_certificate : peras_certificate/ nil
-  ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">leios_certificate =
-  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
-  , signature : leios_signature
-  ]
+<pre><code class="language-cddl">auxiliary_scripts = [* native_script]
 
-leios_signature = bytes .size 48
+auxiliary_data_map =
+  #6.259(
+    { ? 0 : metadata
+    , ? 1 : [* native_script]
 </code></pre>
 </div>
 

@@ -36,7 +36,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-00732440.js";
+            window.path_to_searchindex_js = "../../searchindex-2fef21d8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-404c79fe.js"></script>
@@ -253,7 +253,7 @@ created the block, rather than by the creators of the transactions.</p>
 <p>Leios changes the block structure in two ways:</p>
 <ul>
 <li>Block headers are re-used as announcements of endorser blocks, via an
-<code>eb_announcement</code> field</li>
+<code>eb_references_announcement</code> field</li>
 <li>Blocks may certify an EB and then
 <ul>
 <li>set <code>block_body_contains_leios_cert</code> in the header</li>
@@ -279,33 +279,33 @@ block format currently used on the https://www.musashi.network/ Leios testnet.</
   , vrf_vkey                       : vrf_vkey
   , vrf_result                     : vrf_cert
   , block_body_size                : uint .size 4
-  , block_body_hash                : hash32                ; merkle triple root
+  , block_body_hash                : hash32                           ; merkle triple root
   , operational_cert
-  , protocol_version
+  , header_version_info
   , block_body_contains_leios_cert : bool
-  , eb_announcement                : eb_announcement/ nil
+  , eb_references_announcement     : eb_references_announcement/ nil
   ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">eb_announcement =
+<pre><code class="language-cddl">
+eb_references_announcement =
   [ eb_hash : hash32
   , eb_size : uint .size 4 ; size of the EB references
-  ]
 </code></pre>
 <h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
-<pre><code class="language-cddl">block_body =
+<pre><code class="language-cddl">
+block_body =
   [ transactions      : [* block_transaction]
   , leios_certificate : leios_certificate/ nil
   , peras_certificate : peras_certificate/ nil
-  ]
 </code></pre>
 <p>with</p>
-<pre><code class="language-cddl">leios_certificate =
-  [ signers   : bytes .size (0 .. 8192) ;bitfield with up to 65536 entries
-  , signature : leios_signature
-  ]
+<pre><code class="language-cddl">auxiliary_scripts = [* native_script]
 
-leios_signature = bytes .size 48
+auxiliary_data_map =
+  #6.259(
+    { ? 0 : metadata
+    , ? 1 : [* native_script]
 </code></pre>
 </div>
 
