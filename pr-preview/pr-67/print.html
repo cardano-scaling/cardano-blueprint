@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2fef21d8.js";
+            window.path_to_searchindex_js = "searchindex-fff3d66f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-404c79fe.js"></script>
@@ -1367,7 +1367,10 @@ msgLeiosBlockOffer              = [5, point, eb_size]
 msgLeiosBlockTxsOffer           = [6, point]
 msgLeiosVotes                   = [7, [1* vote]]
 
-announcement = any ; TODO
+; A ranking block header announces the endorser block its body references,
+; so an announcement is exactly the bytes ChainSync diffuses for that header
+; and carries its own KES signature.
+announcement = header.header
 point = [slot, eb_hash]
 
 ; Not redundant with the announcement's size: the point alone does not say
@@ -1387,12 +1390,12 @@ vote =
 leios_bls_signature = bytes .size 48
 
 ;# import base as base
+;# import header as header
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional. Several types remain underspecified (<code>any</code>) pending
-further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
-for rationale and ongoing discussion.</p>
+<p>See <a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164#leios-mini-protocols">CIP-0164</a>
+for the rationale behind these messages.</p>
 </blockquote>
 <script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
