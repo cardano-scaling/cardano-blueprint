@@ -74,7 +74,7 @@ necessary but is helpful for efficient processing:
 Leios changes the block structure in two ways:
 
 - Block headers are re-used as announcements of endorser blocks, via an
-  `eb_announcement` field
+  `eb_references_announcement` field
 - Blocks may certify an EB and then
   - set `block_body_contains_leios_cert` in the header
   - contain a `leios_certificate` instead of transactions in the body

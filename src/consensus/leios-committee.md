@@ -177,7 +177,7 @@ follow the chain.
   bodies are announced and fetched between peers, and the `vote` structure whose
   `voter_id` is the seat index used here.
 - [Dijkstra era CDDL](../ledger/eras/dijkstra.cddl) — `bls_key`, `pool_params`,
-  `eb_announcement`, `leios_certificate` and the block header's
-  `block_body_contains_leios_cert` / `eb_announcement` fields.
+  `eb_references_announcement`, `leios_certificate` and the block header's
+  `block_body_contains_leios_cert` / `eb_references_announcement` fields.
 - [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164)
   — the protocol design and the rationale for stake-based committee selection.
