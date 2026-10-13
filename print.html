@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ee96c1a1.js";
+            window.path_to_searchindex_js = "searchindex-fff3d66f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-fb937a43.js"></script>
+        <script src="toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -235,6 +235,7 @@
     BP --&gt; C
 </pre>
 
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="principles"><a class="header" href="#principles">Principles</a></h1>
 <p>This section contains general principles to apply when developing Cardano nodes.</p>
@@ -308,6 +309,7 @@ adoption.</p>
 <p>The key point is that, in the Cardano setting, optimisations should be carefully
 considered and it is certainly not the case that better average-case performance
 is always desirable!</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="network"><a class="header" href="#network">Network</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -364,6 +366,7 @@ Cardano chain</li>
 <li><a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-design/network-design.pdf">Technical report: Data Diffusion and Network</a>: Original design document of the peer-to-peer network protocols and diffusion semantics</li>
 <li><a href="https://ouroboros-network.cardano.intersectmbo.org/pdfs/network-spec/network-spec.pdf">Ouroboros Network Specification</a>: Document generated from the Haskell implementation of the Cardano network stack. Contains definitions of all mini-protocols and some documentation the connection management.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="multiplexing"><a class="header" href="#multiplexing">Multiplexing</a></h1>
 <p>The multiplexing layer is a simple binary protocol which runs on top of the
@@ -436,6 +439,7 @@ of payload. Multiple payload segments can be combined to form a full message.</p
 <p>How are multi-segment messages delimited? - there is no ‘start of message’
 flag or ‘N of M’ counter</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-agnostic">
@@ -524,6 +528,7 @@ compact binary encoding of JSON, while the schema of valid messages is expressed
 in CDDL (<a href="https://datatracker.ietf.org/doc/rfc8610/">Concise Data Definition
 Language</a>). See <a href="codecs">Codec
 basics</a> for more details.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="handshake-mini-protocol"><a class="header" href="#handshake-mini-protocol">Handshake mini-protocol</a></h1>
 <p><strong>Mini-protocol number: 0</strong></p>
@@ -677,6 +682,7 @@ refuseReasonVersionMismatch      = [0, [ *versionNumber ] ]
 refuseReasonHandshakeDecodeError = [1, versionNumber, tstr]
 refuseReasonRefused              = [2, versionNumber, tstr]
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chainsync"><a class="header" href="#chainsync">ChainSync</a></h1>
 <p><strong>Mini-protocol number: 2</strong></p>
@@ -832,10 +838,10 @@ msgIntersectFound      = [5, point, tip]
 msgIntersectNotFound   = [6, tip]
 chainSyncMsgDone       = [7]
 
-tip = [ point, base.blockNo ]
+tip = [ point, base.blockno ]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# import base as base
 ;# import header as header
@@ -844,13 +850,16 @@ point = []                         ; the genesis point
 for the particular era:</p>
 <pre><code class="language-cddl">;; header.cddl
 header
- = base.ns7&lt;byronHeader,
+ = base.ns8&lt;byronHeader,
             serialisedShelleyHeader&lt;shelley.header&gt;,
             serialisedShelleyHeader&lt;allegra.header&gt;,
             serialisedShelleyHeader&lt;mary.header&gt;,
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
-            serialisedShelleyHeader&lt;conway.header&gt;&gt;
+            serialisedShelleyHeader&lt;conway.header&gt;,
+            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+            ; introduced with it.
+            serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
             / [byronBoundaryIdx, #6.24(bytes .cbor byron.ebbhead)]
@@ -861,7 +870,7 @@ byronRegularIdx = [1, base.word32]
 serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -871,8 +880,10 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="blockfetch"><a class="header" href="#blockfetch">BlockFetch</a></h1>
 <p><strong>Mini-protocol number: 3</strong></p>
@@ -979,7 +990,7 @@ msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# include block as block
 ;# import base as base
@@ -997,6 +1008,9 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
 
 ;# import byron as byron
 ;# import shelley as shelley
@@ -1005,7 +1019,9 @@ cardanoBlock = byron.block
 ;# import alonzo as alonzo
 ;# import babbage as babbage
 ;# import conway as conway
+;# import dijkstra as dijkstra
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="txsubmission2"><a class="header" href="#txsubmission2">TxSubmission2</a></h1>
 <p><strong>Mini-protocol number: 4</strong></p>
@@ -1134,13 +1150,16 @@ for each of the eras. Note that in Byron there are 4 alternatives for
 a transaction ID:</p>
 <pre><code class="language-cddl">;; txid.cddl
 txId =
-  base.ns7&lt;byronTxId,
+  base.ns8&lt;byronTxId,
            shelley.transaction_id,
            allegra.transaction_id,
            mary.transaction_id,
            alonzo.transaction_id,
+           babbage.transaction_id,
            conway.transaction_id,
-           babbage.transaction_id&gt;
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it.
+           dijkstra.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
           / [1, byron.certificateid]
@@ -1148,7 +1167,7 @@ byronTxId = [0, byron.txid]
           / [3, byron.voteid]
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -1158,6 +1177,7 @@ byronTxId = [0, byron.txid]
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
 <p>A transaction as transmitted in <code>TxSubmission2</code> is a tag-encoded
@@ -1165,18 +1185,23 @@ alternative of the transactions for each of the eras. Note that for
 Shelley-onwards, the transaction is serialized in CBOR-in-CBOR:</p>
 <pre><code class="language-cddl">;; tx.cddl
 tx =
-  base.ns7&lt;byron.tx,
+  base.ns8&lt;byron.tx,
            serialisedShelleyTx&lt;shelley.transaction&gt;,
            serialisedShelleyTx&lt;allegra.transaction&gt;,
            serialisedShelleyTx&lt;mary.transaction&gt;,
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
-           serialisedShelleyTx&lt;conway.transaction&gt;&gt;
+           serialisedShelleyTx&lt;conway.transaction&gt;,
+           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+           ; introduced with it. Dijkstra splits `transaction` into
+           ; `block_transaction` and `mempool_transaction`, which differ in
+           ; where the `is_valid` flag sits; this protocol diffuses the latter.
+           serialisedShelleyTx&lt;dijkstra.mempool_transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -1186,8 +1211,10 @@ serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="keepalive"><a class="header" href="#keepalive">KeepAlive</a></h1>
 <p>TODO: fill this section</p>
@@ -1220,16 +1247,18 @@ msgDone = [ 2 ]
 
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leiosnotify"><a class="header" href="#leiosnotify">LeiosNotify</a></h1>
 <p><strong>Mini-protocol number: 18</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p><code>LeiosNotify</code> is the mini-protocol responsible for announcing Endorser Blocks
 (EBs) and offering EB bodies and their associated transaction closures to peers.
 It is a pull-based protocol: the client drives progress by requesting the next
@@ -1254,17 +1283,34 @@ push announcements to downstream peers with minimal latency.</p>
    StDone(((StDone)))
 
    i(( )) --&gt; StIdle
-   StIdle --MsgClientDone--&gt; StDone
+   StIdle --MsgQuit--&gt; StQuit
+   StQuit --MsgDone--&gt; StDone
    StIdle --MsgLeiosNotificationRequestNext--&gt; StBusy
    StBusy --MsgLeiosBlockAnnouncement--&gt; StIdle
    StBusy --MsgLeiosBlockOffer--&gt; StIdle
    StBusy --MsgLeiosBlockTxsOffer--&gt; StIdle
-   StBusy --MsgLeiosVotesOffer--&gt; StIdle
+   StBusy --MsgLeiosVotes--&gt; StIdle
+   StBusy --MsgCanceled--&gt; StIdle
 
    class StIdle client
    class StBusy server
+   class StQuit server
 </pre>
 
+<h3 id="terminating"><a class="header" href="#terminating">Terminating</a></h3>
+<p>The client cannot simply stop. It only has agency in <code>StIdle</code>, and a request
+leaves it in <code>StBusy</code> awaiting a reply the server may have no reason to send:
+under light load there may be nothing to announce for a long while. A node
+being demoted from hot to warm has a bounded time to shut the protocol down
+cleanly, and losing that race costs the whole connection rather than just this
+mini-protocol.</p>
+<p>Two messages resolve that. <code>MsgCanceled</code> lets the server answer “nothing for
+you” and hand agency back, so the client is never stranded in <code>StBusy</code>. And
+<code>MsgQuit</code> lets the client declare it is leaving without first draining the
+replies it has outstanding – it may be pipelining many requests, and waiting
+for each in turn would make shutdown latency a function of pipeline depth. The
+server closes with <code>MsgDone</code>, so termination is a two-step handshake rather
+than a unilateral act by either side.</p>
 <h3 id="state-agencies-4"><a class="header" href="#state-agencies-4">State agencies</a></h3>
 <div class="table-wrapper">
 <table>
@@ -1274,6 +1320,7 @@ push announcements to downstream peers with minimal latency.</p>
 <tbody>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
+<tr><td style="text-align: left">StQuit</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1284,57 +1331,84 @@ push announcements to downstream peers with minimal latency.</p>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgQuit</td><td></td><td style="text-align: left">StQuit</td></tr>
+<tr><td style="text-align: left">StQuit</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosNotificationRequestNext</td><td></td><td style="text-align: left">StBusy</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockAnnouncement</td><td><code>announcement</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>size</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockOffer</td><td><code>point</code>, <code>eb_size</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosBlockTxsOffer</td><td><code>point</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotesOffer</td><td><code>[1* (slot, voterId)]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBusy</td><td style="text-align: left">MsgCanceled</td><td></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
 <h2 id="codecs-3"><a class="header" href="#codecs-3">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
+; Termination first, then the request, then the responses it can draw. Votes
+; come last so a future votes mini-protocol can take them away without
+; renumbering anything else.
 leiosNotifyMessage
-     = msgLeiosNotificationRequestNext
+     = msgDone
+     / msgQuit
+     / msgCanceled
+     / msgLeiosNotificationRequestNext
      / msgLeiosBlockAnnouncement
      / msgLeiosBlockOffer
      / msgLeiosBlockTxsOffer
-     / msgLeiosVotesOffer
-     / msgClientDone
+     / msgLeiosVotes
 
-msgLeiosNotificationRequestNext = [0]
-msgLeiosBlockAnnouncement       = [1, announcement_header]
-msgLeiosBlockOffer              = [2, point]
-msgLeiosBlockTxsOffer           = [3, point]
-msgLeiosVotesOffer              = [4, [1* (slot, voter_id) ]]
-msgClientDone                   = [5]
+msgDone                         = [0]
+msgQuit                         = [1]
+msgCanceled                     = [2]
+msgLeiosNotificationRequestNext = [3]
+msgLeiosBlockAnnouncement       = [4, announcement]
+msgLeiosBlockOffer              = [5, point, eb_size]
+msgLeiosBlockTxsOffer           = [6, point]
+msgLeiosVotes                   = [7, [1* vote]]
 
-announcement_header = any ; TODO
-point = (slot, eb_hash)
-slot = base.slotNo
+; A ranking block header announces the endorser block its body references,
+; so an announcement is exactly the bytes ChainSync diffuses for that header
+; and carries its own KES signature.
+announcement = header.header
+point = [slot, eb_hash]
+
+; Not redundant with the announcement's size: the point alone does not say
+; which announcement is being offered, and two announcements -- even from
+; different elections -- can name one endorser block in one slot at different
+; sizes.
+eb_size = base.word32
+slot = base.slotno
 eb_hash = base.hash
-voter_id = base.word16  ; REVIEW: size?
+
+vote =
+  [ announcing_rb_hash    : base.hash
+  , voter_id              : base.word16
+  , vote_signature        : leios_bls_signature
+  ]
+
+leios_bls_signature = bytes .size 48
 
 ;# import base as base
+;# import header as header
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional. Several types remain underspecified (<code>any</code>) pending
-further protocol design. See <a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164</a>
-for rationale and ongoing discussion.</p>
+<p>See <a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164#leios-mini-protocols">CIP-0164</a>
+for the rationale behind these messages.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leiosfetch"><a class="header" href="#leiosfetch">LeiosFetch</a></h1>
 <p><strong>Mini-protocol number: 19</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p><code>LeiosFetch</code> is the mini-protocol responsible for fetching Endorser Blocks (EBs)
 and their transaction payloads from peers. It is a pull-based protocol: the
 client explicitly requests either a full EB or a subset of its transactions
@@ -1358,15 +1432,8 @@ the data.</p>
    StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
 
-   StIdle --MsgLeiosVotesRequest--&gt; StVotes
-   StVotes --MsgLeiosVotes--&gt;StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 </pre>
 
 <h3 id="state-agencies-5"><a class="header" href="#state-agencies-5">State agencies</a></h3>
@@ -1379,8 +1446,6 @@ the data.</p>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1391,83 +1456,59 @@ the data.</p>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
 <h2 id="codecs-4"><a class="header" href="#codecs-4">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
+; Termination first, as in LeiosNotify, then each request beside the response
+; it draws.
 leiosBlockFetchMessage
-     = msgLeiosBlockRequest
+     = msgDone
+     / msgLeiosBlockRequest
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgLeiosVotesRequest
-     / msgLeiosVoteDelivery
-     / msgLeiosBlockRangeRequest
-     / msgLeiosNextBlockAndTxsInRange
-     / msgLeiosLastBlockAndTxsInRange
-     / msgClientDone
 
-msgLeiosBlockRequest           = [0, point]
-msgLeiosBlock                  = [1, endorser_block]
-msgLeiosBlockTxsRequest        = [2, point, bitmaps]
-msgLeiosBlockTxs               = [3, tx_list]
-msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
-msgLeiosVoteDelivery           = [5, [1* vote ]]
-msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
-msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
-msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
-msgClientDone                  = [9]
+msgDone                        = [0]
+msgLeiosBlockRequest           = [1, point]
+msgLeiosBlock                  = [2, endorser_block]
+msgLeiosBlockTxsRequest        = [3, point, bitmaps]
+msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
 
-point = (slot, eb_hash)
-start_slot = slot
-end_slot = slot
-start_hash = base.hash
-end_hash = base.hash
-slot = base.slotNo
-voter_id = base.word16  ; REVIEW: size?
+point = [slot, eb_hash]
+slot = base.slotno
 eb_hash = base.hash
-endorser_block = any ; TODO
-bitmaps = any ; TODO
-tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
-vote =
-  [ election_id           : base.slotNo
-  , persistent_voter_id   : base.word16
-  , eligibility_signature : leios_bls_signature
-  , endorser_block_hash   : base.hash
-  , vote_signature        : leios_bls_signature
-  ]
+; map from tx hash to serialized tx byte size
+endorser_block = { * base.hash =&gt; base.word32 }
 
-leios_bls_signature = bytes .size 48
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 =&gt; base.word64 }
+
+tx_list = [ *tx.tx ]
 
 ;# import base as base
 ;# import tx as tx
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional (<code>MsgClientDone</code> at <code>[9]</code>
-in particular). The <code>endorser_block</code>, <code>bitmaps</code>, and <code>tx</code> types remain
-underspecified (<code>any</code>) pending further protocol design, including the
-length-definite encoding for <code>txList</code>. Additionally, the protocol is known
-to be incomplete: catch-up oriented batch request messages are likely to be
-added, and the bitmap-based transaction request structure
-(<code>MsgLeiosBlockTxsRequest</code>) may change significantly as the roaring bitmap
-encoding is still under discussion. See
-<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
-for the latest design decisions.</p>
+<p>The <code>endorser_block</code>, <code>bitmaps</code> and <code>tx</code> types remain underspecified
+pending further protocol design, including whether <code>tx_list</code> is
+length-definite, and the bitmap-based transaction request
+(<code>MsgLeiosBlockTxsRequest</code>) may yet change as the roaring bitmap encoding is
+still under discussion.</p>
+<p>Catch-up oriented batch requests were once expected here
+(<code>MsgLeiosBlockRangeRequest</code> and its replies). They were never implemented
+and are no longer planned, so they are not specified.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="consensus"><a class="header" href="#consensus">Consensus</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -1697,6 +1738,7 @@ near future.</p>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org">Website: ouroboros-consensus</a>: Collection of developer articles on the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chain-validity"><a class="header" href="#chain-validity">Chain validity</a></h1>
 <p>A chain of blocks has to be valid in order to be considered for adoption. In
@@ -1820,6 +1862,7 @@ validly extend a single chain.</p>
 <p>This can be leveraged to skip such checks when replaying a chain that has
 already been validated, for example when restarting a node and having to replay
 the chain from scratch.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="chain-selection"><a class="header" href="#chain-selection">Chain selection</a></h1>
 <p><em>Chain selection</em> is the mechanism, specified in the Protocol associated to the
@@ -2050,6 +2093,7 @@ were implemented on top of the Genesis specification:</p>
 <p>Once the node finishes syncing with the network, this rule gracefully converges
 into the usual length-based comparison used in Praos, so the node can safely
 switch to running only Ouroboros Praos.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="forging-new-blocks"><a class="header" href="#forging-new-blocks">Forging new blocks</a></h1>
 <p>Forging new blocks is the process of packing data that has not yet been included
@@ -2126,6 +2170,7 @@ parties.</li>
 advance, the stability periods, the parts of the epoch, which distribution is
 used (2 epochs ago?)</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="multi-era-considerations"><a class="header" href="#multi-era-considerations">Multi-era considerations</a></h1>
 <p>With the blockchain network evolving, the block format and ledger
@@ -2213,6 +2258,205 @@ and evolve.</p>
 implementors need to take into account:</p>
 <h2 id="time"><a class="header" href="#time">Time</a></h2>
 <h2 id="forecast-range-1"><a class="header" href="#forecast-range-1">Forecast range</a></h2>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
+<h1 id="leios-key-registration-and-committee-selection"><a class="header" href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a></h1>
+<p>Leios endorses transaction availability out-of-band from the Praos block chain
+via <a href="network/node-to-node/leios-notify/README.html">Endorser Blocks</a> (EBs). An
+EB becomes part of the canonical history only once a <strong>Leios certificate</strong>
+attests that a stake-weighted <strong>voting committee</strong> has seen it. This page
+specifies how stake pools register the BLS keys used for that voting, how the
+committee is derived from the stake distribution, and how a certificate is
+constructed and validated.</p>
+<p>Committee derivation is <strong>deterministic</strong>: from a given stake distribution every
+node must arrive at the same committee, because a node that derives a different
+committee would reject certificates that were validly produced under the intended
+one. This page specifies that derivation and the certificate format independently
+of any particular implementation, so that all nodes agree.</p>
+<ul>
+<li><a href="#registering-a-voting-key">Registering a voting key</a>
+<ul>
+<li><a href="#expiry-and-rotation">Expiry and rotation</a></li>
+</ul>
+</li>
+<li><a href="#selecting-the-voting-committee">Selecting the voting committee</a></li>
+<li><a href="#leios-certificates">Leios certificates</a>
+<ul>
+<li><a href="#constructing-a-certificate">Constructing a certificate</a></li>
+<li><a href="#verifying-a-certificate">Verifying a certificate</a></li>
+</ul>
+</li>
+<li><a href="#related-specifications">Related specifications</a></li>
+</ul>
+<h2 id="registering-a-voting-key"><a class="header" href="#registering-a-voting-key">Registering a voting key</a></h2>
+<p>A stake pool advertises the BLS key it will vote with by including an optional
+<code>bls_key</code> in its stake-pool registration certificate (a ledger, Dijkstra-era
+structure — see <a href="ledger/eras/dijkstra.cddl"><code>dijkstra.cddl</code></a>):</p>
+<pre><code class="language-cddl">
+; Pool parameters for stake pool registration
+pool_params =
+  (   operator       : pool_keyhash
+  ,   vrf_keyhash    : vrf_keyhash
+  , ? bls_key        : bls_key/ nil
+  ,   pledge         : coin
+  ,   cost           : coin
+  ,   margin         : unit_interval
+  ,   reward_account : reward_account
+  ,   pool_owners    : set&lt;addr_keyhash&gt;
+  ,   relays         : [* relay]
+  ,   pool_metadata  : pool_metadata/ nil
+  )
+
+vrf_keyhash = hash32
+
+; BLS key
+</code></pre>
+<ul>
+<li>The key pair is <strong>BLS12-381</strong> in the <em>minimal-signature-size</em> configuration:
+verification keys live in G2 (96 bytes), signatures in G1 (48 bytes).</li>
+<li><code>bls_possession_proof</code> is a <strong>proof of possession</strong> (PoP): a signature over
+the verification key under a fixed, Leios-specific domain-separation tag
+(DST). It proves the registrant holds the corresponding secret key and defends
+the aggregate signature scheme against rogue-key attacks. Implementations
+<strong>must</strong> verify the PoP with the same DST that certificate verification uses
+(see below); a key whose PoP does not verify is rejected at registration and
+the pool is treated as having no key.</li>
+<li>The field is optional, so existing (pre-Leios) registrations remain valid. A
+re-registration replaces the pool’s <code>bls_key</code> like any other pool parameter,
+taking effect at the next epoch boundary via the usual stake-snapshot pipeline.</li>
+<li>Because it is a pool parameter, the key travels with the pool through the stake
+distribution snapshots: the per-pool entry of the active stake distribution
+carries the pool’s <code>bls_key</code> alongside its relative stake. That distribution
+is the sole input to committee selection.</li>
+</ul>
+<p>To actually cast votes, the node operating the pool must hold the corresponding
+<strong>BLS signing key</strong>; a node that only knows the on-chain (public) registration
+validates certificates but does not vote.</p>
+<h3 id="expiry-and-rotation"><a class="header" href="#expiry-and-rotation">Expiry and rotation</a></h3>
+<p>A registered voting key is honoured for a bounded number of epochs after its
+registration. A pool that has not re-registered by then keeps its seat but
+loses its key, so it can no longer sign. Expiry takes effect at an epoch
+boundary, like activation, so the set of usable keys is stable throughout an
+epoch.</p>
+<p>The bound is <strong>not a protocol parameter</strong>. It is derived from the KES setup
+already fixed in genesis:</p>
+<pre><code>maxKeyAgeEpochs = ceil(slotsPerKESPeriod * maxKESEvolutions / epochLength) + 2
+</code></pre>
+<p>that is, the KES key lifetime rounded up to whole epochs plus the two epochs of
+activation delay. On mainnet this evaluates to <strong>21 epochs</strong>. Deriving the bound
+rather than governing it keeps voting-key rotation on the same schedule as the
+KES rotation pools must perform anyway, with no second knob that could drift out
+of step.</p>
+<p>Expiry is judged against the epoch the committee is selected <em>for</em>, not the
+epoch its stake snapshot was taken in: a seat’s key arrives through a snapshot
+and may have been registered several epochs earlier, while the age bound is
+applied afresh at each epoch boundary.</p>
+<h2 id="selecting-the-voting-committee"><a class="header" href="#selecting-the-voting-committee">Selecting the voting committee</a></h2>
+<p>For each epoch the voting committee is derived <strong>deterministically</strong> from the
+active stake distribution — the same snapshot used for Praos leader election — so
+that all honest nodes agree on it without any coordination.</p>
+<p>The committee is an ordered list of <strong>seats</strong>. It consists of the top <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>
+pools by active stake, where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the <code>leios committee size</code> protocol
+parameter (key 43 of <code>protocol_param_update</code>). Pools are ordered by active
+stake descending, ties broken by pool ID ascending (byte-wise on the pool’s key
+hash); the first <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are seated, or all of them if fewer than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> pools are
+registered. A pool’s position in that order is its <strong>seat index</strong>, counted from
+<code>0</code>, and that index is what a vote and a certificate refer to.</p>
+<p>A seat is:</p>
+<ul>
+<li><strong>keyed</strong> if its pool has a <code>bls_key</code> that is both valid (PoP verified) and
+unexpired — it can sign, and its <code>bls_pubkey</code> is the seat’s verification key;
+or</li>
+<li><strong>keyless</strong> otherwise — the seat exists and still carries its pool’s stake
+weight, but can never contribute a valid signature.</li>
+</ul>
+<p>Committee membership is thus by stake alone, independent of key registration.</p>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p>Committee derivation is <strong>consensus-critical</strong>: every node on a network must
+use the identical <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and the identical selection procedure. Two nodes that
+derive committees differing in seat membership, ordering, or keyed/keyless
+status will disagree on which certificates are valid and fork.</p>
+</blockquote>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a <strong>liveness</strong> parameter rather than a safety-critical one. Because each
+seat carries its own pool’s stake and the quorum is a predicate on stake (see
+below), a seat count cannot mis-weight or under-represent any pool; it only
+decides how much active stake is <em>eligible</em> to vote. Setting it too low means the
+seated pools together hold less stake than the quorum demands, and then no
+certificate can be formed even with unanimous support. The share of active stake
+held by the top <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> pools drifts as stake moves, so <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> must be governed to
+keep that share above the quorum threshold with headroom for members that are
+offline, keyless, or too slow to vote.</p>
+<h2 id="leios-certificates"><a class="header" href="#leios-certificates">Leios certificates</a></h2>
+<p>A <a href="ledger/eras/dijkstra.cddl">block body</a> may carry a <code>leios_certificate</code>
+attesting the EB announced by (a recent) block header. The certificate records
+<em>which</em> committee seats voted and an aggregate of their signatures:</p>
+<pre><code class="language-cddl">auxiliary_scripts = [* native_script]
+
+auxiliary_data_map =
+  #6.259(
+    { ? 0 : metadata
+    , ? 1 : [* native_script]
+</code></pre>
+<ul>
+<li><code>signers</code> is a <strong>bitfield</strong> over seat indices: bit <code>i</code> set means the committee
+seat with index <code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code>
+marks seats 0 and 2.) It is <code>⌈N/8⌉</code> bytes, where <code>N</code> is the committee size for
+the epoch in which the announcing RB was produced.</li>
+<li>Each voter signs the same certified message — the hash of the RB header that
+announced the EB — with its registered BLS key. <code>signature</code> is the BLS
+aggregate of exactly the signatures of the seats marked in <code>signers</code>.</li>
+</ul>
+<p>The certificate repeats neither the announcing RB’s slot nor the EB hash: the
+announcing RB is determined from the certifying RB’s own chain context, so both
+would be redundant on the wire.</p>
+<h3 id="constructing-a-certificate"><a class="header" href="#constructing-a-certificate">Constructing a certificate</a></h3>
+<p>A block producer that has collected votes for an announced EB aggregates the
+signatures of the voting seats and sets the corresponding bits in <code>signers</code>. A
+certificate is only worth including once the marked seats’ <strong>combined stake
+meets the quorum threshold</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> — the <code>leios quorum stake threshold</code>
+protocol parameter (key 44), expressed as a fraction of <em>total active stake</em>,
+not of the stake seated on the committee.</p>
+<h3 id="verifying-a-certificate"><a class="header" href="#verifying-a-certificate">Verifying a certificate</a></h3>
+<p>To validate a block carrying a <code>leios_certificate</code>, a node MUST:</p>
+<ol>
+<li>Reconstruct the committee for the certificate’s epoch from its own copy of the
+active stake distribution, using the exact selection procedure above.</li>
+<li>Resolve every seat index set in <code>signers</code> to that seat’s <code>bls_pubkey</code>. If
+any set bit resolves to a <strong>keyless</strong> seat, the certificate is invalid — it
+claims a vote from a seat that carries no usable key.</li>
+<li>Verify <code>signature</code> as a BLS aggregate of the resolved public keys over the
+hash of the announcing RB header, under the Leios DST.</li>
+<li>Check that the stake covered by the signing seats meets <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> times the
+total active stake.</li>
+</ol>
+<p>A block whose certificate fails any of these checks is invalid. Steps 1 and 2
+together are why committee derivation must be deterministic and shared: a node
+whose committee diverges from the one the votes were cast under — through a
+different <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, a different selection or seat ordering, or a differing view of
+which keys are usable — rejects legitimately signed certificates and cannot
+follow the chain.</p>
+<h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
+<ul>
+<li><a href="network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
+<a href="network/node-to-node/leios-fetch/README.html">LeiosFetch</a> — how EBs and their
+bodies are announced and fetched between peers, and the <code>vote</code> structure whose
+<code>voter_id</code> is the seat index used here.</li>
+<li><a href="ledger/eras/dijkstra.cddl">Dijkstra era CDDL</a> — <code>bls_key</code>, <code>pool_params</code>,
+<code>eb_references_announcement</code>, <code>leios_certificate</code> and the block header’s
+<code>block_body_contains_leios_cert</code> / <code>eb_references_announcement</code> fields.</li>
+<li><a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164">Leios (CIP-0164)</a>
+— the protocol design and the rationale for stake-based committee selection.</li>
+</ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="storage"><a class="header" href="#storage">Storage</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2295,6 +2539,7 @@ best selection).</p>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org">Website: ouroboros-consensus</a>: Collection of developer articles on the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="cardano-nodes-chaindb"><a class="header" href="#cardano-nodes-chaindb"><code>cardano-node</code>’s ChainDB</a></h1>
 <p>In the Haskell reference implementation, the Storage layer manages a <code>ChainDB</code>,
@@ -2407,6 +2652,7 @@ checking consistency and detect hardware corruptions.</p>
 <p>Conversion among backends is also provided by <a href="https://github.com/IntersectMBO/ouroboros-consensus/tree/main/ouroboros-consensus-cardano/app/snapshot-converter.hs">the
 <code>snapshot-converter</code>
 tool</a>.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="mempool"><a class="header" href="#mempool">Mempool</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2431,7 +2677,7 @@ is the one that will be forwarded to other peers, but this is not a
 requirement.</p>
 <p>The bytes in the serialized transaction do not change by translation, however
 the tag in the tagged-sum will. See
-<a href="#codecs-2">the TxSubmission2 codecs</a>.</p>
+<a href="network/node-to-node/txsubmission2#codecs">the TxSubmission2 codecs</a>.</p>
 </blockquote>
 <p>Transactions are <em>pending</em> on some Ledger State if they have not been included
 in any block since Genesis up until such Ledger State. Transactions are <em>valid</em>
@@ -2560,6 +2806,7 @@ transactions.</p>
 <ul>
 <li><a href="https://ouroboros-consensus.cardano.intersectmbo.org/pdfs/report.pdf">Technical report: Cardano Consensus and Storage Layer</a>: Documentation of the Haskell implementation of consensus components</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-1"><a class="header" href="#ledger-1">Ledger</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2604,6 +2851,7 @@ and also the ledger implementations against each other is crucial. For this
 purpose, a conformance test suite with <a href="https://github.com/cardano-scaling/cardano-blueprint/tree/main/src/ledger/conformance-test-vectors">implementation-independent test
 vectors</a>
 can be used.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-blocks"><a class="header" href="#ledger-blocks">Ledger: Blocks</a></h1>
 <p>Blocks are a fundamental component of all blockchains and represent one of two
@@ -2671,6 +2919,68 @@ separately since this map is provided, effectively, by the node which
 created the block, rather than by the creators of the transactions.</p>
 </li>
 </ol>
+<div class="leios">
+<h2 id="leios-block-structure-changes"><a class="header" href="#leios-block-structure-changes">Leios block structure changes</a></h2>
+<p>Leios changes the block structure in two ways:</p>
+<ul>
+<li>Block headers are re-used as announcements of endorser blocks, via an
+<code>eb_references_announcement</code> field</li>
+<li>Blocks may certify an EB and then
+<ul>
+<li>set <code>block_body_contains_leios_cert</code> in the header</li>
+<li>contain a <code>leios_certificate</code> instead of transactions in the body</li>
+</ul>
+</li>
+</ul>
+<p>How the committee behind such a certificate is derived, and how the certificate
+is verified against it, is described under
+<a href="#leios-key-registration-and-committee-selection">Leios key registration and committee selection</a>.</p>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The <a href="ledger/eras/dijkstra.cddl">djikstra.cddl</a> in the <code>cardano-blueprint</code> is matching
+the same-named branch of the <code>cardano-ledger</code> upstream repository. This is the
+block format currently used on the https://www.musashi.network/ Leios testnet.</p>
+</blockquote>
+<h3 id="changed-dijkstra-header_body"><a class="header" href="#changed-dijkstra-header_body">Changed dijkstra header_body</a></h3>
+<pre><code class="language-cddl">header_body =
+  [ block_number                   : block_number
+  , slot                           : slot
+  , prev_hash                      : hash32/ nil
+  , issuer_vkey                    : vkey
+  , vrf_vkey                       : vrf_vkey
+  , vrf_result                     : vrf_cert
+  , block_body_size                : uint .size 4
+  , block_body_hash                : hash32                           ; merkle triple root
+  , operational_cert
+  , header_version_info
+  , block_body_contains_leios_cert : bool
+  , eb_references_announcement     : eb_references_announcement/ nil
+  ]
+</code></pre>
+<p>with</p>
+<pre><code class="language-cddl">
+eb_references_announcement =
+  [ eb_hash : hash32
+  , eb_size : uint .size 4 ; size of the EB references
+</code></pre>
+<h3 id="changed-dijkstra-block"><a class="header" href="#changed-dijkstra-block">Changed dijkstra block</a></h3>
+<pre><code class="language-cddl">
+block_body =
+  [ transactions      : [* block_transaction]
+  , leios_certificate : leios_certificate/ nil
+  , peras_certificate : peras_certificate/ nil
+</code></pre>
+<p>with</p>
+<pre><code class="language-cddl">auxiliary_scripts = [* native_script]
+
+auxiliary_data_map =
+  #6.259(
+    { ? 0 : metadata
+    , ? 1 : [* native_script]
+</code></pre>
+</div>
+
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="determinism"><a class="header" href="#determinism">Determinism</a></h1>
 <p>An important principle that occurs in a few places throughout the Cardano ledger
@@ -2706,6 +3016,7 @@ exist.</li>
 <p>To take advantage of these properties, ledger implementers must distinguish
 between these checks in the ledger in such a way as to allow transactions to be
 (re-)processed without repeating expensive computation.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="the-ledger-state-transition"><a class="header" href="#the-ledger-state-transition">The ledger state transition</a></h1>
 <p>The ledger can be fundamentally seen as a state transition function. Given a
@@ -2756,6 +3067,7 @@ the network. Consequently, the full function is defined in the ledger specs -
 formal or semi-formal expressions of the computation to be performed. More
 detail on how to read the specs is detailed in
 <a href="#how-to-read-the-ledger-specs">How to read the ledger specs</a></p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="block-validity"><a class="header" href="#block-validity">Block Validity</a></h1>
 <blockquote>
@@ -2848,6 +3160,7 @@ here and only apply the transition.</li>
 </ol>
 <p>Node developers should bear these scenarios in mind when considering how to
 structure their node transition function.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1">
@@ -2868,6 +3181,7 @@ script. <a href="#fr-1-1">↩</a></p>
 <blockquote>
 <p>TODO This section is a stub</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="transaction-fee"><a class="header" href="#transaction-fee">Transaction fee</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-warning">
@@ -2966,6 +3280,7 @@ TODO: Explain protocol parameters somewhere</p>
 </ul>
 <p>Thus, the total minimum fee is <code>578786</code> lovelace.</p>
 <p>Note that historically calculating this has been pretty opaque, and so many people have resorted to slightly padding the minimum fee, and I believe this is why the on-chain minimum fee (which is declared in the transaction body) is <code>601677</code> lovelace.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="ledger-block-validation"><a class="header" href="#ledger-block-validation">Ledger: Block Validation</a></h1>
 <p>Block validation is the process of applying a set of ledger rules to a candidate block before adding it to the blockchain and updating the state of the ledger.
@@ -3310,6 +3625,7 @@ EUC[EraRule UTXOW Conway]
             ABBT --&gt; BBodyState[(BbodyState @era ls')]
 </pre>
 
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="plutus"><a class="header" href="#plutus">Plutus</a></h1>
 <p>Plutus is Cardano’s on-chain smart contract platform.
@@ -3341,6 +3657,7 @@ You can find the Haddock <a href="https://plutus.cardano.intersectmbo.org/haddoc
 <p><a href="https://en.wikipedia.org/wiki/CEK_Machine">CEK machine Wikipedia page</a>.</p>
 </li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="syntax"><a class="header" href="#syntax">Syntax</a></h1>
 <p>The following listing shows the concrete syntax of Plutus.
@@ -3382,6 +3699,7 @@ De Bruijn indices are used in serialized scripts.
 It therefore makes the most sense for a CEK machine implementation to use de Bruijn indices.</p>
 <p>When using de Bruijn indices, the binder <code>𝑥</code> in <code>(lam 𝑥 𝑀)</code> is irrelevant, and any number can be used.
 0 is a good choice since it is not a valid de Bruijn index.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="built-in-types-and-functions"><a class="header" href="#built-in-types-and-functions">Built-in Types and Functions</a></h1>
 <h2 id="built-in-types"><a class="header" href="#built-in-types">Built-in Types</a></h2>
@@ -3492,6 +3810,7 @@ Moreover, not all built-in functions are available in every Plutus ledger langua
 Scripts using an unavailable built-in function will be rejected by the Cardano node.
 More details will be provided in Script Deserialization and Execution.</p>
 <p>For the full list of UPLC built-in functions, their signatures, semantics, and supported Plutus ledger language versions and protocol versions, refer to the <a href="https://plutus.cardano.intersectmbo.org/resources/plutus-core-spec.pdf">Plutus Core Spec</a>, Section 4.3 (Built-in types and functions).</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="the-cek-machine"><a class="header" href="#the-cek-machine">The CEK Machine</a></h1>
 <p>This page presents the operational semantics of the Plutus language using an abstract machine - a <a href="https://en.wikipedia.org/wiki/CEK_Machine">CEK machine</a>.
@@ -3630,6 +3949,7 @@ In this case the <code>force</code> makes the builtin application saturated, so 
 In this case, all arguments have been evaluated, so the machine pops the frame and returns a <code>constr</code> value.</p>
 <p><a id="25" href="#25"><strong>25.</strong></a> If the returned value is a constructor application with index <code>𝑖</code>, and the top stack frame is a <code>case</code> frame, the machine will evaluate the <code>𝑖</code>th branch - <code>𝑀𝑖</code> - applied to arguments <code>𝑉ₘ … 𝑉₁</code> (it is important to note that arguments under <code>constr</code> are reversed when passing to a <code>case</code> branch - this is done for performance reasons).
 To do so, it pops the frame, and pushes <code>m</code> frames, each representing an application, with the top frame corresponding to <code>𝑉ₘ</code> (the first argument).</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="serialization"><a class="header" href="#serialization">Serialization</a></h1>
 <h2 id="serializing-data-objects-using-the-cbor-format"><a class="header" href="#serializing-data-objects-using-the-cbor-format">Serializing Data Objects Using the CBOR Format</a></h2>
@@ -3655,6 +3975,7 @@ The serialization method used by the Haskell node is described in the Plutus Cor
 <p>The <code>flat</code>-serialized script is then serialized into CBOR, based on which script hashes are calculated.</p>
 <p>All Cardano node implementations must agree on how Plutus scripts are serialized.
 The serialization method used by the Haskell node is described in the Plutus Core script, Appendix C.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="client-interfaces"><a class="header" href="#client-interfaces">Client interfaces</a></h1>
 <p>Node implementations may offer interfaces to clients for submitting new data to
@@ -3697,6 +4018,7 @@ with other UTxO-based blockchains.</li>
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p>Please help us keep this list up-to-date by <a href="https://github.com/cardano-scaling/cardano-blueprint/edit/main/src/client/README.md">suggesting an edit</a>.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="node-to-client-ntc"><a class="header" href="#node-to-client-ntc">Node-To-Client (NTC)</a></h1>
 <p><code>cardano-node</code> implements a set of mini-protocols that follow rules very similar
@@ -3714,6 +4036,7 @@ client/server APIs.</p>
 <li><a href="#node-to-client-ntc">TxMonitor</a>: to monitor the status of transactions,</li>
 <li><a href="#node-to-client-ntc">LocalChainSync</a>: to retrieve chains of blocks from the node.</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="localstatequery"><a class="header" href="#localstatequery">LocalStateQuery</a></h1>
 <blockquote>
@@ -3819,6 +4142,7 @@ timeOfDayPico = bigint
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
 <p>TODO: Era-specific query with an involved answer</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1-1">
@@ -3829,6 +4153,7 @@ timeOfDayPico = bigint
 <h1 id="utxo-rpc"><a class="header" href="#utxo-rpc">UTxO-RPC</a></h1>
 <p>A gRPC interface for UTxO Blockchains that is implemented by a few Cardano components.</p>
 <p>See the official website <a href="https://utxorpc.org/">utxorpc.org</a> for a full introduction and documentation.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="codec-basics"><a class="header" href="#codec-basics">Codec basics</a></h1>
 <p>Common encoding format and binary interface description used across blueprints.</p>
@@ -3844,30 +4169,49 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">blockNo = word64
-epochNo = word64
-slotNo = word64
+<pre><code class="language-cddl">;; Blockchain types
+pastEra = [bound, bound]
+currentEra&lt;st&gt; = [bound, st]
+bound = [relativeTime, slotno, epochno]
+eraIdx = word8
+individualPoolStake = [stake, hash]
+nonce = [0] / [1, hash]
+point = [] / [ slotno, hash ]
+poolDistr = map&lt;keyhash, individualPoolStake&gt;
+slotno = word64
+roundno = word64
+stake = rational
 
+withOrigin&lt;v&gt; = [] / [v]
+
+;; Collections
+either&lt;x, y&gt; = [0, x] / [1, y]
+map&lt;x, y&gt; = { * x =&gt; y }
+maybe&lt;x&gt; = [] / [x]
+seq&lt;x&gt; = [*23 x] / [24* x] ; encoded with indefinite-length encoding
+set&lt;x&gt; = #6.258([* x])
+
+;; Types from other packages
+blockno = word64
+epochno = word64
 coin = word64
-
 rational = [int, int]
-
 keyhash = bstr .size 28
 hash = bstr .size 32
-
 relativeTime = int
 
-; Words
-word8  = uint .size 1; 1 byte
-word16 = uint .size 2; 2 bytes
-word32 = uint .size 4; 4 bytes
-word64 = uint .size 8; 8 bytes
+;; Base word types
+word8  = uint .size 1
+word16 = uint .size 2
+word32 = uint .size 4
+word64 = uint .size 8
 </code></pre>
 <p>In addition, we add the following types to represent tag-encoded
 alternatives, commonly used at the consensus level to encode a
 different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">telescope7&lt;byron, shelley, allegra, mary, alonzo, babbage, conway&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
+<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
     [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
     [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
     [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
@@ -3875,8 +4219,9 @@ different tag for each one of the eras in the Cardano blockchain:</p>
     [pastEra, currentEra&lt;shelley&gt;] /
     [currentEra&lt;byron&gt;]
 
-ns7&lt;byron, shelley, allegra, mary, alonzo, babbage, conway&gt;
-  = [6, conway] /
+ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [7, dijkstra] /
+    [6, conway] /
     [5, babbage] /
     [4, alonzo] /
     [3, mary] /
@@ -3898,6 +4243,7 @@ in qualified by the era name. We will usually import the Ledger CDDLs as:</p>
 ;# include babbage as babbage
 ;# include conway as conway
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
 <h1 id="styleguide"><a class="header" href="#styleguide">Styleguide</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -4029,10 +4375,85 @@ How about code blocks?</p>
 <pre><code>cargo install mdbook-alerts
 </code></pre>
 </blockquote>
+<h2 id="marking-proposed-leios-changes"><a class="header" href="#marking-proposed-leios-changes">Marking proposed (Leios) changes</a></h2>
+<p>Some blueprints describe changes that are not part of the currently active
+protocol yet, but are <em>proposed</em> future changes - most notably <a href="https://leios.cardano-scaling.org">Leios</a>. Such
+content is marked so readers can tell it apart from the current protocol and,
+ideally, turn it on or off.</p>
+<p>Wrap the proposed content in a <code>&lt;div class="leios"&gt;</code> block:</p>
+<pre><code class="language-markdown">&lt;div class="leios"&gt;
+
+## Leios block structure changes
+
+Leios changes the block structure in two ways:
+
+- ...
+
+&lt;/div&gt;
+</code></pre>
+<p>Note the <strong>blank lines</strong> right after the opening <code>&lt;div ...&gt;</code> and right before
+the closing <code>&lt;/div&gt;</code>. They are required so that the markdown inside the block
+(headings, lists, <code>{{#include}}</code> snippets, …) is still rendered as markdown.</p>
+<p>Such blocks are <strong>hidden by default</strong> - a plain page shows the current protocol
+only. A very visible <strong><code>🌊 Leios changes</code></strong> toggle in the top menu bar reveals
+them, adding a <code>?leios=on</code> query parameter to the URL. The choice is sticky: it
+is carried onto the links you follow, so it persists while navigating the book,
+and a <code>?leios=on</code> link can be shared directly. When shown, each block is set off
+as a purple, badged callout.</p>
+<p>When content is inside such a block there is no need to also add a “(proposed)”
+suffix to its headings - the callout badge already conveys that.</p>
+<h3 id="whole-pages"><a class="header" href="#whole-pages">Whole pages</a></h3>
+<p>A page that describes proposed Leios changes in its entirety needs no <code>&lt;div&gt;</code>.
+Declare it in <strong>front matter</strong> instead:</p>
+<pre><code class="language-markdown">---
+leios: new
+---
+
+# LeiosFetch
+</code></pre>
+<p>Its sidebar entry (and that of any sub-chapters) is then hidden while the
+toggle is off and highlighted with a 🌊 icon while it is on. The entry of the
+page you are currently reading is never hidden, so toggling cannot lose your
+place in the table of contents.</p>
+<p>Such a page also gets a <strong>banner</strong> prepended automatically, saying that it is
+proposed and pointing at CIP-0164. The banner sits deliberately <em>outside</em> the
+toggle, because the page stays reachable by direct link and through the search
+even while the toggle is off - it must announce itself either way. So do not
+hand-write a “this is proposed” warning at the top of the page; the banner is
+that warning, and one generated copy cannot drift out of sync with the others.</p>
+<p>Do give such pages a “(proposed)” suffix in <code>SUMMARY.md</code>: the sidebar entry is
+also visible in the search results and the printed book, where the toggle does
+not apply.</p>
+<p>A page that merely <em>contains</em> a <code>&lt;div class="leios"&gt;</code> section needs no front
+matter - it is detected automatically and its entry is highlighted (never
+hidden, since it documents the current protocol too).</p>
+<p>Both are collected by <code>.mdbook/leios-preprocessor.py</code> into a
+<code>window.LEIOS_PAGES</code> manifest, which <code>.mdbook/leios-toggle.js</code> uses to mark the
+table of contents. The detection ignores fenced and inline code, so this very
+page - which only quotes the convention - is not itself flagged.</p>
+<h3 id="cddl-shared-between-the-current-protocol-and-leios"><a class="header" href="#cddl-shared-between-the-current-protocol-and-leios">CDDL shared between the current protocol and Leios</a></h3>
+<p>A <code>{{#include}}</code> is atomic, so a code block cannot be partly hidden by the
+toggle. Where one <code>.cddl</code> file carries both current-protocol and proposed
+rules, as the network codecs do (Leios is introduced with the Dijkstra era), do
+not try to split it. Mark the proposed lines with a <strong>comment in the CDDL</strong>
+itself:</p>
+<pre><code class="language-cddl">cardanoBlock = byron.block
+             / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
+</code></pre>
+<p>The comment is part of the code block, so it is visible whichever way the
+toggle is set - which is the point, since the rule it explains is too.</p>
+<p>This is not an option for <code>src/ledger/eras/*.cddl</code>: those are generated and
+overwritten by the <code>sync-ledger-cddls</code> workflow, so any comment added by hand
+is lost on the next sync. Include them by line range, and re-check the ranges
+after a sync - they silently shift.</p>
 <h2 id="footnotes"><a class="header" href="#footnotes">Footnotes</a></h2>
 <p>Additional information that would complicate the read-flow can be put into footnotes <sup class="footnote-reference" id="fr-example-1"><a href="#footnote-example">1</a></sup>.</p>
 <h2 id="other-stuff"><a class="header" href="#other-stuff">Other stuff</a></h2>
 <p>The footnote should appear below. If not, we need to contribute this to <code>mdbook</code>.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-example">
@@ -4123,6 +4544,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <p>Besides the many ways to engage through issues and discussions, we also use text and video channels on the <a href="https://discord.gg/47YkBFaTtT">Cardano Scaling Discord server</a> for informal chats.</p>
 <p>There is a weekly <a href="https://discord.gg/xvmdpdsM?event=1346780137806626816">office hours event</a> to which anyone is welcome and we are looking forward to see you there!</p>
 <p>Last but not least and probably the best way to contribute: Share the love for blueprints! 📘📐💙</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="logbook"><a href="#logbook" class="header">Logbook</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4207,6 +4629,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <li>Socket/plug seems to be CDDL extension point: https://datatracker.ietf.org/doc/html/rfc8610#section-3.9</li>
 <li>There is also <code>generics</code> feature, which seems even more powerful way to parameterize cddl rules</li>
 </ul>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="logo"><a href="#logo" class="header">Logo</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4226,6 +4649,7 @@ enforced in CI. With <code>nix develop</code> active:</p>
 <p><img src="logo/logo-dark.svg" alt=""></p>
 <br />
 <p><img src="logo/logo-wordmark-dark.svg" alt=""></p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="license"><a href="#license" class="header">License</a></h1>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
@@ -4421,6 +4845,7 @@ distributed under the License is distributed on an “AS IS” BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 
@@ -4463,6 +4888,7 @@ limitations under the License.</p>
         <!-- Custom JS scripts -->
         <script src=".mdbook/mermaid.min.js"></script>
         <script src=".mdbook/mermaid-init.js"></script>
+        <script src=".mdbook/leios-toggle.js"></script>
 
         <script>
         window.addEventListener('load', function() {

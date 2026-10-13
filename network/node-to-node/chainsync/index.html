@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-ee96c1a1.js";
+            window.path_to_searchindex_js = "../../../searchindex-fff3d66f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-fb937a43.js"></script>
+        <script src="../../../toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -336,10 +336,10 @@ msgIntersectFound      = [5, point, tip]
 msgIntersectNotFound   = [6, tip]
 chainSyncMsgDone       = [7]
 
-tip = [ point, base.blockNo ]
+tip = [ point, base.blockno ]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# import base as base
 ;# import header as header
@@ -348,13 +348,16 @@ point = []                         ; the genesis point
 for the particular era:</p>
 <pre><code class="language-cddl">;; header.cddl
 header
- = base.ns7&lt;byronHeader,
+ = base.ns8&lt;byronHeader,
             serialisedShelleyHeader&lt;shelley.header&gt;,
             serialisedShelleyHeader&lt;allegra.header&gt;,
             serialisedShelleyHeader&lt;mary.header&gt;,
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
-            serialisedShelleyHeader&lt;conway.header&gt;&gt;
+            serialisedShelleyHeader&lt;conway.header&gt;,
+            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+            ; introduced with it.
+            serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
             / [byronBoundaryIdx, #6.24(bytes .cbor byron.ebbhead)]
@@ -365,7 +368,7 @@ byronRegularIdx = [1, base.word32]
 serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 
 ; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns7&lt;&gt;) are baked in as concrete definitions.
+; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
 ; cddlc does not rewrite such references through chained imports, so a parent
 ; that imports this module would see undefined era names.
 ;# include byron as byron
@@ -375,8 +378,10 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 ;# include alonzo as alonzo
 ;# include babbage as babbage
 ;# include conway as conway
+;# include dijkstra as dijkstra
 ;# import base as base
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 
@@ -431,6 +436,7 @@ serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
         <!-- Custom JS scripts -->
         <script src="../../../.mdbook/mermaid.min.js"></script>
         <script src="../../../.mdbook/mermaid-init.js"></script>
+        <script src="../../../.mdbook/leios-toggle.js"></script>
 
 
 

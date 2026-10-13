@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-ee96c1a1.js";
+            window.path_to_searchindex_js = "../../../searchindex-fff3d66f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-fb937a43.js"></script>
+        <script src="../../../toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -287,7 +287,7 @@ msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# include block as block
 ;# import base as base
@@ -305,6 +305,9 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
+             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
+             ; introduced with it.
+             / [8, dijkstra.block]
 
 ;# import byron as byron
 ;# import shelley as shelley
@@ -313,7 +316,9 @@ cardanoBlock = byron.block
 ;# import alonzo as alonzo
 ;# import babbage as babbage
 ;# import conway as conway
+;# import dijkstra as dijkstra
 </code></pre>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 
@@ -368,6 +373,7 @@ cardanoBlock = byron.block
         <!-- Custom JS scripts -->
         <script src="../../../.mdbook/mermaid.min.js"></script>
         <script src="../../../.mdbook/mermaid-init.js"></script>
+        <script src="../../../.mdbook/leios-toggle.js"></script>
 
 
 

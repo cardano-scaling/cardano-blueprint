@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>LeiosFetch (proposed) - Cardano Blueprint</title>
+        <title>LeiosFetch - Cardano Blueprint</title>
 
 
         <!-- Custom HTML head -->
@@ -36,10 +36,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-ee96c1a1.js";
+            window.path_to_searchindex_js = "../../../searchindex-fff3d66f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-fb937a43.js"></script>
+        <script src="../../../toc-404c79fe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -182,15 +182,16 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<div class="leios-banner">
+<p>This page describes <strong>proposed</strong> changes that are not yet part of the Cardano
+mainnet. They are specified as part of
+<a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>, an
+extension to the Ouroboros consensus protocol aimed at significantly increasing
+transaction throughput. Details are subject to change.</p>
+</div>
+
 <h1 id="leiosfetch"><a class="header" href="#leiosfetch">LeiosFetch</a></h1>
 <p><strong>Mini-protocol number: 19</strong></p>
-<blockquote class="blockquote-tag blockquote-tag-warning">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
-<p>This protocol is <strong>proposed</strong> and not yet part of the Cardano mainnet. It is
-specified as part of <a href="https://github.com/cardano-foundation/CIPs/pull/1167">Leios (CIP-0164)</a>,
-an extension to the Ouroboros consensus protocol aimed at significantly
-increasing transaction throughput. Details are subject to change.</p>
-</blockquote>
 <p><code>LeiosFetch</code> is the mini-protocol responsible for fetching Endorser Blocks (EBs)
 and their transaction payloads from peers. It is a pull-based protocol: the
 client explicitly requests either a full EB or a subset of its transactions
@@ -214,15 +215,8 @@ the data.</p>
    StIdle --MsgLeiosBlockTxsRequest--&gt; StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--&gt; StIdle
 
-   StIdle --MsgLeiosVotesRequest--&gt; StVotes
-   StVotes --MsgLeiosVotes--&gt;StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--&gt; StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--&gt; StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--&gt; StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 </pre>
 
 <h3 id="state-agencies"><a class="header" href="#state-agencies">State agencies</a></h3>
@@ -235,8 +229,6 @@ the data.</p>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left"><span class="agency-initiator">Initiator</span></td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left"><span class="agency-responder">Responder</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -247,83 +239,59 @@ the data.</p>
 <tr><th style="text-align: left">From state</th><th style="text-align: left">Message</th><th>Parameters</th><th style="text-align: left">To state</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgClientDone</td><td></td><td style="text-align: left">End</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgDone</td><td></td><td style="text-align: left">End</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosVotesRequest</td><td><code>[1* (slot, voter_id)]</code></td><td style="text-align: left">StVotes</td></tr>
-<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRangeRequest</td><td><code>start_slot</code>, <code>end_slot</code>, <code>start_hash</code>, <code>end_hash</code></td><td style="text-align: left">StBlockRange</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
 <tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StVotes</td><td style="text-align: left">MsgLeiosVotes</td><td><code>[1* vote]</code></td><td style="text-align: left">StIdle</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosNextBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StBlockRange</td></tr>
-<tr><td style="text-align: left">StBlockRange</td><td style="text-align: left">MsgLeiosLastBlockAndTxsInRange</td><td><code>endorser_block</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
+; Termination first, as in LeiosNotify, then each request beside the response
+; it draws.
 leiosBlockFetchMessage
-     = msgLeiosBlockRequest
+     = msgDone
+     / msgLeiosBlockRequest
      / msgLeiosBlock
      / msgLeiosBlockTxsRequest
      / msgLeiosBlockTxs
-     / msgLeiosVotesRequest
-     / msgLeiosVoteDelivery
-     / msgLeiosBlockRangeRequest
-     / msgLeiosNextBlockAndTxsInRange
-     / msgLeiosLastBlockAndTxsInRange
-     / msgClientDone
 
-msgLeiosBlockRequest           = [0, point]
-msgLeiosBlock                  = [1, endorser_block]
-msgLeiosBlockTxsRequest        = [2, point, bitmaps]
-msgLeiosBlockTxs               = [3, tx_list]
-msgLeiosVotesRequest           = [4, [1* (slot, voter_id) ]]
-msgLeiosVoteDelivery           = [5, [1* vote ]]
-msgLeiosBlockRangeRequest      = [6, start_slot, end_slot, start_hash, end_hash]
-msgLeiosNextBlockAndTxsInRange = [7, endorser_block, tx_list]
-msgLeiosLastBlockAndTxsInRange = [8, endorser_block, tx_list]
-msgClientDone                  = [9]
+msgDone                        = [0]
+msgLeiosBlockRequest           = [1, point]
+msgLeiosBlock                  = [2, endorser_block]
+msgLeiosBlockTxsRequest        = [3, point, bitmaps]
+msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
 
-point = (slot, eb_hash)
-start_slot = slot
-end_slot = slot
-start_hash = base.hash
-end_hash = base.hash
-slot = base.slotNo
-voter_id = base.word16  ; REVIEW: size?
+point = [slot, eb_hash]
+slot = base.slotno
 eb_hash = base.hash
-endorser_block = any ; TODO
-bitmaps = any ; TODO
-tx_list = [ *tx.tx ] ; REVIEW: length-definite encoding TBD
 
-vote =
-  [ election_id           : base.slotNo
-  , persistent_voter_id   : base.word16
-  , eligibility_signature : leios_bls_signature
-  , endorser_block_hash   : base.hash
-  , vote_signature        : leios_bls_signature
-  ]
+; map from tx hash to serialized tx byte size
+endorser_block = { * base.hash =&gt; base.word32 }
 
-leios_bls_signature = bytes .size 48
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 =&gt; base.word64 }
+
+tx_list = [ *tx.tx ]
 
 ;# import base as base
 ;# import tx as tx
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The CBOR tags in this specification are provisional (<code>MsgClientDone</code> at <code>[9]</code>
-in particular). The <code>endorser_block</code>, <code>bitmaps</code>, and <code>tx</code> types remain
-underspecified (<code>any</code>) pending further protocol design, including the
-length-definite encoding for <code>txList</code>. Additionally, the protocol is known
-to be incomplete: catch-up oriented batch request messages are likely to be
-added, and the bitmap-based transaction request structure
-(<code>MsgLeiosBlockTxsRequest</code>) may change significantly as the roaring bitmap
-encoding is still under discussion. See
-<a href="https://github.com/cardano-foundation/CIPs/pull/1167">CIP-0164 PR #1167</a>
-for the latest design decisions.</p>
+<p>The <code>endorser_block</code>, <code>bitmaps</code> and <code>tx</code> types remain underspecified
+pending further protocol design, including whether <code>tx_list</code> is
+length-definite, and the bitmap-based transaction request
+(<code>MsgLeiosBlockTxsRequest</code>) may yet change as the roaring bitmap encoding is
+still under discussion.</p>
+<p>Catch-up oriented batch requests were once expected here
+(<code>MsgLeiosBlockRangeRequest</code> and its replies). They were never implemented
+and are no longer planned, so they are not specified.</p>
 </blockquote>
+<script>window.LEIOS_PAGES = {"consensus/leios-committee.html": "new", "ledger/concepts/blocks.html": "modified", "network/node-to-node/leios-fetch/index.html": "new", "network/node-to-node/leios-notify/index.html": "new"};</script>
 
                     </main>
 
@@ -378,6 +346,7 @@ for the latest design decisions.</p>
         <!-- Custom JS scripts -->
         <script src="../../../.mdbook/mermaid.min.js"></script>
         <script src="../../../.mdbook/mermaid-init.js"></script>
+        <script src="../../../.mdbook/leios-toggle.js"></script>
 
 
 
