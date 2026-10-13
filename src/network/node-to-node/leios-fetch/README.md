@@ -1,13 +1,10 @@
+---
+leios: new
+---
+
 # LeiosFetch
 
 **Mini-protocol number: 19**
-
-> [!WARNING]
->
-> This protocol is **proposed** and not yet part of the Cardano mainnet. It is
-> specified as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
 
 `LeiosFetch` is the mini-protocol responsible for fetching Endorser Blocks (EBs)
 and their transaction payloads from peers. It is a pull-based protocol: the
@@ -36,41 +33,27 @@ graph LR
    StIdle --MsgLeiosBlockTxsRequest--> StBlockTxs
    StBlockTxs --MsgLeiosBlockTxs--> StIdle
 
-   StIdle --MsgLeiosVotesRequest--> StVotes
-   StVotes --MsgLeiosVotes-->StIdle
-
-   StIdle --MsgLeiosBlockRangeRequest--> StBlockRange
-   StBlockRange --MsgLeiosNextBlockAndTxsInRange--> StBlockRange
-   StBlockRange --MsgLeiosLastBlockAndTxsInRange--> StIdle
-
    class StIdle client
-   class StBlock,StBlockTxs,StVotes,StBlockRange server
+   class StBlock,StBlockTxs server
 ```
 
 ### State agencies
 
-| State        | Agency                                          |
-| :----------- | :---------------------------------------------- |
-| StIdle       | <span class="agency-initiator">Initiator</span> |
-| StBlock      | <span class="agency-responder">Responder</span> |
-| StBlockTxs   | <span class="agency-responder">Responder</span> |
-| StVotes      | <span class="agency-responder">Responder</span> |
-| StBlockRange | <span class="agency-responder">Responder</span> |
+| State      | Agency                                          |
+| :--------- | :---------------------------------------------- |
+| StIdle     | <span class="agency-initiator">Initiator</span> |
+| StBlock    | <span class="agency-responder">Responder</span> |
+| StBlockTxs | <span class="agency-responder">Responder</span> |
 
 ### State transitions
 
-| From state   | Message                        | Parameters                                         | To state     |
-| :----------- | :----------------------------- | -------------------------------------------------- | :----------- |
-| StIdle       | MsgClientDone                  |                                                    | End          |
-| StIdle       | MsgLeiosBlockRequest           | `point`                                            | StBlock      |
-| StIdle       | MsgLeiosBlockTxsRequest        | `point`, `bitmaps`                                 | StBlockTxs   |
-| StIdle       | MsgLeiosVotesRequest           | `[1* (slot, voter_id)]`                            | StVotes      |
-| StIdle       | MsgLeiosBlockRangeRequest      | `start_slot`, `end_slot`, `start_hash`, `end_hash` | StBlockRange |
-| StBlock      | MsgLeiosBlock                  | `endorser_block`                                   | StIdle       |
-| StBlockTxs   | MsgLeiosBlockTxs               | `point`, `bitmaps`, `tx_list`                      | StIdle       |
-| StVotes      | MsgLeiosVotes                  | `[1* vote]`                                        | StIdle       |
-| StBlockRange | MsgLeiosNextBlockAndTxsInRange | `endorser_block`, `tx_list`                        | StBlockRange |
-| StBlockRange | MsgLeiosLastBlockAndTxsInRange | `endorser_block`, `tx_list`                        | StIdle       |
+| From state | Message                 | Parameters                    | To state   |
+| :--------- | :---------------------- | ----------------------------- | :--------- |
+| StIdle     | MsgDone                 |                               | End        |
+| StIdle     | MsgLeiosBlockRequest    | `point`                       | StBlock    |
+| StBlock    | MsgLeiosBlock           | `endorser_block`              | StIdle     |
+| StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps`            | StBlockTxs |
+| StBlockTxs | MsgLeiosBlockTxs        | `point`, `bitmaps`, `tx_list` | StIdle     |
 
 ## Codecs
 
@@ -83,13 +66,12 @@ The messages depicted in the state machine follow this CDDL specification:
 
 > [!NOTE]
 >
-> The CBOR tags in this specification are provisional (`MsgClientDone` at `[9]`
-> in particular). The `endorser_block`, `bitmaps`, and `tx` types remain
-> underspecified (`any`) pending further protocol design, including the
-> length-definite encoding for `txList`. Additionally, the protocol is known
-> to be incomplete: catch-up oriented batch request messages are likely to be
-> added, and the bitmap-based transaction request structure
-> (`MsgLeiosBlockTxsRequest`) may change significantly as the roaring bitmap
-> encoding is still under discussion. See
-> [CIP-0164 PR #1167](https://github.com/cardano-foundation/CIPs/pull/1167)
-> for the latest design decisions.
+> The `endorser_block`, `bitmaps` and `tx` types remain underspecified
+> pending further protocol design, including whether `tx_list` is
+> length-definite, and the bitmap-based transaction request
+> (`MsgLeiosBlockTxsRequest`) may yet change as the roaring bitmap encoding is
+> still under discussion.
+>
+> Catch-up oriented batch requests were once expected here
+> (`MsgLeiosBlockRangeRequest` and its replies). They were never implemented
+> and are no longer planned, so they are not specified.

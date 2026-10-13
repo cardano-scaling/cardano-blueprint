@@ -5,8 +5,9 @@
 # Uses 'cddlc' to resolve module imports (;# import/include pragmas) and
 # checks that no undefined names remain in the merged output.
 #
-# Era CDDL files (byron, shelley, ..., conway) are downloaded from
-# cardano-ledger at runtime since they are not part of this repository.
+# The era CDDL files are the vendored copies under src/ledger/eras, kept in
+# sync with cardano-ledger by .github/workflows/sync-ledger-cddls.yaml. Only
+# byron is downloaded: it lives elsewhere upstream and is frozen.
 #
 # Run with: bats validate-cddl.bats
 # Requirements: bats, cddlc, curl
@@ -25,6 +26,13 @@ LOCAL_MODULES=(
   src/network/node-to-node/chainsync/header.cddl
   src/network/node-to-node/txsubmission2/tx.cddl
   src/network/node-to-node/txsubmission2/txid.cddl
+  src/ledger/eras/allegra.cddl
+  src/ledger/eras/alonzo.cddl
+  src/ledger/eras/babbage.cddl
+  src/ledger/eras/conway.cddl
+  src/ledger/eras/dijkstra.cddl
+  src/ledger/eras/mary.cddl
+  src/ledger/eras/shelley.cddl
 )
 
 @test "network/node-to-node/blockfetch/messages.cddl" {
@@ -68,10 +76,7 @@ setup_file() {
     cp "$REPO_ROOT/$f" "$INCLUDE_DIR/"
   done
 
-  echo "# Downloading era CDDL files from cardano-ledger..." >&3
-  for era in allegra alonzo babbage conway mary shelley; do
-    curl -sSfL "$LEDGER_RAW/eras/$era/impl/cddl/data/$era.cddl" -o "$INCLUDE_DIR/$era.cddl"
-  done
+  echo "# Downloading byron CDDL from cardano-ledger..." >&3
   curl -sSfL "$LEDGER_RAW/eras/byron/ledger/impl/cddl-spec/byron.cddl" -o "$INCLUDE_DIR/byron.cddl"
 
   echo "# INCLUDE_DIR=$INCLUDE_DIR" >&3

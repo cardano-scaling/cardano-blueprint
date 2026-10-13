@@ -25,7 +25,7 @@ validated against.
 >
 > The bytes in the serialized transaction do not change by translation, however
 > the tag in the tagged-sum will. See
-> [the TxSubmission2 codecs](../network/node-to-node/txsubmission2/index.html#codecs).
+> [the TxSubmission2 codecs](../network/node-to-node/txsubmission2#codecs).
 
 Transactions are _pending_ on some Ledger State if they have not been included
 in any block since Genesis up until such Ledger State. Transactions are _valid_

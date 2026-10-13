@@ -1,13 +1,10 @@
+---
+leios: new
+---
+
 # LeiosNotify
 
 **Mini-protocol number: 18**
-
-> [!WARNING]
->
-> This protocol is **proposed** and not yet part of the Cardano mainnet. It is
-> specified as part of [Leios (CIP-0164)](https://github.com/cardano-foundation/CIPs/pull/1167),
-> an extension to the Ouroboros consensus protocol aimed at significantly
-> increasing transaction throughput. Details are subject to change.
 
 `LeiosNotify` is the mini-protocol responsible for announcing Endorser Blocks
 (EBs) and offering EB bodies and their associated transaction closures to peers.
@@ -37,16 +34,36 @@ graph LR
    StDone(((StDone)))
 
    i(( )) --> StIdle
-   StIdle --MsgClientDone--> StDone
+   StIdle --MsgQuit--> StQuit
+   StQuit --MsgDone--> StDone
    StIdle --MsgLeiosNotificationRequestNext--> StBusy
    StBusy --MsgLeiosBlockAnnouncement--> StIdle
    StBusy --MsgLeiosBlockOffer--> StIdle
    StBusy --MsgLeiosBlockTxsOffer--> StIdle
-   StBusy --MsgLeiosVotesOffer--> StIdle
+   StBusy --MsgLeiosVotes--> StIdle
+   StBusy --MsgCanceled--> StIdle
 
    class StIdle client
    class StBusy server
+   class StQuit server
 ```
+
+### Terminating
+
+The client cannot simply stop. It only has agency in `StIdle`, and a request
+leaves it in `StBusy` awaiting a reply the server may have no reason to send:
+under light load there may be nothing to announce for a long while. A node
+being demoted from hot to warm has a bounded time to shut the protocol down
+cleanly, and losing that race costs the whole connection rather than just this
+mini-protocol.
+
+Two messages resolve that. `MsgCanceled` lets the server answer "nothing for
+you" and hand agency back, so the client is never stranded in `StBusy`. And
+`MsgQuit` lets the client declare it is leaving without first draining the
+replies it has outstanding -- it may be pipelining many requests, and waiting
+for each in turn would make shutdown latency a function of pipeline depth. The
+server closes with `MsgDone`, so termination is a two-step handshake rather
+than a unilateral act by either side.
 
 ### State agencies
 
@@ -54,17 +71,20 @@ graph LR
 | :----- | :---------------------------------------------- |
 | StIdle | <span class="agency-initiator">Initiator</span> |
 | StBusy | <span class="agency-responder">Responder</span> |
+| StQuit | <span class="agency-responder">Responder</span> |
 
 ### State transitions
 
-| From state | Message                         | Parameters             | To state |
-| :--------- | :------------------------------ | ---------------------- | :------- |
-| StIdle     | MsgClientDone                   |                        | End      |
-| StIdle     | MsgLeiosNotificationRequestNext |                        | StBusy   |
-| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`         | StIdle   |
-| StBusy     | MsgLeiosBlockOffer              | `point`, `size`        | StIdle   |
-| StBusy     | MsgLeiosBlockTxsOffer           | `point`                | StIdle   |
-| StBusy     | MsgLeiosVotesOffer              | `[1* (slot, voterId)]` | StIdle   |
+| From state | Message                         | Parameters         | To state |
+| :--------- | :------------------------------ | ------------------ | :------- |
+| StIdle     | MsgQuit                         |                    | StQuit   |
+| StQuit     | MsgDone                         |                    | End      |
+| StIdle     | MsgLeiosNotificationRequestNext |                    | StBusy   |
+| StBusy     | MsgLeiosBlockAnnouncement       | `announcement`     | StIdle   |
+| StBusy     | MsgLeiosBlockOffer              | `point`, `eb_size` | StIdle   |
+| StBusy     | MsgLeiosBlockTxsOffer           | `point`            | StIdle   |
+| StBusy     | MsgLeiosVotes                   | `[1* vote]`        | StIdle   |
+| StBusy     | MsgCanceled                     |                    | StIdle   |
 
 ## Codecs
 
@@ -77,6 +97,5 @@ The messages depicted in the state machine follow this CDDL specification:
 
 > [!NOTE]
 >
-> The CBOR tags in this specification are provisional. Several types remain underspecified (`any`) pending
-> further protocol design. See [CIP-0164](https://github.com/cardano-foundation/CIPs/pull/1167)
-> for rationale and ongoing discussion.
+> See [CIP-0164](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164#leios-mini-protocols)
+> for the rationale behind these messages.

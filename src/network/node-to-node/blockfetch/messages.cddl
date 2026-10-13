@@ -14,7 +14,7 @@ msgBlock        = [4, block.cardanoBlock]
 msgBatchDone    = [5]
 
 point = []                         ; the genesis point
-      / [ base.slotNo, base.hash ]
+      / [ base.slotno, base.hash ]
 
 ;# include block as block
 ;# import base as base

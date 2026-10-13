@@ -38,17 +38,18 @@
             binary = binaryFor.${pkgs.stdenv.hostPlatform.system} or null;
           in
           if binary != null then
-            pkgs.stdenv.mkDerivation {
-              pname = "mdbook-katex";
-              inherit version;
-              src = pkgs.fetchurl { inherit (binary) url hash; };
-              dontUnpack = true;
-              installPhase = ''
-                mkdir -p $out/bin
-                tar -xf $src -C $out/bin
-                chmod +x $out/bin/mdbook-katex
-              '';
-            }
+            pkgs.stdenv.mkDerivation
+              {
+                pname = "mdbook-katex";
+                inherit version;
+                src = pkgs.fetchurl { inherit (binary) url hash; };
+                dontUnpack = true;
+                installPhase = ''
+                  mkdir -p $out/bin
+                  tar -xf $src -C $out/bin
+                  chmod +x $out/bin/mdbook-katex
+                '';
+              }
           else
             pkgs.rustPlatform.buildRustPackage {
               pname = "mdbook-katex";
@@ -88,6 +89,7 @@
             mdbook
             mdbook-mermaid
             mdbook-toc
+            python3 # runs .mdbook/leios-preprocessor.py
           ] ++ [ mdbook-katex ];
           phases = [ "unpackPhase" "buildPhase" ];
           buildPhase = ''
@@ -96,10 +98,6 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = formattingPkgs ++ cddlPkgs;
-        };
-
-        devShells.book = pkgs.mkShell {
           inputsFrom = [ packages.mdbook ];
           buildInputs = formattingPkgs ++ cddlPkgs;
         };
