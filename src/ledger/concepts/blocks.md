@@ -97,19 +97,19 @@ is verified against it, is described under
 with
 
 ```cddl
-{{#include ../eras/dijkstra.cddl:104:107}}
+{{#include ../eras/dijkstra.cddl:105:108}}
 ```
 
 ### Changed dijkstra block
 
 ```cddl
-{{#include ../eras/dijkstra.cddl:109:113}}
+{{#include ../eras/dijkstra.cddl:110:114}}
 ```
 
 with
 
 ```cddl
-{{#include ../eras/dijkstra.cddl:921:926}}
+{{#include ../eras/dijkstra.cddl:937:942}}
 ```
 
 </div>

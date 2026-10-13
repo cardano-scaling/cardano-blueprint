@@ -27,7 +27,7 @@ A stake pool advertises the BLS key it will vote with by including an optional
 structure — see [`dijkstra.cddl`](../ledger/eras/dijkstra.cddl)):
 
 ```cddl
-{{#include ../ledger/eras/dijkstra.cddl:465:482}}
+{{#include ../ledger/eras/dijkstra.cddl:466:483}}
 ```
 
 - The key pair is **BLS12-381** in the *minimal-signature-size* configuration:
@@ -125,7 +125,7 @@ attesting the EB announced by (a recent) block header. The certificate records
 *which* committee seats voted and an aggregate of their signatures:
 
 ```cddl
-{{#include ../ledger/eras/dijkstra.cddl:921:926}}
+{{#include ../ledger/eras/dijkstra.cddl:937:942}}
 ```
 
 - `signers` is a **bitfield** over seat indices: bit `i` set means the committee
