@@ -131,7 +131,8 @@ attesting the EB announced by (a recent) block header. The certificate records
 - `signers` is a **bitfield** over seat indices: bit `i` set means the committee
   seat with index `i` contributed a vote. (For example `0xa0` = `1010_0000`
   marks seats 0 and 2.) It is `⌈N/8⌉` bytes, where `N` is the committee size for
-  the epoch in which the announcing RB was produced.
+  the epoch in which the announcing RB was produced — which is also the
+  certifying RB's epoch, see [Verifying a certificate](#verifying-a-certificate).
 - Each voter signs the same certified message — the hash of the RB header that
   announced the EB — with its registered BLS key. `signature` is the BLS
   aggregate of exactly the signatures of the seats marked in `signers`.
@@ -153,8 +154,11 @@ not of the stake seated on the committee.
 
 To validate a block carrying a `leios_certificate`, a node MUST:
 
-1. Reconstruct the committee for the certificate's epoch from its own copy of the
-   active stake distribution, using the exact selection procedure above.
+1. Check that the certifying block is in the **same epoch** as the block that
+   announced the EB. An announcement does not survive an epoch boundary, so the
+   first block of an epoch never carries a certificate.
+1. Reconstruct the committee for that epoch from its own copy of the active
+   stake distribution, using the exact selection procedure above.
 1. Resolve every seat index set in `signers` to that seat's `bls_pubkey`. If
    any set bit resolves to a **keyless** seat, the certificate is invalid — it
    claims a vote from a seat that carries no usable key.
@@ -163,12 +167,23 @@ To validate a block carrying a `leios_certificate`, a node MUST:
 1. Check that the stake covered by the signing seats meets $\tau$ times the
    total active stake.
 
-A block whose certificate fails any of these checks is invalid. Steps 1 and 2
+A block whose certificate fails any of these checks is invalid. Steps 2 and 3
 together are why committee derivation must be deterministic and shared: a node
 whose committee diverges from the one the votes were cast under — through a
 different $N_c$, a different selection or seat ordering, or a differing view of
 which keys are usable — rejects legitimately signed certificates and cannot
 follow the chain.
+
+The first check is what makes the rest of them unambiguous. A certificate
+attests what the voters checked, and the voters checked the announcing block's
+world — its committee, its quorum threshold $\tau$, its $N_c$. Allowing a
+certificate to cross an epoch boundary would oblige every node to keep the
+retiring committee available for exactly one more block, and to decide
+case-by-case which epoch each of the four checks above reads. Retiring the
+announcement with the epoch costs at most one EB per boundary and leaves one
+committee in play. Era transitions fall on epoch boundaries, so this also rules
+out certifying across an era boundary, where the block format itself may
+differ.
 
 ## Related specifications
 
