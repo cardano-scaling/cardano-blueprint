@@ -1,0 +1,5 @@
+query = 1
+result = [year, dayOfYear, timeOfDayPico]
+year = bigint
+dayOfYear = int
+timeOfDayPico = bigint

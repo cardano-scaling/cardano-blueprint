@@ -1,0 +1,9 @@
+keepAliveMessage = msgKeepAlive
+                 / msgKeepAliveResponse
+                 / msgDone
+
+msgKeepAlive = [ 0, base.word16 ]
+msgKeepAliveResponse = [ 1, base.word16 ]
+msgDone = [ 2 ]
+
+;# import base as base

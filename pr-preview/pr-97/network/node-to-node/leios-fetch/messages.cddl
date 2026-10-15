@@ -1,0 +1,29 @@
+; Termination first, as in LeiosNotify, then each request beside the response
+; it draws.
+leiosBlockFetchMessage
+     = msgDone
+     / msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+
+msgDone                        = [0]
+msgLeiosBlockRequest           = [1, point]
+msgLeiosBlock                  = [2, endorser_block]
+msgLeiosBlockTxsRequest        = [3, point, bitmaps]
+msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
+
+point = [slot, eb_hash]
+slot = base.slotno
+eb_hash = base.hash
+
+; map from tx hash to serialized tx byte size
+endorser_block = { * base.hash => base.word32 }
+
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 => base.word64 }
+
+tx_list = [ *tx.tx ]
+
+;# import base as base
+;# import tx as tx
