@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-106e960e.js";
+            window.path_to_searchindex_js = "searchindex-5ca7a961.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-404c79fe.js"></script>
@@ -2410,7 +2410,8 @@ leios_signature = bytes .size 48
 <li><code>signers</code> is a <strong>bitfield</strong> over seat indices: bit <code>i</code> set means the committee
 seat with index <code>i</code> contributed a vote. (For example <code>0xa0</code> = <code>1010_0000</code>
 marks seats 0 and 2.) It is <code>⌈N/8⌉</code> bytes, where <code>N</code> is the committee size for
-the epoch in which the announcing RB was produced.</li>
+the epoch in which the announcing RB was produced — which is also the
+certifying RB’s epoch, see <a href="#verifying-a-certificate">Verifying a certificate</a>.</li>
 <li>Each voter signs the same certified message — the hash of the RB header that
 announced the EB — with its registered BLS key. <code>signature</code> is the BLS
 aggregate of exactly the signatures of the seats marked in <code>signers</code>.</li>
@@ -2428,8 +2429,11 @@ not of the stake seated on the committee.</p>
 <h3 id="verifying-a-certificate"><a class="header" href="#verifying-a-certificate">Verifying a certificate</a></h3>
 <p>To validate a block carrying a <code>leios_certificate</code>, a node MUST:</p>
 <ol>
-<li>Reconstruct the committee for the certificate’s epoch from its own copy of the
-active stake distribution, using the exact selection procedure above.</li>
+<li>Check that the certifying block is in the <strong>same epoch</strong> as the block that
+announced the EB. An announcement does not survive an epoch boundary, so the
+first block of an epoch never carries a certificate.</li>
+<li>Reconstruct the committee for that epoch from its own copy of the active
+stake distribution, using the exact selection procedure above.</li>
 <li>Resolve every seat index set in <code>signers</code> to that seat’s <code>bls_pubkey</code>. If
 any set bit resolves to a <strong>keyless</strong> seat, the certificate is invalid — it
 claims a vote from a seat that carries no usable key.</li>
@@ -2438,12 +2442,22 @@ hash of the announcing RB header, under the Leios DST.</li>
 <li>Check that the stake covered by the signing seats meets <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> times the
 total active stake.</li>
 </ol>
-<p>A block whose certificate fails any of these checks is invalid. Steps 1 and 2
+<p>A block whose certificate fails any of these checks is invalid. Steps 2 and 3
 together are why committee derivation must be deterministic and shared: a node
 whose committee diverges from the one the votes were cast under — through a
 different <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, a different selection or seat ordering, or a differing view of
 which keys are usable — rejects legitimately signed certificates and cannot
 follow the chain.</p>
+<p>The first check is what makes the rest of them unambiguous. A certificate
+attests what the voters checked, and the voters checked the announcing block’s
+world — its committee, its quorum threshold <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span>, its <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>. Allowing a
+certificate to cross an epoch boundary would oblige every node to keep the
+retiring committee available for exactly one more block, and to decide
+case-by-case which epoch each of the four checks above reads. Retiring the
+announcement with the epoch costs at most one EB per boundary and leaves one
+committee in play. Era transitions fall on epoch boundaries, so this also rules
+out certifying across an era boundary, where the block format itself may
+differ.</p>
 <h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
 <ul>
 <li><a href="network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
