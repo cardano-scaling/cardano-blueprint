@@ -17,13 +17,17 @@ point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
-; map from tx hash to serialized tx byte size
+; map from tx hash to serialized tx byte size, both of the `leios_tx` bytes
 endorser_block = { * base.hash => base.word32 }
 
 ; indefinite-length map from 64-tx window index to 64-bit presence bitmap
 bitmaps = { * base.word16 => base.word64 }
 
-tx_list = [ *tx.tx ]
+tx_list = [ *leios_tx ]
+
+; Dijkstra only, without an era tag. A transaction travels in its block
+; encoding, whose `is_valid` flag the mempool encoding lacks.
+leios_tx = bytes .cbor dijkstra.block_transaction
 
 ;# import base as base
-;# import tx as tx
+;# include dijkstra as dijkstra
