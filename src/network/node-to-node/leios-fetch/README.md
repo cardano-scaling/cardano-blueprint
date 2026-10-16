@@ -66,7 +66,7 @@ The messages depicted in the state machine follow this CDDL specification:
 
 > [!NOTE]
 >
-> The `endorser_block`, `bitmaps` and `tx` types remain underspecified
+> The `endorser_block` and `bitmaps` types remain underspecified
 > pending further protocol design, including whether `tx_list` is
 > length-definite, and the bitmap-based transaction request
 > (`MsgLeiosBlockTxsRequest`) may yet change as the roaring bitmap encoding is
