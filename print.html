@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e80671a8.js";
+            window.path_to_searchindex_js = "searchindex-f4df74dc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-404c79fe.js"></script>
@@ -1460,7 +1460,7 @@ the data.</p>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockRequest</td><td><code>point</code></td><td style="text-align: left">StBlock</td></tr>
 <tr><td style="text-align: left">StBlock</td><td style="text-align: left">MsgLeiosBlock</td><td><code>endorser_block</code></td><td style="text-align: left">StIdle</td></tr>
 <tr><td style="text-align: left">StIdle</td><td style="text-align: left">MsgLeiosBlockTxsRequest</td><td><code>point</code>, <code>bitmaps</code></td><td style="text-align: left">StBlockTxs</td></tr>
-<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>point</code>, <code>bitmaps</code>, <code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
+<tr><td style="text-align: left">StBlockTxs</td><td style="text-align: left">MsgLeiosBlockTxs</td><td><code>tx_list</code></td><td style="text-align: left">StIdle</td></tr>
 </tbody>
 </table>
 </div>
@@ -1480,14 +1480,15 @@ msgDone                        = [0]
 msgLeiosBlockRequest           = [1, point]
 msgLeiosBlock                  = [2, endorser_block]
 msgLeiosBlockTxsRequest        = [3, point, bitmaps]
-msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
+msgLeiosBlockTxs               = [4, tx_list]
 
 point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
-; map from tx hash to serialized tx byte size, both of the `leios_tx` bytes
-endorser_block = { * base.hash =&gt; base.word32 }
+; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
+; wraps; an endorser block names at least one transaction
+endorser_block = { + base.hash =&gt; base.word32 }
 
 ; indefinite-length map from 64-tx window index to 64-bit presence bitmap
 bitmaps = { * base.word16 =&gt; base.word64 }
@@ -1496,7 +1497,7 @@ tx_list = [ *leios_tx ]
 
 ; Dijkstra only, without an era tag. A transaction travels in its block
 ; encoding, whose `is_valid` flag the mempool encoding lacks.
-leios_tx = bytes .cbor dijkstra.block_transaction
+leios_tx = #6.24(bytes .cbor dijkstra.block_transaction)
 
 ;# import base as base
 ;# include dijkstra as dijkstra
