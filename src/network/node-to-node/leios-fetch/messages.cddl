@@ -11,7 +11,7 @@ msgDone                        = [0]
 msgLeiosBlockRequest           = [1, point]
 msgLeiosBlock                  = [2, endorser_block]
 msgLeiosBlockTxsRequest        = [3, point, bitmaps]
-msgLeiosBlockTxs               = [4, point, bitmaps, tx_list]
+msgLeiosBlockTxs               = [4, tx_list]
 
 point = [slot, eb_hash]
 slot = base.slotno

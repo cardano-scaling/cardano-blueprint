@@ -53,7 +53,7 @@ graph LR
 | StIdle     | MsgLeiosBlockRequest    | `point`                       | StBlock    |
 | StBlock    | MsgLeiosBlock           | `endorser_block`              | StIdle     |
 | StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps`            | StBlockTxs |
-| StBlockTxs | MsgLeiosBlockTxs        | `point`, `bitmaps`, `tx_list` | StIdle     |
+| StBlockTxs | MsgLeiosBlockTxs        | `tx_list`                     | StIdle     |
 
 ## Codecs
 
