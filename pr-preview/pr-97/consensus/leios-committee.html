@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-5ca7a961.js";
+            window.path_to_searchindex_js = "../searchindex-74000115.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-404c79fe.js"></script>
@@ -370,16 +370,14 @@ whose committee diverges from the one the votes were cast under — through a
 different <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, a different selection or seat ordering, or a differing view of
 which keys are usable — rejects legitimately signed certificates and cannot
 follow the chain.</p>
-<p>The first check is what makes the rest of them unambiguous. A certificate
-attests what the voters checked, and the voters checked the announcing block’s
-world — its committee, its quorum threshold <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span>, its <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>. Allowing a
-certificate to cross an epoch boundary would oblige every node to keep the
-retiring committee available for exactly one more block, and to decide
-case-by-case which epoch each of the four checks above reads. Retiring the
-announcement with the epoch costs at most one EB per boundary and leaves one
-committee in play. Era transitions fall on epoch boundaries, so this also rules
-out certifying across an era boundary, where the block format itself may
-differ.</p>
+<p>The first check buys simplicity, not safety. An epoch boundary already
+concentrates a great deal of work, and an announcement that outlived it would
+be one more thing to carry across; across an <em>era</em> boundary the announcement,
+the certificate and the EB would further have to stay syntactically compatible
+with the very format change a new era exists to make. Era transitions fall on
+epoch boundaries, so one rule covers both, at a cost of at most one EB per
+boundary. It also leaves exactly one committee in play, which is what makes the
+remaining checks unambiguous.</p>
 <h2 id="related-specifications"><a class="header" href="#related-specifications">Related specifications</a></h2>
 <ul>
 <li><a href="../network/node-to-node/leios-notify/README.html">LeiosNotify</a> and
