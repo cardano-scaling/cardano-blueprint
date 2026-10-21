@@ -7,7 +7,9 @@
 #
 # The era CDDL files are the vendored copies under src/ledger/eras, kept in
 # sync with cardano-ledger by .github/workflows/sync-ledger-cddls.yaml. Only
-# byron is downloaded: it lives elsewhere upstream and is frozen.
+# byron is downloaded: it lives elsewhere upstream and is frozen. The
+# hard-fork combinator modules (base, block, header, tx, txid) are likewise kept
+# in sync with ouroboros-consensus by .github/workflows/sync-consensus-cddls.yaml.
 #
 # Run with: bats validate-cddl.bats
 # Requirements: bats, cddlc, curl

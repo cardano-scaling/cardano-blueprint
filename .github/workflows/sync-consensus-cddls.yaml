@@ -1,0 +1,59 @@
+name: Sync consensus CDDLs
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Sync from ouroboros-consensus@${{ matrix.branch }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - main
+    steps:
+      - name: Checkout ${{ matrix.branch }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Fetch upstream consensus CDDLs
+        env:
+          BRANCH: ${{ matrix.branch }}
+        run: |
+          set -euo pipefail
+          base="https://raw.githubusercontent.com/IntersectMBO/ouroboros-consensus/$BRANCH/ouroboros-consensus-cardano/cddl"
+          # Upstream path, then the path here.
+          files=(
+            "base.cddl src/codecs/base.cddl"
+            "node-to-node/blockfetch/block.cddl src/network/node-to-node/blockfetch/block.cddl"
+            "node-to-node/chainsync/header.cddl src/network/node-to-node/chainsync/header.cddl"
+            "node-to-node/txsubmission2/tx.cddl src/network/node-to-node/txsubmission2/tx.cddl"
+            "node-to-node/txsubmission2/txId.cddl src/network/node-to-node/txsubmission2/txid.cddl"
+            "node-to-node/leiosfetch/leiosFetch.cddl src/network/node-to-node/leios-fetch/messages.cddl"
+            "node-to-node/leiosnotify/leiosNotify.cddl src/network/node-to-node/leios-notify/messages.cddl"
+          )
+          for file in "${files[@]}"; do
+            read -r src dest <<< "$file"
+            curl -fsSL "$base/$src" -o "$dest"
+          done
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: ${{ matrix.branch }}
+          branch: sync/consensus-cddls-${{ matrix.branch }}
+          delete-branch: true
+          commit-message: "Sync consensus CDDLs from ouroboros-consensus@${{ matrix.branch }}"
+          title: "Sync consensus CDDLs from ouroboros-consensus@${{ matrix.branch }}"
+          body: |
+            Automated update of the hard-fork combinator CDDLs from
+            [`IntersectMBO/ouroboros-consensus@${{ matrix.branch }}`](https://github.com/IntersectMBO/ouroboros-consensus/tree/${{ matrix.branch }}/ouroboros-consensus-cardano/cddl):
+            `src/codecs/base.cddl` and the block, header, tx and txid modules
+            under `src/network/node-to-node`.
