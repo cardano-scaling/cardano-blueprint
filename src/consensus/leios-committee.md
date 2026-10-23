@@ -134,12 +134,16 @@ attesting the EB announced by (a recent) block header. The certificate records
   seat with index `i` contributed a vote. (For example `0xa0` = `1010_0000`
   marks seats 0 and 2.) It is `⌈N/8⌉` bytes, where `N` is the committee size for
   the epoch in which the announcing RB was produced — which is also the
-  certifying RB's epoch, see [Verifying a certificate](#verifying-a-certificate).
-- Each voter signs the same certified message with its registered BLS key: the
-  32 bytes of the hash of the RB header that announced the EB, not their CBOR
-  encoding, under the DST `BLS_SIG_BLS12381G1_XMD:SHA-256_SSWU_RO_POP_`.
-  `signature` is the BLS aggregate of exactly the signatures of the seats marked
-  in `signers`.
+  certifying RB's epoch, see [Verifying a
+  certificate](#verifying-a-certificate).
+- `signature` is the BLS aggregate of exactly the signatures of the seats marked
+  in `signers`. Where each voter signs the same certified message with its
+  registered BLS key: the 32 bytes of the hash of the RB header that announced
+  the EB, not their CBOR encoding, under the DST
+  `BLS_SIG_BLS12381G1_XMD:SHA-256_SSWU_RO_POP_`.
+- `prefix` is reserved for [partial
+  certification](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0164#partial-certification)
+  and must be absent. Endorser blocks reserve a field of the same name.
 
 The certificate repeats neither the announcing RB's slot nor the EB hash: the
 announcing RB is determined from the certifying RB's own chain context, so both
@@ -171,6 +175,7 @@ To validate a block carrying a `leios_certificate`, a node MUST:
    above.
 1. Check that the stake covered by the signing seats meets $\tau$ times the
    total active stake.
+1. Check that the reserved `prefix` field is absent.
 
 A block whose certificate fails any of these checks is invalid. Steps 2 and 3
 together are why committee derivation must be deterministic and shared: a node

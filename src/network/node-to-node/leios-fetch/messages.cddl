@@ -17,9 +17,13 @@ point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
-; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
-; wraps; an endorser block names at least one transaction
-endorser_block = { + base.hash => base.word32 }
+; transaction_references maps tx hash to serialized tx byte size, both of the
+; bytes `leios_tx` wraps; an endorser block names at least one transaction.
+; prefix is reserved for partial certification and must be absent.
+endorser_block =
+  [ transaction_references : { + base.hash => base.word32 }
+  , ? prefix               : base.word16
+  ]
 
 ; indefinite-length map from 64-tx window index to 64-bit presence bitmap
 bitmaps = { * base.word16 => base.word64 }
