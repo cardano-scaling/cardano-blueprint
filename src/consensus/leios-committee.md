@@ -33,12 +33,14 @@ structure — see [`dijkstra.cddl`](../ledger/eras/dijkstra.cddl)):
 - The key pair is **BLS12-381** in the *minimal-signature-size* configuration:
   verification keys live in G2 (96 bytes), signatures in G1 (48 bytes).
 - `bls_possession_proof` is a **proof of possession** (PoP): a signature over
-  the verification key under a fixed, Leios-specific domain-separation tag
-  (DST). It proves the registrant holds the corresponding secret key and defends
-  the aggregate signature scheme against rogue-key attacks. Implementations
-  **must** verify the PoP with the same DST that certificate verification uses
-  (see below); a key whose PoP does not verify is rejected at registration and
-  the pool is treated as having no key.
+  the compressed verification key under the domain-separation tag (DST)
+  `BLS_POP_BLS12381G1_XMD:SHA-256_SSWU_RO_POP_`. It proves the registrant holds
+  the corresponding secret key and defends the aggregate signature scheme
+  against rogue-key attacks. Like the signature DST of [certificate
+  verification](#verifying-a-certificate), it is that of the IETF
+  proof-of-possession ciphersuite for minimal-size signatures; a key whose PoP
+  does not verify is rejected at registration and the pool is treated as having
+  no key.
 - The field is optional, so existing (pre-Leios) registrations remain valid. A
   re-registration replaces the pool's `bls_key` like any other pool parameter,
   taking effect at the next epoch boundary via the usual stake-snapshot pipeline.
@@ -133,9 +135,11 @@ attesting the EB announced by (a recent) block header. The certificate records
   marks seats 0 and 2.) It is `⌈N/8⌉` bytes, where `N` is the committee size for
   the epoch in which the announcing RB was produced — which is also the
   certifying RB's epoch, see [Verifying a certificate](#verifying-a-certificate).
-- Each voter signs the same certified message — the hash of the RB header that
-  announced the EB — with its registered BLS key. `signature` is the BLS
-  aggregate of exactly the signatures of the seats marked in `signers`.
+- Each voter signs the same certified message with its registered BLS key: the
+  32 bytes of the hash of the RB header that announced the EB, not their CBOR
+  encoding, under the DST `BLS_SIG_BLS12381G1_XMD:SHA-256_SSWU_RO_POP_`.
+  `signature` is the BLS aggregate of exactly the signatures of the seats marked
+  in `signers`.
 
 The certificate repeats neither the announcing RB's slot nor the EB hash: the
 announcing RB is determined from the certifying RB's own chain context, so both
@@ -163,7 +167,8 @@ To validate a block carrying a `leios_certificate`, a node MUST:
    any set bit resolves to a **keyless** seat, the certificate is invalid — it
    claims a vote from a seat that carries no usable key.
 1. Verify `signature` as a BLS aggregate of the resolved public keys over the
-   hash of the announcing RB header, under the Leios DST.
+   certified message, the announcing RB header's hash, under the signature DST
+   above.
 1. Check that the stake covered by the signing seats meets $\tau$ times the
    total active stake.
 

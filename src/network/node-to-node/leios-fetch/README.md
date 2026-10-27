@@ -47,13 +47,13 @@ graph LR
 
 ### State transitions
 
-| From state | Message                 | Parameters                    | To state   |
-| :--------- | :---------------------- | ----------------------------- | :--------- |
-| StIdle     | MsgDone                 |                               | End        |
-| StIdle     | MsgLeiosBlockRequest    | `point`                       | StBlock    |
-| StBlock    | MsgLeiosBlock           | `endorser_block`              | StIdle     |
-| StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps`            | StBlockTxs |
-| StBlockTxs | MsgLeiosBlockTxs        | `tx_list`                     | StIdle     |
+| From state | Message                 | Parameters         | To state   |
+| :--------- | :---------------------- | ------------------ | :--------- |
+| StIdle     | MsgDone                 |                    | End        |
+| StIdle     | MsgLeiosBlockRequest    | `point`            | StBlock    |
+| StBlock    | MsgLeiosBlock           | `endorser_block`   | StIdle     |
+| StIdle     | MsgLeiosBlockTxsRequest | `point`, `bitmaps` | StBlockTxs |
+| StBlockTxs | MsgLeiosBlockTxs        | `tx_list`          | StIdle     |
 
 ## Codecs
 
