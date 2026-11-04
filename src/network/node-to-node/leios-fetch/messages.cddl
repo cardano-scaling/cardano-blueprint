@@ -17,9 +17,16 @@ point = [slot, eb_hash]
 slot = base.slotno
 eb_hash = base.hash
 
+; the version of the endorser block's encoding, like the era tag around a
+; header, then its bytes CBOR-in-CBOR, which its hash and size are of: a
+; server sends the bytes it holds as they are, a client knows their length
+; before it decodes them, and the bytes decode alone, also long after their
+; era; only version 0, Dijkstra's, so far
+endorser_block = [0, #6.24(bytes .cbor eb_references)]
+
 ; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
 ; wraps; an endorser block names at least one transaction
-endorser_block = { + base.hash => base.word32 }
+eb_references = { + base.hash => base.word32 }
 
 ; indefinite-length map from 64-tx window index to 64-bit presence bitmap
 bitmaps = { * base.word16 => base.word64 }
