@@ -128,6 +128,14 @@ bats test/validate-cddl.bats
 
 These tests also run automatically in CI on every pull request and push to `main`.
 
+### Upstream format changes
+
+The CDDLs under `src/ledger/eras` and the hard-fork combinator modules are
+copies of their `cardano-ledger` and `ouroboros-consensus` versions. To explain
+an upstream format change, push a branch with the same name as the upstream
+one: CI commits that branch's CDDLs onto yours whenever you push, or when you
+run the "Sync CDDLs from same-named upstream branches" workflow by hand.
+
 ## Publishing
 
 Any changes to the `main` branch are automatically published to the live version of the blueprints hosted [via Github Pages](https://cardano-scaling.github.io/cardano-blueprint/). If you have made changes and they are not propagated to the live version, please check the build status on [GitHub Actions](https://github.com/cardano-scaling/cardano-blueprint/actions), or make sure you fully reload the webpage (Ctrl+Shift+R on firefox).

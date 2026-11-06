@@ -1,0 +1,66 @@
+name: Sync CDDLs from same-named upstream branches
+
+# A branch named like one in cardano-ledger or ouroboros-consensus picks up that
+# branch's CDDLs, so a PR here can explain an upstream format change next to it.
+on:
+  push:
+    branches-ignore:
+      - main
+      - gh-pages
+      - "sync/**"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-branch-cddls-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Sync from upstream@${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout ${{ github.ref_name }}
+        uses: actions/checkout@v4
+
+      - name: Fetch CDDLs from same-named upstream branches
+        id: fetch
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          synced=()
+          for upstream in "ledger cardano-ledger" "consensus ouroboros-consensus"; do
+            read -r repo name <<< "$upstream"
+            url="https://github.com/IntersectMBO/$name"
+            # Pin the commit so the message names exactly what was synced.
+            rev="$(git ls-remote --heads "$url" "refs/heads/$BRANCH" | cut -f1)"
+            if [[ -z "$rev" ]]; then
+              echo "No '$BRANCH' branch in $url"
+              continue
+            fi
+            bash .github/scripts/sync-cddls.sh "$repo" "$rev"
+            synced+=("$url/commit/$rev")
+          done
+          {
+            echo "synced<<EOF"
+            printf -- '- %s\n' "${synced[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Commit changed CDDLs
+        env:
+          BRANCH: ${{ github.ref_name }}
+          SYNCED: ${{ steps.fetch.outputs.synced }}
+        run: |
+          set -euo pipefail
+          git add --all src
+          if git diff --cached --quiet; then
+            echo "CDDLs already match upstream@$BRANCH"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --message "Sync CDDLs from upstream@$BRANCH" --message "$SYNCED"
+          git push origin "HEAD:refs/heads/$BRANCH"

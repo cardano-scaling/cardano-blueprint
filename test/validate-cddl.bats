@@ -10,6 +10,8 @@
 # byron is downloaded: it lives elsewhere upstream and is frozen. The
 # hard-fork combinator modules (base, block, header, tx, txid) are likewise kept
 # in sync with ouroboros-consensus by .github/workflows/sync-consensus-cddls.yaml.
+# On a branch named like one upstream, .github/workflows/sync-branch-cddls.yaml
+# takes them from that branch instead.
 #
 # Run with: bats validate-cddl.bats
 # Requirements: bats, cddlc, curl
