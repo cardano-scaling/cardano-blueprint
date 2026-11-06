@@ -1,0 +1,34 @@
+; Termination first, as in LeiosNotify, then each request beside the response
+; it draws.
+leiosBlockFetchMessage
+     = msgDone
+     / msgLeiosBlockRequest
+     / msgLeiosBlock
+     / msgLeiosBlockTxsRequest
+     / msgLeiosBlockTxs
+
+msgDone                        = [0]
+msgLeiosBlockRequest           = [1, point]
+msgLeiosBlock                  = [2, endorser_block]
+msgLeiosBlockTxsRequest        = [3, point, bitmaps]
+msgLeiosBlockTxs               = [4, tx_list]
+
+point = [slot, eb_hash]
+slot = base.slotno
+eb_hash = base.hash
+
+; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
+; wraps; an endorser block names at least one transaction
+endorser_block = { + base.hash => base.word32 }
+
+; indefinite-length map from 64-tx window index to 64-bit presence bitmap
+bitmaps = { * base.word16 => base.word64 }
+
+tx_list = [ *leios_tx ]
+
+; Dijkstra only, without an era tag. A transaction travels in its block
+; encoding, whose `is_valid` flag the mempool encoding lacks.
+leios_tx = #6.24(bytes .cbor dijkstra.block_transaction)
+
+;# import base as base
+;# include dijkstra as dijkstra
