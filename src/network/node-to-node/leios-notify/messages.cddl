@@ -1,15 +1,19 @@
-; Termination first, then the request, then the responses it can draw. Votes
-; come last so a future votes mini-protocol can take them away without
-; renumbering anything else.
+; The messages of the LeiosNotify mini-protocol, as the cardano-blueprint's
+; network/node-to-node/leios-notify/messages.cddl has them, except that a
+; MsgLeiosVotes holds at most sixteen votes, which the blueprint does not bound.
+;
+; TODO Bound the votes in the blueprint too; then drop this file in favour of
+; the blueprint's.
+
 leiosNotifyMessage
-     = msgDone
-     / msgQuit
-     / msgCanceled
-     / msgLeiosNotificationRequestNext
-     / msgLeiosBlockAnnouncement
-     / msgLeiosBlockOffer
-     / msgLeiosBlockTxsOffer
-     / msgLeiosVotes
+  = msgDone
+  / msgQuit
+  / msgCanceled
+  / msgLeiosNotificationRequestNext
+  / msgLeiosBlockAnnouncement
+  / msgLeiosBlockOffer
+  / msgLeiosBlockTxsOffer
+  / msgLeiosVotes
 
 msgDone                         = [0]
 msgQuit                         = [1]
@@ -18,29 +22,20 @@ msgLeiosNotificationRequestNext = [3]
 msgLeiosBlockAnnouncement       = [4, announcement]
 msgLeiosBlockOffer              = [5, point, eb_size]
 msgLeiosBlockTxsOffer           = [6, point]
-msgLeiosVotes                   = [7, [1* vote]]
+msgLeiosVotes                   = [7, [1*16 vote]]
 
-; A ranking block header announces the endorser block its body references,
-; so an announcement is exactly the bytes ChainSync diffuses for that header
-; and carries its own KES signature.
+; the announcing ranking block's header, as ChainSync sends it
 announcement = header.header
-point = [slot, eb_hash]
 
-; Not redundant with the announcement's size: the point alone does not say
-; which announcement is being offered, and two announcements -- even from
-; different elections -- can name one endorser block in one slot at different
-; sizes.
-eb_size = base.word32
-slot = base.slotno
-eb_hash = base.hash
+point = [slot, eb_hash]
+slot = uint .size 8
+eb_hash = bytes .size 32
+eb_size = uint .size 4
 
 vote =
-  [ announcing_rb_hash    : base.hash
-  , voter_id              : base.word16
-  , vote_signature        : leios_bls_signature ; over the bytes of announcing_rb_hash
+  [ announcing_rb_hash : bytes .size 32
+  , voter_id           : uint .size 2
+  , vote_signature     : bytes .size 48
   ]
 
-leios_bls_signature = bytes .size 48
-
-;# import base as base
 ;# import header as header
