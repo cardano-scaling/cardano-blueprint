@@ -201,6 +201,12 @@ place, effectively refining the Praos chain selection rule:
   incentivize stake pools to ignore blocks from other pools if theirs can win a
   VRF comparison.
 
+Differently encoded copies of one header (see
+[The header hash](../ledger/concepts/blocks.md#the-header-hash)) have the same
+slot, issuer, ocert and VRF output, so they tie and the node keeps whichever
+arrived first. A third party re-encoding a header thus gains nothing in chain
+selection.
+
 ### Ouroboros Genesis
 
 When a node is syncing with the network, there is little benefit in having it

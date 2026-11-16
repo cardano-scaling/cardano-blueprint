@@ -105,6 +105,20 @@ whether they are Epoch Boundary Blocks or Regular Blocks:
 
 TODO
 
+The `body_signature` of a header is a KES signature by the block producer's hot
+key. It is verified over a re-serialisation of the decoded `header_body`, not
+over the bytes as received, so any encoding of the same `header_body` carries a
+valid signature.
+
+<div class="leios">
+
+From Dijkstra on, `body_signature` is verified over the `header_body` bytes as
+received. Together with the [changed header
+hash](../ledger/concepts/blocks.md#changed-dijkstra-header-hash), this makes the
+header hash identify exactly what the block producer signed.
+
+</div>
+
 ## Ouroboros TPraos
 
 TODO
