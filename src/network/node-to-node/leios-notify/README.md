@@ -86,6 +86,21 @@ than a unilateral act by either side.
 | StBusy     | MsgLeiosVotes                   | `[1* vote]`        | StIdle   |
 | StBusy     | MsgCanceled                     |                    | StIdle   |
 
+## Identifying announcements
+
+An `announcement` is a block header, and it is identified by that header's
+hash: votes for the announced EB sign it (see
+[Leios committee](../../../consensus/leios-committee.md)), and two different
+headers of one block producer for the same slot are an equivocation, for which
+honest nodes do not vote.
+
+This requires the header hash to change only when the block producer signs
+something else. Were it to depend on the encoding, any relay could re-encode an
+honest announcement, making it look equivocated or splitting its votes across
+the copies. The
+[Dijkstra header hash](../../../ledger/concepts/blocks.md#changed-dijkstra-header-hash)
+provides this.
+
 ## Codecs
 
 The messages depicted in the state machine follow this CDDL specification:

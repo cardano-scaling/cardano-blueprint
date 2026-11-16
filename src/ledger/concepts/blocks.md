@@ -39,6 +39,62 @@ The full details and implications of this split are covered in
 For now, we can assume that the contents of the header are not important for
 the ledger processing.
 
+<div class="leios">
+
+Leios re-uses block headers as announcements of endorser blocks (EBs), via an
+`eb_references_announcement` field. A `block_body_contains_leios_cert` flag
+tells whether the body certifies an EB instead of carrying transactions (see
+[below](#changed-dijkstra-block)).
+
+```cddl
+{{#include ../eras/dijkstra.cddl:58:71}}
+```
+
+with
+
+```cddl
+{{#include ../eras/dijkstra.cddl:105:108}}
+```
+
+</div>
+
+## The header hash
+
+A block is identified by the hash of its header: `prev_hash` in the next header
+and the points exchanged between peers refer to it. It is the Blake2b-256 hash
+of the whole `header` exactly as received, that is, of the encoded
+`[header_body, body_signature]`.
+
+CBOR admits several encodings of the same value, for example definite- and
+indefinite-length arrays, and the decoders accept them. So one header can be
+relayed under several hashes. What the signature covers is described under
+[Chain validity](../../consensus/chainvalid.md#ouroboros-praos), and why such
+copies are harmless for Praos under
+[Chain selection](../../consensus/chainsel.md#tie-breakers-in-praos-and-older-protocols).
+
+<div class="leios">
+
+From Dijkstra on, the header hash covers only what the block producer signed:
+
+```
+header_hash = blake2b_256(original_bytes(header_body) || raw_bytes(body_signature))
+```
+
+where `original_bytes(header_body)` is the encoded `header_body` exactly as
+received, and `raw_bytes(body_signature)` is the content of the `kes_signature`
+byte string, without its CBOR head. As the signature is verified over those same
+`header_body` bytes (see [Chain validity](../../consensus/chainvalid.md#ouroboros-praos)),
+changing any of them invalidates it, and the encoding of the enclosing array no
+longer enters the hash.
+
+The signature scheme need not produce unique signatures: only the signer can
+make another valid signature for the same `header_body`, so a second header hash
+still means the block producer signed twice. Leios relies on this, as it
+identifies [announcements](../../network/node-to-node/leios-notify/README.md#identifying-announcements)
+by their header hash.
+
+</div>
+
 ## The block body
 
 The block body itself is split into four parts. This division is not conceptually
@@ -69,38 +125,13 @@ necessary but is helpful for efficient processing:
 
 <div class="leios">
 
-## Leios block structure changes
+### Changed dijkstra block
 
-Leios changes the block structure in two ways:
-
-- Block headers are re-used as announcements of endorser blocks, via an
-  `eb_references_announcement` field
-- Blocks may certify an EB and then
-  - set `block_body_contains_leios_cert` in the header
-  - contain a `leios_certificate` instead of transactions in the body
-
+A block may certify an EB. It then sets `block_body_contains_leios_cert` in the
+header and contains a `leios_certificate` instead of transactions in the body.
 How the committee behind such a certificate is derived, and how the certificate
 is verified against it, is described under
 [Leios key registration and committee selection](../../consensus/leios-committee.md).
-
-> [!NOTE]
-> The [djikstra.cddl](../eras/dijkstra.cddl) in the `cardano-blueprint` is matching
-> the same-named branch of the `cardano-ledger` upstream repository. This is the
-> block format currently used on the https://www.musashi.network/ Leios testnet.
-
-### Changed dijkstra header_body
-
-```cddl
-{{#include ../eras/dijkstra.cddl:58:71}}
-```
-
-with
-
-```cddl
-{{#include ../eras/dijkstra.cddl:105:108}}
-```
-
-### Changed dijkstra block
 
 ```cddl
 {{#include ../eras/dijkstra.cddl:110:114}}
