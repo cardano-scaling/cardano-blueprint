@@ -1,24 +1,20 @@
 tx =
-  base.ns8<byron.tx,
+  base.ns8<byron.transaction,
            serialisedShelleyTx<shelley.transaction>,
            serialisedShelleyTx<allegra.transaction>,
            serialisedShelleyTx<mary.transaction>,
            serialisedShelleyTx<alonzo.transaction>,
            serialisedShelleyTx<babbage.transaction>,
            serialisedShelleyTx<conway.transaction>,
-           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it. Dijkstra splits `transaction` into
-           ; `block_transaction` and `mempool_transaction`, which differ in
-           ; where the `is_valid` flag sits; this protocol diffuses the latter.
            serialisedShelleyTx<dijkstra.mempool_transaction>>
 
 serialisedShelleyTx<era> = #6.24(bytes .cbor era)
 
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns8<>) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
 ;# include byron as byron
+
+; See https://github.com/IntersectMBO/cardano-ledger/issues/5124
+byron.transaction = [0, [byron.tx, [+ byron.twit]]] / [1, any] / [2, any] / [3, any]
+
 ;# include shelley as shelley
 ;# include allegra as allegra
 ;# include mary as mary

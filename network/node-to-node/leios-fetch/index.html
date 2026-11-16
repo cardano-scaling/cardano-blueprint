@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-ef69d46e.js";
+            window.path_to_searchindex_js = "../../../searchindex-aa226fbe.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-404c79fe.js"></script>
@@ -250,40 +250,47 @@ the data.</p>
 <h2 id="codecs"><a class="header" href="#codecs">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
-; Termination first, as in LeiosNotify, then each request beside the response
-; it draws.
-leiosBlockFetchMessage
-     = msgDone
-     / msgLeiosBlockRequest
-     / msgLeiosBlock
-     / msgLeiosBlockTxsRequest
-     / msgLeiosBlockTxs
+; The messages of the LeiosFetch mini-protocol
+;
+; TODO Upstream this from ouroboros-consensus into cardano-blueprint and not
+; only sync it using a GHA workflow
 
-msgDone                        = [0]
-msgLeiosBlockRequest           = [1, point]
-msgLeiosBlock                  = [2, endorser_block]
-msgLeiosBlockTxsRequest        = [3, point, bitmaps]
-msgLeiosBlockTxs               = [4, tx_list]
+leiosFetchMessage
+  = msgDone
+  / msgLeiosBlockRequest
+  / msgLeiosBlock
+  / msgLeiosBlockTxsRequest
+  / msgLeiosBlockTxs
 
-point = [slot, eb_hash]
-slot = base.slotno
+msgDone                 = [0]
+msgLeiosBlockRequest    = [1, point]
+msgLeiosBlock           = [2, endorser_block]
+msgLeiosBlockTxsRequest = [3, point, bitmaps]
+msgLeiosBlockTxs        = [4, tx_list]
+
+point = [base.slotno, eb_hash]
 eb_hash = base.hash
 
-; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
-; wraps; an endorser block names at least one transaction
-endorser_block = { + base.hash =&gt; base.word32 }
+; The endorser block as CBOR-in-CBOR to indicate what bytes are hashed and that
+; servers may serve them without decoding. Was introduced with Dijkstra era and
+; currently only one format exists. When the structure changes, fetch clients
+; and other consensus components will know which era this is from; endorser
+; blocks are not allowed to be used across era boundaries.
+endorser_block = #6.24(bytes .cbor dijkstra.eb_references)
 
-; indefinite-length map from 64-tx window index to 64-bit presence bitmap
-bitmaps = { * base.word16 =&gt; base.word64 }
+; Inspired by roaring bitmaps: 64-tx window index to 64-bit presence bitmaps
+bitmaps = { * uint .size 2 =&gt; uint .size 8 }
 
-tx_list = [ *leios_tx ]
+tx_list = [ *tx ]
 
-; Dijkstra only, without an era tag. A transaction travels in its block
-; encoding, whose `is_valid` flag the mempool encoding lacks.
-leios_tx = #6.24(bytes .cbor dijkstra.block_transaction)
+; Endorsed transactions as CBOR-in-CBOR to indicate that neither fetch clients
+; nor servers will decode this. However, consensus components like leios voting
+; logic or block adoption will need to decode these using the appropriate era.
+; Currently only Dijkstra is supported.
+tx = #6.24(bytes .cbor dijkstra.block_transaction)
 
-;# import base as base
 ;# include dijkstra as dijkstra
+;# import base as base
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>

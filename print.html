@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ef69d46e.js";
+            window.path_to_searchindex_js = "searchindex-aa226fbe.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-404c79fe.js"></script>
@@ -857,8 +857,6 @@ header
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
             serialisedShelleyHeader&lt;conway.header&gt;,
-            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-            ; introduced with it.
             serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
@@ -869,10 +867,6 @@ byronRegularIdx = [1, base.word32]
 
 serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
 ;# include byron as byron
 ;# include shelley as shelley
 ;# include allegra as allegra
@@ -1008,8 +1002,6 @@ cardanoBlock = byron.block
              / [5, alonzo.block]
              / [6, babbage.block]
              / [7, conway.block]
-             ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-             ; introduced with it.
              / [8, dijkstra.block]
 
 ;# import byron as byron
@@ -1149,27 +1141,22 @@ txSizeInBytes   = base.word32
 for each of the eras. Note that in Byron there are 4 alternatives for
 a transaction ID:</p>
 <pre><code class="language-cddl">;; txid.cddl
+; TODO(geo2a): why are this order? Why babbage is last?
 txId =
   base.ns8&lt;byronTxId,
            shelley.transaction_id,
            allegra.transaction_id,
            mary.transaction_id,
            alonzo.transaction_id,
-           babbage.transaction_id,
            conway.transaction_id,
-           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it.
-           dijkstra.transaction_id&gt;
+           dijkstra.transaction_id,
+           babbage.transaction_id&gt;
 
 byronTxId = [0, byron.txid]
           / [1, byron.certificateid]
           / [2, byron.updid]
           / [3, byron.voteid]
 
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
 ;# include byron as byron
 ;# include shelley as shelley
 ;# include allegra as allegra
@@ -1185,26 +1172,22 @@ alternative of the transactions for each of the eras. Note that for
 Shelley-onwards, the transaction is serialized in CBOR-in-CBOR:</p>
 <pre><code class="language-cddl">;; tx.cddl
 tx =
-  base.ns8&lt;byron.tx,
+  base.ns8&lt;byron.transaction,
            serialisedShelleyTx&lt;shelley.transaction&gt;,
            serialisedShelleyTx&lt;allegra.transaction&gt;,
            serialisedShelleyTx&lt;mary.transaction&gt;,
            serialisedShelleyTx&lt;alonzo.transaction&gt;,
            serialisedShelleyTx&lt;babbage.transaction&gt;,
            serialisedShelleyTx&lt;conway.transaction&gt;,
-           ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-           ; introduced with it. Dijkstra splits `transaction` into
-           ; `block_transaction` and `mempool_transaction`, which differ in
-           ; where the `is_valid` flag sits; this protocol diffuses the latter.
            serialisedShelleyTx&lt;dijkstra.mempool_transaction&gt;&gt;
 
 serialisedShelleyTx&lt;era&gt; = #6.24(bytes .cbor era)
 
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
 ;# include byron as byron
+
+; See https://github.com/IntersectMBO/cardano-ledger/issues/5124
+byron.transaction = [0, [byron.tx, [+ byron.twit]]] / [1, any] / [2, any] / [3, any]
+
 ;# include shelley as shelley
 ;# include allegra as allegra
 ;# include mary as mary
@@ -1345,18 +1328,20 @@ than a unilateral act by either side.</p>
 <h2 id="codecs-3"><a class="header" href="#codecs-3">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
-; Termination first, then the request, then the responses it can draw. Votes
-; come last so a future votes mini-protocol can take them away without
-; renumbering anything else.
+; The messages of the LeiosNotify mini-protocol
+;
+; TODO Upstream this from ouroboros-consensus into cardano-blueprint and not
+; only sync it using a GHA workflow
+
 leiosNotifyMessage
-     = msgDone
-     / msgQuit
-     / msgCanceled
-     / msgLeiosNotificationRequestNext
-     / msgLeiosBlockAnnouncement
-     / msgLeiosBlockOffer
-     / msgLeiosBlockTxsOffer
-     / msgLeiosVotes
+  = msgDone
+  / msgQuit
+  / msgCanceled
+  / msgLeiosNotificationRequestNext
+  / msgLeiosBlockAnnouncement
+  / msgLeiosBlockOffer
+  / msgLeiosBlockTxsOffer
+  / msgLeiosVotes
 
 msgDone                         = [0]
 msgQuit                         = [1]
@@ -1365,31 +1350,22 @@ msgLeiosNotificationRequestNext = [3]
 msgLeiosBlockAnnouncement       = [4, announcement]
 msgLeiosBlockOffer              = [5, point, eb_size]
 msgLeiosBlockTxsOffer           = [6, point]
-msgLeiosVotes                   = [7, [1* vote]]
+msgLeiosVotes                   = [7, [1*16 vote]]
 
-; A ranking block header announces the endorser block its body references,
-; so an announcement is exactly the bytes ChainSync diffuses for that header
-; and carries its own KES signature.
+; the announcing ranking block's header, as ChainSync sends it
 announcement = header.header
-point = [slot, eb_hash]
 
-; Not redundant with the announcement's size: the point alone does not say
-; which announcement is being offered, and two announcements -- even from
-; different elections -- can name one endorser block in one slot at different
-; sizes.
-eb_size = base.word32
-slot = base.slotno
-eb_hash = base.hash
+point = [slot, eb_hash]
+slot = uint .size 8
+eb_hash = bytes .size 32
+eb_size = uint .size 4
 
 vote =
-  [ announcing_rb_hash    : base.hash
-  , voter_id              : base.word16
-  , vote_signature        : leios_bls_signature ; over the bytes of announcing_rb_hash
+  [ announcing_rb_hash : bytes .size 32
+  , voter_id           : uint .size 2
+  , vote_signature     : bytes .size 48
   ]
 
-leios_bls_signature = bytes .size 48
-
-;# import base as base
 ;# import header as header
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -1467,40 +1443,47 @@ the data.</p>
 <h2 id="codecs-4"><a class="header" href="#codecs-4">Codecs</a></h2>
 <p>The messages depicted in the state machine follow this CDDL specification:</p>
 <pre><code class="language-cddl">;; messages.cddl
-; Termination first, as in LeiosNotify, then each request beside the response
-; it draws.
-leiosBlockFetchMessage
-     = msgDone
-     / msgLeiosBlockRequest
-     / msgLeiosBlock
-     / msgLeiosBlockTxsRequest
-     / msgLeiosBlockTxs
+; The messages of the LeiosFetch mini-protocol
+;
+; TODO Upstream this from ouroboros-consensus into cardano-blueprint and not
+; only sync it using a GHA workflow
 
-msgDone                        = [0]
-msgLeiosBlockRequest           = [1, point]
-msgLeiosBlock                  = [2, endorser_block]
-msgLeiosBlockTxsRequest        = [3, point, bitmaps]
-msgLeiosBlockTxs               = [4, tx_list]
+leiosFetchMessage
+  = msgDone
+  / msgLeiosBlockRequest
+  / msgLeiosBlock
+  / msgLeiosBlockTxsRequest
+  / msgLeiosBlockTxs
 
-point = [slot, eb_hash]
-slot = base.slotno
+msgDone                 = [0]
+msgLeiosBlockRequest    = [1, point]
+msgLeiosBlock           = [2, endorser_block]
+msgLeiosBlockTxsRequest = [3, point, bitmaps]
+msgLeiosBlockTxs        = [4, tx_list]
+
+point = [base.slotno, eb_hash]
 eb_hash = base.hash
 
-; map from tx hash to serialized tx byte size, both of the bytes `leios_tx`
-; wraps; an endorser block names at least one transaction
-endorser_block = { + base.hash =&gt; base.word32 }
+; The endorser block as CBOR-in-CBOR to indicate what bytes are hashed and that
+; servers may serve them without decoding. Was introduced with Dijkstra era and
+; currently only one format exists. When the structure changes, fetch clients
+; and other consensus components will know which era this is from; endorser
+; blocks are not allowed to be used across era boundaries.
+endorser_block = #6.24(bytes .cbor dijkstra.eb_references)
 
-; indefinite-length map from 64-tx window index to 64-bit presence bitmap
-bitmaps = { * base.word16 =&gt; base.word64 }
+; Inspired by roaring bitmaps: 64-tx window index to 64-bit presence bitmaps
+bitmaps = { * uint .size 2 =&gt; uint .size 8 }
 
-tx_list = [ *leios_tx ]
+tx_list = [ *tx ]
 
-; Dijkstra only, without an era tag. A transaction travels in its block
-; encoding, whose `is_valid` flag the mempool encoding lacks.
-leios_tx = #6.24(bytes .cbor dijkstra.block_transaction)
+; Endorsed transactions as CBOR-in-CBOR to indicate that neither fetch clients
+; nor servers will decode this. However, consensus components like leios voting
+; logic or block adoption will need to decode these using the appropriate era.
+; Currently only Dijkstra is supported.
+tx = #6.24(bytes .cbor dijkstra.block_transaction)
 
-;# import base as base
 ;# include dijkstra as dijkstra
+;# import base as base
 </code></pre>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
@@ -4193,17 +4176,18 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">;; Blockchain types
+<pre><code class="language-cddl">    [1, shelley] /
+    [0, byron]
+
+;; Blockchain types
 pastEra = [bound, bound]
-currentEra&lt;st&gt; = [bound, st]
-bound = [relativeTime, slotno, epochno]
+bound = [relativeTime, slotno, epochno, perasRoundNo]
 eraIdx = word8
 individualPoolStake = [stake, hash]
 nonce = [0] / [1, hash]
 point = [] / [ slotno, hash ]
 poolDistr = map&lt;keyhash, individualPoolStake&gt;
 slotno = word64
-roundno = word64
 stake = rational
 
 withOrigin&lt;v&gt; = [] / [v]
@@ -4218,6 +4202,7 @@ set&lt;x&gt; = #6.258([* x])
 ;; Types from other packages
 blockno = word64
 epochno = word64
+perasRoundNo = word64
 coin = word64
 rational = [int, int]
 keyhash = bstr .size 28
@@ -4226,22 +4211,24 @@ relativeTime = int
 
 ;; Base word types
 word8  = uint .size 1
-word16 = uint .size 2
 word32 = uint .size 4
 word64 = uint .size 8
 </code></pre>
 <p>In addition, we add the following types to represent tag-encoded
 alternatives, commonly used at the consensus level to encode a
 different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
-    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
-    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
-    [pastEra, currentEra&lt;shelley&gt;] /
-    [currentEra&lt;byron&gt;]
+<pre><code class="language-cddl">; The current era is [bound, st]. It is written out instead of using a
+; currentEra&lt;st&gt; rule because cuddle mixes up nested generics when telescope8
+; is used more than once in the same file.
+telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, [bound, dijkstra]] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, [bound, conway]] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, [bound, babbage]] /
+    [pastEra, pastEra, pastEra, pastEra, [bound, alonzo]] /
+    [pastEra, pastEra, pastEra, [bound, mary]] /
+    [pastEra, pastEra, [bound, allegra]] /
+    [pastEra, [bound, shelley]] /
+    [[bound, byron]]
 
 ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
   = [7, dijkstra] /
@@ -4249,9 +4236,6 @@ ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
     [5, babbage] /
     [4, alonzo] /
     [3, mary] /
-    [2, allegra] /
-    [1, shelley] /
-    [0, byron]
 </code></pre>
 <p>These definitions are made available in the
 <a href="codecs/base.cddl"><code>base.cddl</code></a>

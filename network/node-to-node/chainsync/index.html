@@ -36,7 +36,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-ef69d46e.js";
+            window.path_to_searchindex_js = "../../../searchindex-aa226fbe.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-404c79fe.js"></script>
@@ -355,8 +355,6 @@ header
             serialisedShelleyHeader&lt;alonzo.header&gt;,
             serialisedShelleyHeader&lt;babbage.header&gt;,
             serialisedShelleyHeader&lt;conway.header&gt;,
-            ; The Dijkstra era is proposed and not yet on mainnet - Leios is
-            ; introduced with it.
             serialisedShelleyHeader&lt;dijkstra.header&gt;&gt;
 
 byronHeader = [byronRegularIdx, #6.24(bytes .cbor byron.blockhead)]
@@ -367,10 +365,6 @@ byronRegularIdx = [1, base.word32]
 
 serialisedShelleyHeader&lt;era&gt; = #6.24(bytes .cbor era)
 
-; Era modules are included (not imported) so that era type references used as
-; generic arguments (e.g. in ns8&lt;&gt;) are baked in as concrete definitions.
-; cddlc does not rewrite such references through chained imports, so a parent
-; that imports this module would see undefined era names.
 ;# include byron as byron
 ;# include shelley as shelley
 ;# include allegra as allegra

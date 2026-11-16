@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ef69d46e.js";
+            window.path_to_searchindex_js = "../searchindex-aa226fbe.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-404c79fe.js"></script>
@@ -196,17 +196,18 @@ tool provide meaning to the <code>;# import</code> and <code>;# include</code> d
 have a modular system over CDDL definitions.</p>
 <p>The CDDL specs presented in this section will make use of the
 following base definitions that we will consider defined globally:</p>
-<pre><code class="language-cddl">;; Blockchain types
+<pre><code class="language-cddl">    [1, shelley] /
+    [0, byron]
+
+;; Blockchain types
 pastEra = [bound, bound]
-currentEra&lt;st&gt; = [bound, st]
-bound = [relativeTime, slotno, epochno]
+bound = [relativeTime, slotno, epochno, perasRoundNo]
 eraIdx = word8
 individualPoolStake = [stake, hash]
 nonce = [0] / [1, hash]
 point = [] / [ slotno, hash ]
 poolDistr = map&lt;keyhash, individualPoolStake&gt;
 slotno = word64
-roundno = word64
 stake = rational
 
 withOrigin&lt;v&gt; = [] / [v]
@@ -221,6 +222,7 @@ set&lt;x&gt; = #6.258([* x])
 ;; Types from other packages
 blockno = word64
 epochno = word64
+perasRoundNo = word64
 coin = word64
 rational = [int, int]
 keyhash = bstr .size 28
@@ -229,22 +231,24 @@ relativeTime = int
 
 ;; Base word types
 word8  = uint .size 1
-word16 = uint .size 2
 word32 = uint .size 4
 word64 = uint .size 8
 </code></pre>
 <p>In addition, we add the following types to represent tag-encoded
 alternatives, commonly used at the consensus level to encode a
 different tag for each one of the eras in the Cardano blockchain:</p>
-<pre><code class="language-cddl">telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
-  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;dijkstra&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;conway&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, pastEra, currentEra&lt;babbage&gt;] /
-    [pastEra, pastEra, pastEra, pastEra, currentEra&lt;alonzo&gt;] /
-    [pastEra, pastEra, pastEra, currentEra&lt;mary&gt;] /
-    [pastEra, pastEra, currentEra&lt;allegra&gt;] /
-    [pastEra, currentEra&lt;shelley&gt;] /
-    [currentEra&lt;byron&gt;]
+<pre><code class="language-cddl">; The current era is [bound, st]. It is written out instead of using a
+; currentEra&lt;st&gt; rule because cuddle mixes up nested generics when telescope8
+; is used more than once in the same file.
+telescope8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
+  = [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, [bound, dijkstra]] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, pastEra, [bound, conway]] /
+    [pastEra, pastEra, pastEra, pastEra, pastEra, [bound, babbage]] /
+    [pastEra, pastEra, pastEra, pastEra, [bound, alonzo]] /
+    [pastEra, pastEra, pastEra, [bound, mary]] /
+    [pastEra, pastEra, [bound, allegra]] /
+    [pastEra, [bound, shelley]] /
+    [[bound, byron]]
 
 ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
   = [7, dijkstra] /
@@ -252,9 +256,6 @@ ns8&lt;byron, shelley, allegra, mary, alonzo, babbage, conway, dijkstra&gt;
     [5, babbage] /
     [4, alonzo] /
     [3, mary] /
-    [2, allegra] /
-    [1, shelley] /
-    [0, byron]
 </code></pre>
 <p>These definitions are made available in the
 <a href="base.cddl"><code>base.cddl</code></a>
