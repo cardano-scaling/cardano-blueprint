@@ -44,6 +44,7 @@
     - [LocalChainSync](<>)
   - [UTxO-RPC](client/utxo-rpc/README.md)
 - [Codec basics](codecs/README.md)
+- [Networks](networks/README.md)
 
 ______________________________________________________________________
 
